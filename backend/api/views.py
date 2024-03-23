@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from rest_framework import status,serializers
-from rest_framework.views import APIView
+from rest_framework import generics
 from rest_framework.response import Response
 from .serializer import OneCodeSerializer
 from .models import OneCode
@@ -16,13 +16,14 @@ import time
 def getRoutes(request):
     return JsonResponse("Starting..... ", safe=False)
 
-class GetRunCode(APIView):
-    def post(self,request,*args,**kwargs):
+class GetRunCode(generics.CreateAPIView):
+    serializer_class = OneCodeSerializer
+    def create(self,request,*args,**kwargs):
         print(request.data)
-        serializer = OneCodeSerializer(data = request.data)
+        serializer = self.get_serializer(data = request.data)
         if serializer.is_valid():
-            lang = request.data['pref_language']
-            code = request.data['code']
+            lang = serializer.validated_data['pref_language']
+            code = serializer.validated_data['code']
             """
             code to get run time, and memory of executing code!
             """
