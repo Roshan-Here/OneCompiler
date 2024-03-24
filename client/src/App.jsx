@@ -1,13 +1,20 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import {BrowserRouter,Routes ,Route } from "react-router-dom"
+import Header from "./components/Header"
+import Testing from "./components/Testing"
 
 function App() {
 
   return (
     <>
-        <p className='text-xl text-violet-800 border-b-indigo-400'>Welcome to OneCompiler</p>
+    <BrowserRouter>
+      <Header/>
+      <Routes>
+        <Route path="/" element={
+          <p className='text-xl text-violet-800 border-b-indigo-400'>Welcome to OneCompiler</p>
+        }/>
+        <Route path="/test" element={<Testing/>}/>
+      </Routes>
+    </BrowserRouter>
     </>
   )
 }
