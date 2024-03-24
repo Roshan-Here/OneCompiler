@@ -19,6 +19,8 @@ lib64/
 parts/
 sdist/
 var/
+# for not colliding frontend with backend
+client/
 wheels/
 share/python-wheels/
 *.egg-info/

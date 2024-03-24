@@ -9,7 +9,7 @@ from .Compile import run_my_code, get_memory_usage
 import asyncio
 import psutil
 import time
-
+import re
 # Create your views here.
 
 
@@ -30,7 +30,10 @@ class GetRunCode(generics.CreateAPIView):
             start_memory = get_memory_usage()
             
             start_time = time.time()
-            output = str(asyncio.run(run_my_code(lang,code)))
+            try:
+                output = str(asyncio.run(run_my_code(lang,code)))
+            except Execption as e:
+                output = f"Err: {e}"
             end_time = time.time()
         
             end_memory = get_memory_usage()
@@ -41,13 +44,24 @@ class GetRunCode(generics.CreateAPIView):
             print(run_time,start_memory,end_memory)
         
             print("valid data")
-            response_data = {
+            find_err =  re.search(r'(?i)(SyntaxError|syntax error|error|exception|warning|fatal error|undefined reference|segmentation fault|runtime error|compilation error|invalid syntax): (.+)', output,re.DOTALL)
+            if find_err:
+                find_err = find_err.group()
+                response_data = {
                 'preffered language' : lang,
                 'code': code,
-                'Compiled Output' : output,
+                'Error' : find_err,
                 'run time' : run_time,
                 'memory usage' : memory_usage_mb,
-            }
+                }
+            else:            
+                response_data = {
+                    'preffered language' : lang,
+                    'code': code,
+                    'Compiled Output' : output,
+                    'run time' : run_time,
+                    'memory usage' : memory_usage_mb,
+                }
             return Response(response_data, status=status.HTTP_200_OK)
         else:
             return Response({"Req":"bad daata"},status=status.HTTP_400_BAD_REQUEST)
