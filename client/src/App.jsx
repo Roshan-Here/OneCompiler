@@ -2,6 +2,7 @@ import {BrowserRouter,Routes ,Route } from "react-router-dom"
 import Header from "./components/Header"
 import Testing from "./components/Testing"
 import Home from "./pages/Home"
+import NotFound from "./components/NotFound"
 function App() {
 
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/home" element={<Home/>}/>
         <Route path="/test" element={<Testing/>}/>
         <Route path="/about" element={<Testing/>}/>
+        <Route path="*" element={<NotFound/>}/>
       </Routes>
     </BrowserRouter>
     </>
