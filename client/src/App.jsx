@@ -3,6 +3,7 @@ import Header from "./components/Header"
 import Testing from "./components/Testing"
 import Home from "./pages/Home"
 import NotFound from "./components/NotFound"
+import Compile from "./pages/Compile"
 function App() {
 
   return (
@@ -14,6 +15,7 @@ function App() {
           <p className='text-xl text-violet-800 border-b-indigo-400'>Welcome to OneCompiler</p>
         }/>
         <Route path="/home" element={<Home/>}/>
+        <Route path="/compile" element={<Compile/>}/>
         <Route path="/test" element={<Testing/>}/>
         <Route path="/about" element={<Testing/>}/>
         <Route path="*" element={<NotFound/>}/>
