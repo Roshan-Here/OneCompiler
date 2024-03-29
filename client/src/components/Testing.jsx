@@ -1,9 +1,11 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
+import Footer from './Footer';
 
 function Testing() {
   return (
-    <div className='bg-gray-900 min-h-lvh'>
+    <main>
+    <div className='bg-gray-900 h-full'>
         <div className='flex md:justify-center p-5'>
             <div className='text-5xl md:text-7xl text-slate-200 font-extrabold'>Accelerate your career</div>
             {/* <div className='text-2xl text-slate-400 font-bold'>Live learning with industry experts. Jobs at technology companies.</div> */}
@@ -30,20 +32,21 @@ function Testing() {
             <div className='flex gap-4 mt-auto ml-auto'>
                 <Link to='/about'>
                   <button className='p-2 flex items-center gap-1 border border-gray-500 rounded-full hover:bg-gray-200'>
-                      <span className='text-monospace'>Read More..</span>
+                      <span className='text-monospace text-slate-900'>Read More..</span>
                   </button>
                 </Link>
             </div>
           </div>
-
+          
         </div>
 
         {/* sample languages... 6,5,4 -format*/}
         <div className='flex text-4xl font-bold justify-center text-slate-100'>
             Available languages
         </div>
-        <div className='m-8 border rounded-2xl gap-5 shadow-lg bg-cyan-950'>
+        <div className='m-8  border rounded-2xl gap-5 shadow-lg bg-cyan-950'>
             {/* part one of lang 6 */}
+            {/* used icons form here https://github.com/devicons/devicon/blob/master/icons/ */}
             <div className='flex flex-row justify-between md:flex-row mt-2 font-bold ml-7 mr-7'>
                   <div className="flex flex-col p-3 text-center w-1/3 md:w-1/12 text-slate-100">
                     <img
@@ -143,13 +146,15 @@ function Testing() {
             <div className='flex justify-center gap-4 mt-auto ml-auto'>
                 <Link to='/about'>
                   <button className='p-2 flex items-center gap-1 border border-cyan-950 rounded-full hover:bg-cyan-700'>
-                      <span className='text-monospace'>Many More..</span>
+                      <span className='text-monospace text-slate-100'>Many More..</span>
                   </button>
                 </Link>
             </div>
         </div>
-
+      {/* Footer */}
+      <Footer/>
     </div> 
+  </main>
   )
 }
 
