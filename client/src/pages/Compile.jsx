@@ -109,14 +109,14 @@ function Compile() {
             </div>
             <div className='px-6 mt-3'>
                 <div role='button' className='btn btn-block btn-neutral border-r-2 border-green-500 hover:border-cyan-500 mt-1 hover:text-green-400 font-semibold text-white'>
-                <FontAwesomeIcon className='text-2xl text-green-500 transition-colors' icon={faCirclePlay} />
+                <FontAwesomeIcon className='text-2xl text-green-500 transition-colors hover:text-cyan-500' icon={faCirclePlay} />
                     Run
                 </div>
                 {/* <button className='bg-success p-3 border border-green-400 hover:border-blue-600 rounded-md font-semibold text-white'>Run</button> */}
             </div>
         </div>
       <div className='flex flex-col justify-between md:flex-row'>
-        <div className='md:w-3/5 w-full px-6 m-3 h-screen'>
+        <div className='md:w-3/5 w-full md:px-6 px-4 m-3 h-screen'>
             <Editor
             // error ! - border-red-500 : border-cyan-500
             className='border rounded-lg border-cyan-500'
@@ -127,7 +127,18 @@ function Compile() {
             ></Editor>
         </div>
         
-        <div className='md:w-2/5 px-6 mt-3 w-full'>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Odit placeat exercitationem laboriosam ut quaerat vel ab unde, temporibus sed cum? Asperiores rerum earum assumenda, atque accusantium eveniet. Fuga, accusamus? Tempora!</div>
+        <div className='md:w-2/5 md:px-2 px-6 w-4.5/5'>
+            <div className='my-2 text-white text-xl font-semibold'>
+                Output
+            </div>
+            <div className='w-full border border-gray-400 rounded-md h-44 md:h-56'>
+                {/* text-green-500 : text-red-500 */}
+                <pre className='p-2 text-green-500'>
+                    output from backend is this ok ?
+                </pre>
+            </div>
+            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Odit placeat exercitationem laboriosam ut quaerat vel ab unde, temporibus sed cum? Asperiores rerum earum assumenda, atque accusantium eveniet. Fuga, accusamus? Tempora!
+        </div>
       </div>
     </div>
     <Footer/>
