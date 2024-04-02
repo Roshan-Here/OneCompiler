@@ -15,6 +15,9 @@ function Compile() {
     const [language,setlanguage] = useState("Languages")
     const [langforbutton, setlangforbutton] = useState("Languages")
     const [code,setcode] = useState("")
+    const [codestatus,setcodestatus] = useState("Nill")
+    const [runtime, setruntime] = useState("Nill")
+    const [memusage, setmemusage] = useState("Nill")
     const handlechange=(value)=>{
         setcode(value)
     }
@@ -116,7 +119,7 @@ function Compile() {
             </div>
         </div>
       <div className='flex flex-col justify-between md:flex-row'>
-        <div className='md:w-3/5 w-full md:px-6 px-4 m-3 h-screen'>
+        <div className='md:w-3/5 w-full md:px-6 px-4 m-3 md:h-screen'>
             <Editor
             // error ! - border-red-500 : border-cyan-500
             className='border rounded-lg border-cyan-500'
@@ -131,13 +134,22 @@ function Compile() {
             <div className='my-2 text-white text-xl font-semibold'>
                 Output
             </div>
-            <div className='w-full border border-gray-400 rounded-md h-44 md:h-56'>
+            <div className='w-full border border-gray-400 rounded-md h-44 md:h-3/4'>
                 {/* text-green-500 : text-red-500 */}
                 <pre className='p-2 text-green-500'>
                     output from backend is this ok ?
                 </pre>
             </div>
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Odit placeat exercitationem laboriosam ut quaerat vel ab unde, temporibus sed cum? Asperiores rerum earum assumenda, atque accusantium eveniet. Fuga, accusamus? Tempora!
+            <div className='my-2 text-white text-xl font-semibold'>
+                Statistics 
+            </div>
+            <div className='border border-red-500 rounded-md'>
+                <ul className='font-semibold text-xl p-3'>
+                    <li>Status : {codestatus}</li>
+                    <li>Run Time : {runtime}</li>
+                    <li>Memory Usage : {memusage}</li>
+                </ul>
+            </div>
         </div>
       </div>
     </div>
