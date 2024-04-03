@@ -14,6 +14,7 @@ function Compile() {
     const [theme,setTheme] = useState()
     const [language,setlanguage] = useState("Languages")
     const [langforbutton, setlangforbutton] = useState("Languages")
+    const [fileextention, setfileextention] = useState("txt")
     const [code,setcode] = useState("")
     const [codestatus,setcodestatus] = useState("Nill")
     const [runtime, setruntime] = useState("Nill")
@@ -59,6 +60,8 @@ function Compile() {
         setlanguage(value.name)
         setlangforbutton(value.value)
         setdeftmsg(value.initCode)
+        setcode(deftmsg)
+        setfileextention(value.extension)
     }
     console.log(deftmsg)
 
@@ -78,13 +81,28 @@ function Compile() {
     );
     };
 
+    const handlesave = ()=>{
+        console.log("save button clicked!",fileextention)
+        let filename = "OneCompiler."+String(fileextention)
+        console.log(filename)
+        const blob = new Blob([code],{type:"text/plain"})
+        const url = URL.createObjectURL(blob)
+        const link = document.createElement('a')
+        link.href = url
+        link.download = filename
+        link.click()
+
+        URL.revokeObjectURL(url)
+
+    }
+
 
     return (
     <section>
-    <div className=' bg-gray-900 bg-auto'>
+    <div className=' bg-gray-900 bg-auto overflow-hidden'>
         {/* theme selector,language selector,run button */}
         <div className='flex flex-row justify-between'>
-            <div className='flex justify-center px-6 mt-3'>
+            <div className='flex justify-center px-2 md:px-6 mt-3'>
                 <div className='px-6'>
                 <div className="dropdown dropdown-hover">
                     {/* <option className='font-semibold text-slate-300'>Theme Selector</option> */}
@@ -104,13 +122,13 @@ function Compile() {
                     </div>
                 </div>
                 <div className='px-5'>
-                    <div role='button' className='hidden md:btn btn-block btn-neutral border-r-2 border-green-500 hover:border-cyan-500 mt-1 hover:text-green-400 font-semibold text-white'>
+                    <div onClick={handlesave} role='button' className='hidden md:btn btn-block btn-neutral border-r-2 border-green-500 hover:border-cyan-500 mt-1 hover:text-green-400 font-semibold text-white'>
                         Save
                     <FontAwesomeIcon className='text-2xl text-blue-400 transition-colors' icon={faFloppyDisk} />
                     </div>
                 </div>
             </div>
-            <div className='px-6 mt-3'>
+            <div className='px-0.5 md:px-6 mt-3'>
                 <div role='button' className='btn btn-block btn-neutral border-r-2 border-green-500 hover:border-cyan-500 mt-1 hover:text-green-400 font-semibold text-white'>
                 <FontAwesomeIcon className='text-2xl text-green-500 transition-colors hover:text-cyan-500' icon={faCirclePlay} />
                     Run
@@ -118,8 +136,8 @@ function Compile() {
                 {/* <button className='bg-success p-3 border border-green-400 hover:border-blue-600 rounded-md font-semibold text-white'>Run</button> */}
             </div>
         </div>
-      <div className='flex flex-col justify-between md:flex-row'>
-        <div className='md:w-3/5 w-full md:px-6 px-4 m-3 md:h-screen'>
+      <div className='flex flex-col justify-between md:flex-row m-3'>
+        <div className='md:w-3/5 w-full h-96 md:px-6 px-4 md:h-screen'>
             <Editor
             // error ! - border-red-500 : border-cyan-500
             className='border rounded-lg border-cyan-500'
@@ -130,13 +148,14 @@ function Compile() {
             ></Editor>
         </div>
         
-        <div className='md:w-2/5 md:px-2 px-6 w-4.5/5'>
+        <div className='md:w-2/5 md:px-2 px-6 w-4.5/5 over'
+        >
             <div className='my-2 text-white text-xl font-semibold'>
                 Output
             </div>
             <div className='w-full border border-gray-400 rounded-md h-44 md:h-96'>
                 {/* text-green-500 : text-red-500 */}
-                <pre className='p-2 text-green-500 text-lg'>
+                <pre className='p-2 text-green-500 text-lg overflow-hidden'>
                     output from backend is this ok ?
                 </pre>
             </div>
