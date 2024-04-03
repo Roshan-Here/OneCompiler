@@ -6,7 +6,7 @@ function Header() {
   return (
 
 <div>
-    <div className='bg-slate-800 flex max-w-8xl mx-auto p-5 justify-between items-center cursor-pointer border-b-4 border-cyan-500 rounded-b-lg'>
+    <div className='bg-slate-800 flex max-w-8xl mx-auto p-5 justify-between items-center cursor-pointer border-b-4 border-cyan-500 rounded-b-lg overflow-hidden'>
         <Link to='/'> 
             <div className='flex gap-1'>
                 <span className='font-medium text-3xl text-blue-600'>One</span>
