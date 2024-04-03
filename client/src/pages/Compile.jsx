@@ -134,9 +134,9 @@ function Compile() {
             <div className='my-2 text-white text-xl font-semibold'>
                 Output
             </div>
-            <div className='w-full border border-gray-400 rounded-md h-44 md:h-3/4'>
+            <div className='w-full border border-gray-400 rounded-md h-44 md:h-96'>
                 {/* text-green-500 : text-red-500 */}
-                <pre className='p-2 text-green-500'>
+                <pre className='p-2 text-green-500 text-lg'>
                     output from backend is this ok ?
                 </pre>
             </div>
