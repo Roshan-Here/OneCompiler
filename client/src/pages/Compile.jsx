@@ -6,6 +6,7 @@ import Footer from './../components/Footer';
 import languagesList from '../utils/listLanguges';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {faCirclePlay, faFloppyDisk} from '@fortawesome/free-solid-svg-icons'
+import { axios } from 'axios';
 
 function Compile() {
     const monaco = useMonaco()
@@ -19,6 +20,16 @@ function Compile() {
     const [codestatus,setcodestatus] = useState("Nill")
     const [runtime, setruntime] = useState("Nill")
     const [memusage, setmemusage] = useState("Nill")
+    const submitdata = {
+
+    }
+    const runCode= async()=>{
+        axios.post(
+'url',{submitdata}
+        )
+        .then(res=>console.log(res))
+        .catch(err=>console.log(err))
+    }
     const handlechange=(value)=>{
         setcode(value)
     }
