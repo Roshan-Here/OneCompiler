@@ -110,7 +110,7 @@ function Compile() {
 
     return (
     <section>
-    <div className=' bg-gray-900 bg-auto overflow-hidden'>
+    <div className=' bg-gray-900 bg-auto h-auto overflow-hidden'>
         {/* theme selector,language selector,run button */}
         <div className='flex flex-row justify-between'>
             <div className='flex justify-center px-2 md:px-6 mt-3'>
@@ -148,7 +148,7 @@ function Compile() {
             </div>
         </div>
       <div className='flex flex-col justify-between md:flex-row m-3'>
-        <div className='md:w-3/5 w-full h-96 md:px-6 px-4 md:h-screen'>
+        <div className='md:w-3/5 w-full h-96 md:px-6 px-4 md:h-auto'>
             <Editor
             // error ! - border-red-500 : border-cyan-500
             className='border rounded-lg border-cyan-500'
