@@ -32,7 +32,7 @@ class GetRunCode(generics.CreateAPIView):
             start_time = time.time()
             try:
                 output = str(asyncio.run(run_my_code(lang,code)))
-            except Execption as e:
+            except Exception as e:
                 output = f"Err: {e}"
             end_time = time.time()
         

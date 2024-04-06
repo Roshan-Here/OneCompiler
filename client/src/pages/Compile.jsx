@@ -1,14 +1,13 @@
 import Editor, {useMonaco } from '@monaco-editor/react'
 import React, { useEffect, useState } from 'react'
 import dracula from "monaco-themes/themes/Dracula.json";
-import themeMap from '../utils/themelist';
 import Footer from './../components/Footer';
-import languagesList from '../utils/listLanguges';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {faCirclePlay, faFloppyDisk} from '@fortawesome/free-solid-svg-icons'
-import { axios } from 'axios';
+import {faCirclePlay, faFloppyDisk, faL} from '@fortawesome/free-solid-svg-icons'
+import axios from 'axios';
 import ThemeList from '../components/ThemeList';
 import LangList from '../components/LangList';
+import { bool } from 'prop-types';
 
 function Compile() {
     const monaco = useMonaco()
@@ -20,10 +19,33 @@ function Compile() {
     const [fileextention, setfileextention] = useState("txt")
     const [code,setcode] = useState("")
     const [codestatus,setcodestatus] = useState("Nill")
+    const [outputdata, setoutputdata] = useState("Your output will be displayed here!")
     const [runtime, setruntime] = useState("Nill")
     const [memusage, setmemusage] = useState("Nill")
+    const [errorstatus, seterrorstatus] = useState(false)
 
     // console.log(import.meta.env.VITE_BACKEND_URL)
+    // console.log(language)
+    const repetedusage = (value) =>{
+        setruntime(value.data["run time"])
+        setmemusage(value.data["memory usage"])
+        if (value.data["Error"]){
+            seterrorstatus(true)
+            console.log(value.data["Error"])
+            setoutputdata(value.data["Error"])
+            setcodestatus("Failure")
+            console.log(value.data["memory usage"]); 
+            console.log(value.data["run time"]);
+        }
+        else{
+            seterrorstatus(false)
+            setoutputdata(value.data["Compiled Output"])
+            setcodestatus("Success")
+            console.log(value.data["Compiled Output"]); 
+            console.log(value.data["memory usage"]); 
+            console.log(value.data["run time"]);
+        }
+    }
 
     const runCode= async()=>{
         const submitdata = {
@@ -31,22 +53,16 @@ function Compile() {
             'code': code
         }
         try {
-            const res = axios.post(
-                `${import.meta.env.VITE_BACKEND_URL}`,{submitdata}
-                )
-                .then(res=>console.log(res))
-                .catch(err=>console.log(err))    
-                const data = res.data
-                console.log(data)
+            const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/run/`, submitdata);
+            repetedusage(res)
+        } catch (error) {
+            console.log(error);
         }
-        catch (err){
-            console.log(err)
-        }       
     }
     const handlechange=(value)=>{
         setcode(value)
     }
-    console.log(code)
+    // console.log(code)
     
     const handleTheme=(value,name)=>{
         setTheme(value)
@@ -59,6 +75,7 @@ function Compile() {
     }
 
     useEffect(() => {
+        setcode(deftmsg) // initial state
         if (monaco) {
           monaco.editor.defineTheme("newtheme", dracula);
           monaco.editor.setTheme("newtheme");
@@ -66,13 +83,13 @@ function Compile() {
       }, [monaco]);
 
     const handlelanguage = (value) =>{
-        setlanguage(value.name)
-        setlangforbutton(value.value)
+        setlanguage(value.value)
+        setlangforbutton(value.name)
         setdeftmsg(value.initCode)
         setcode(deftmsg)
         setfileextention(value.extension)
     }
-    console.log(deftmsg)
+    console.log(code)
 
     const handlesave = ()=>{
         console.log("save button clicked!",fileextention)
@@ -108,7 +125,7 @@ function Compile() {
                 <div className='px-5'>
                 <div className="dropdown dropdown-hover">
                     {/* <option className='font-semibold text-slate-300'>Select Language</option> */}
-                    <div tabIndex={0} role="button" className="btn btn-block btn-neutral btn-outline btn-accent mt-1">{language}</div>
+                    <div tabIndex={0} role="button" className="btn btn-block btn-neutral btn-outline btn-accent mt-1">{langforbutton}</div>
                         <ul tabIndex={0} className="dropdown-content z-[1] shadow bg-slate-800 rounded-box w-56 max-h-48 overflow-y-auto">
                             <LangList handlelanguage={handlelanguage}/>
                         </ul>
@@ -122,7 +139,7 @@ function Compile() {
                 </div>
             </div>
             <div className='px-0.5 md:px-6 mt-3'>
-                <div role='button' className='btn btn-block btn-neutral border-r-2 border-green-500 hover:border-cyan-500 mt-1 hover:text-green-400 font-semibold text-white'>
+                <div onClick={runCode} role='button' className='btn btn-block btn-neutral border-r-2 border-green-500 hover:border-cyan-500 mt-1 hover:text-green-400 font-semibold text-white'>
                 <FontAwesomeIcon className='text-2xl text-green-500 transition-colors hover:text-cyan-500' icon={faCirclePlay} />
                     Run
                 </div>
@@ -133,7 +150,7 @@ function Compile() {
         <div className='md:w-3/5 w-full h-96 md:px-6 px-4 md:h-auto'>
             <Editor
             // error ! - border-red-500 : border-cyan-500
-            className='border rounded-lg border-cyan-500'
+            className={`border rounded-lg border-cyan-500 ${errorstatus ? 'border-red-500': 'border-cyan-500'}`}
             theme={theme || "Dracula"}
             language={langforbutton || "python"}
             value={deftmsg}
@@ -146,17 +163,17 @@ function Compile() {
             <div className='my-2 text-white text-xl font-semibold'>
                 Output
             </div>
-            <div className='w-full border border-gray-400 rounded-md h-44 md:h-96'>
+            <div className={` w-full border ${errorstatus ? 'border-red-400': 'border-cyan-400'} rounded-md h-44 md:h-96 overflow-y-auto`}>
                 {/* text-green-500 : text-red-500 */}
-                <pre className='p-2 text-green-500 text-lg overflow-hidden'>
-                    output from backend is this ok ?
-                </pre>
+                <div className={`p-2 text-lg overflow-hidden font-mono ${errorstatus === true ? 'text-red-500' : 'text-green-500'}`}>
+                    {outputdata}
+                </div>
             </div>
             <div className='my-2 text-white text-xl font-semibold'>
                 Statistics 
             </div>
-            <div className='border border-red-500 rounded-md'>
-                <ul className='font-semibold text-xl p-3'>
+            <div className='border border-cyan-500 rounded-md p-2'>
+                <ul  className='font-semibold text-xl p-3  overflow-y-auto'>
                     <li>Status : {codestatus}</li>
                     <li>Run Time : {runtime}</li>
                     <li>Memory Usage : {memusage}</li>
