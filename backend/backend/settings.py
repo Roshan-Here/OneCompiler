@@ -59,7 +59,8 @@ CORS_ALLOWED_ORIGINS = []
 
 if DEBUG:
     CORS_ALLOWED_ORIGINS += [
-    "https://192.168.1.4:8000",
+    "http://192.168.1.4:8000",
+    "http://192.168.1.5:8111",
     "http://localhost:8000",
 ]
 
