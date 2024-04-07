@@ -3,11 +3,11 @@ import React, { useEffect, useState } from 'react'
 import dracula from "monaco-themes/themes/Dracula.json";
 import Footer from './../components/Footer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {faCirclePlay, faFloppyDisk, faL} from '@fortawesome/free-solid-svg-icons'
+import {faCirclePlay, faFloppyDisk} from '@fortawesome/free-solid-svg-icons'
 import axios from 'axios';
 import ThemeList from '../components/ThemeList';
 import LangList from '../components/LangList';
-import { bool } from 'prop-types';
+import Loader from './../components/Loader';
 
 function Compile() {
     const monaco = useMonaco()
@@ -23,6 +23,8 @@ function Compile() {
     const [runtime, setruntime] = useState("Nill")
     const [memusage, setmemusage] = useState("Nill")
     const [errorstatus, seterrorstatus] = useState(false)
+    const [isLoading, setisLoading] = useState(false)
+    const [outputLoading, setoutputLoading] = useState(false)
 
     // console.log(import.meta.env.VITE_BACKEND_URL)
     // console.log(language)
@@ -53,8 +55,10 @@ function Compile() {
             'code': code
         }
         try {
+            setoutputLoading(true)
             const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/run/`, submitdata);
             repetedusage(res)
+            setoutputLoading(false)
         } catch (error) {
             console.log(error);
         }
@@ -71,7 +75,7 @@ function Compile() {
             monaco.editor.defineTheme("updatetheme", value);
             monaco.editor.setTheme("updatetheme");
         }
-        console.log(value)
+        // console.log(value)
     }
 
     useEffect(() => {
@@ -80,7 +84,15 @@ function Compile() {
           monaco.editor.defineTheme("newtheme", dracula);
           monaco.editor.setTheme("newtheme");
         }
+        setisLoading(true)
+        setTimeout(() => {
+            setisLoading(false);
+          }, 300);
       }, [monaco]);
+
+      useEffect(()=>{
+
+      },[])
 
     const handlelanguage = (value) =>{
         setlanguage(value.value)
@@ -109,7 +121,9 @@ function Compile() {
 
     return (
     <section>
-    <div className=' bg-gray-900 bg-auto h-auto overflow-hidden'>
+        {isLoading ? (
+        <Loader/>):(
+        <div className=' bg-gray-900 bg-auto h-auto overflow-hidden'>
         {/* theme selector,language selector,run button */}
         <div className='flex flex-row justify-between'>
             <div className='flex justify-center px-2 md:px-6 mt-3'>
@@ -146,13 +160,13 @@ function Compile() {
                 {/* <button className='bg-success p-3 border border-green-400 hover:border-blue-600 rounded-md font-semibold text-white'>Run</button> */}
             </div>
         </div>
-      <div className='flex flex-col justify-between md:flex-row m-3'>
+        <div className='flex flex-col justify-between md:flex-row m-3'>
         <div className='md:w-3/5 w-full h-96 md:px-6 px-4 md:h-auto'>
             <Editor
             // error ! - border-red-500 : border-cyan-500
             className={`border rounded-lg border-cyan-500 ${errorstatus ? 'border-red-500': 'border-cyan-500'}`}
             theme={theme || "Dracula"}
-            language={langforbutton || "python"}
+            language={language || "python"}
             value={deftmsg}
             onChange={handlechange}
             ></Editor>
@@ -166,7 +180,14 @@ function Compile() {
             <div className={` w-full border ${errorstatus ? 'border-red-400': 'border-cyan-400'} rounded-md h-44 md:h-96 overflow-y-auto`}>
                 {/* text-green-500 : text-red-500 */}
                 <div className={`p-2 text-lg overflow-hidden font-mono ${errorstatus === true ? 'text-red-500' : 'text-green-500'}`}>
-                    {outputdata}
+                    {outputLoading ?(
+                        <div className='flex justify-center items-center p-6'>
+                            <span className="loading loading-bars loading-lg"></span>
+                        </div>
+                    ):(
+                        <span>{outputdata}</span>
+                        // {outputdata}
+                    )}
                 </div>
             </div>
             <div className='my-2 text-white text-xl font-semibold'>
@@ -180,8 +201,9 @@ function Compile() {
                 </ul>
             </div>
         </div>
-      </div>
+        </div>
     </div>
+        )}
     <Footer/>
     </section>
   )
