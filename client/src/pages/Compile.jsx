@@ -84,14 +84,13 @@ function Compile() {
           monaco.editor.defineTheme("newtheme", dracula);
           monaco.editor.setTheme("newtheme");
         }
-        setisLoading(true)
-        setTimeout(() => {
-            setisLoading(false);
-          }, 300);
       }, [monaco]);
 
       useEffect(()=>{
-
+        setisLoading(true)
+        setTimeout(() => {
+            setisLoading(false);
+          }, 400);
       },[])
 
     const handlelanguage = (value) =>{
@@ -122,7 +121,7 @@ function Compile() {
     return (
     <section>
         {isLoading ? (
-        <Loader/>):(
+        <Loader about={"Loading PlayGround...."}/>):(
         <div className=' bg-gray-900 bg-auto h-auto overflow-hidden'>
         {/* theme selector,language selector,run button */}
         <div className='flex flex-row justify-between'>
@@ -172,7 +171,7 @@ function Compile() {
             ></Editor>
         </div>
         
-        <div className='md:w-2/5 md:px-2 px-6 w-4.5/5 over'
+        <div className='md:w-2/5 md:px-2 px-6 w-4.5/5'
         >
             <div className='my-2 text-white text-xl font-semibold'>
                 Output

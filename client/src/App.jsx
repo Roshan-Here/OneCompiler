@@ -5,6 +5,7 @@ import Home from "./pages/Home"
 import NotFound from "./components/NotFound"
 import Compile from "./pages/Compile"
 import CommingSoon from "./pages/CommingSoon"
+import Pasteit from "./pages/Pasteit"
 function App() {
 
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path="/test" element={<Testing/>}/>
         <Route path="/about" element={<Testing/>}/>
         <Route path="/login" element={<CommingSoon/>}/>
+        <Route path="/pasteit" element={<Pasteit/>}/>
         <Route path="*" element={<NotFound/>}/>
       </Routes>
     </BrowserRouter>
