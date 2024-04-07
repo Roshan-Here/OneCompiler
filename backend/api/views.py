@@ -92,3 +92,20 @@ class CreateSaveLink(generics.CreateAPIView):
         unique_code = str(uuid.uuid4())
         print(unique_code)
         serializer.save(unique_link=unique_code)
+        
+class RetriveSaveLink(generics.RetrieveAPIView):
+    queryset = Savelink.objects.all()
+    serializer_class = SaveLinkSerializer
+    lookup_field = 'unique_link'
+    
+class SaveLinkList(generics.ListAPIView):
+    queryset = Savelink.objects.all().order_by('-created')
+    serializer_class = SaveLinkSerializer
+    
+class DeleteSaveLink(generics.DestroyAPIView):
+    queryset = Savelink.objects.all()
+    serializer_class = SaveLinkSerializer
+    lookup_field = 'unique_link'
+    
+    def perform_destroy(self, instance):
+        return super().perform_destroy(instance)

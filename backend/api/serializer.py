@@ -16,4 +16,4 @@ class OneCodeSerializer(serializers.ModelSerializer):
 class SaveLinkSerializer(serializers.ModelSerializer):
     class Meta:
         model = Savelink
-        fields = ['code','pref_language']
+        fields = ['code','pref_language','unique_link']

@@ -11,5 +11,5 @@ class OneCode(models.Model):
 class Savelink(models.Model):
     code = models.TextField()
     pref_language = models.CharField(max_length=255,null=True)
-    unique_link = models.CharField(max_length=200,null=False)
+    unique_link = models.CharField(max_length=200,null=True,blank=True)
     created = models.DateTimeField(auto_now_add=True)
