@@ -2,14 +2,15 @@ from django.shortcuts import render
 from rest_framework import status,serializers
 from rest_framework import generics
 from rest_framework.response import Response
-from .serializer import OneCodeSerializer
-from .models import OneCode
+from .serializer import OneCodeSerializer, SaveLinkSerializer
+from .models import OneCode, Savelink
 from django.http import JsonResponse
 from .Compile import run_my_code, get_memory_usage
 import asyncio
 import psutil
 import time
 import re
+import uuid
 # Create your views here.
 
 
@@ -82,3 +83,12 @@ class GetRunCode(generics.CreateAPIView):
 # }
 # """
 # }
+
+class CreateSaveLink(generics.CreateAPIView):
+    queryset = Savelink.objects.all()
+    serializer_class = SaveLinkSerializer
+    
+    def perform_create(self, serializer):
+        unique_code = str(uuid.uuid4())
+        print(unique_code)
+        serializer.save(unique_link=unique_code)
