@@ -1,7 +1,22 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Footer from './../components/Footer';
+import Editor,{ useMonaco } from '@monaco-editor/react';
+import dracula from "monaco-themes/themes/Dracula.json";
 
 function Pasteit() {
+  const monaco = useMonaco()
+  const [code,setcode] = useState("")
+  const handlechangeeditor = (value)=>{
+    setcode(value)
+  }
+  console.log(code)
+  useEffect(() => {
+    if (monaco) {
+      monaco.editor.defineTheme("newtheme", dracula);
+      monaco.editor.setTheme("newtheme");
+    }
+  }, [monaco]);
+
   return (
     <section>
       <div className='bg-gray-900 h-screen overflow-auto'>
@@ -19,8 +34,13 @@ function Pasteit() {
             </div>
         </div>
         <div className='flex m-3 overflow-auto'>
-            <div className='border p-3 border-cyan-400 w-full md:h-96 h-auto rounded-lg'>
-                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Animi non quidem fugiat repellendus exercitationem nulla nisi eligendi, consectetur quam similique veritatis cum maiores mollitia nobis provident distinctio delectus temporibus dicta!</p>
+            <div className='border p-3 border-cyan-400 w-full h-96 rounded-lg'>
+                <Editor
+                theme={dracula}
+                language='python'
+                value={code}
+                onChange={handlechangeeditor}
+                ></Editor>
             </div>
         </div>
 
