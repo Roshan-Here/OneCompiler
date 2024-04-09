@@ -3,11 +3,11 @@ import React, { useEffect, useState } from 'react'
 import dracula from "monaco-themes/themes/Dracula.json";
 import Footer from './../components/Footer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {faCirclePlay, faFloppyDisk} from '@fortawesome/free-solid-svg-icons'
+import { faCirclePlay } from '@fortawesome/free-solid-svg-icons'
 import axios from 'axios';
-import ThemeList from '../components/ThemeList';
-import LangList from '../components/LangList';
 import Loader from './../components/Loader';
+import CodeEditorButtons from '../components/CodeEditorButtons';
+import toast, { Toaster } from 'react-hot-toast';
 
 function Compile() {
     const monaco = useMonaco()
@@ -59,8 +59,11 @@ function Compile() {
             const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/run/`, submitdata);
             repetedusage(res)
             setoutputLoading(false)
+            toast.success("Compiled Sucessfully")
         } catch (error) {
-            console.log(error);
+            toast.error(`Error ${error}`)
+            setoutputLoading(false)
+            // console.log(error);
         }
     }
     const handlechange=(value)=>{
@@ -84,14 +87,13 @@ function Compile() {
           monaco.editor.defineTheme("newtheme", dracula);
           monaco.editor.setTheme("newtheme");
         }
-        setisLoading(true)
-        setTimeout(() => {
-            setisLoading(false);
-          }, 300);
       }, [monaco]);
 
       useEffect(()=>{
-
+        setisLoading(true)
+        setTimeout(() => {
+            setisLoading(false);
+          }, 400);
       },[])
 
     const handlelanguage = (value) =>{
@@ -122,36 +124,19 @@ function Compile() {
     return (
     <section>
         {isLoading ? (
-        <Loader/>):(
+        <Loader about={"Loading PlayGround...."}/>):(
         <div className=' bg-gray-900 bg-auto h-auto overflow-hidden'>
+        <Toaster/>
         {/* theme selector,language selector,run button */}
         <div className='flex flex-row justify-between'>
-            <div className='flex justify-center px-2 md:px-6 mt-3'>
-                <div className='px-6'>
-                <div className="dropdown dropdown-hover">
-                    {/* <option className='font-semibold text-slate-300'>Theme Selector</option> */}
-                    <div tabIndex={0} role="button" className="btn btn-block btn-neutral btn-outline btn-primary mt-1">{themename}</div>
-                        <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-slate-800 rounded-box w-52">
-                            <ThemeList handleTheme={handleTheme}/>
-                        </ul>
-                    </div>
-                </div>
-                <div className='px-5'>
-                <div className="dropdown dropdown-hover">
-                    {/* <option className='font-semibold text-slate-300'>Select Language</option> */}
-                    <div tabIndex={0} role="button" className="btn btn-block btn-neutral btn-outline btn-accent mt-1">{langforbutton}</div>
-                        <ul tabIndex={0} className="dropdown-content z-[1] shadow bg-slate-800 rounded-box w-56 max-h-48 overflow-y-auto">
-                            <LangList handlelanguage={handlelanguage}/>
-                        </ul>
-                    </div>
-                </div>
-                <div className='px-5'>
-                    <div onClick={handlesave} role='button' className='hidden md:btn btn-block btn-neutral border-r-2 border-green-500 hover:border-cyan-500 mt-1 hover:text-green-400 font-semibold text-white'>
-                        Save
-                    <FontAwesomeIcon className='text-2xl text-blue-400 transition-colors' icon={faFloppyDisk} />
-                    </div>
-                </div>
-            </div>
+            {/* repeated usage so created new component */}
+            <CodeEditorButtons
+                handleTheme={handleTheme}
+                handlelanguage={handlelanguage}
+                handlesave={handlesave}
+                themename={themename}
+                langforbutton={langforbutton}
+            />
             <div className='px-0.5 md:px-6 mt-3'>
                 <div onClick={runCode} role='button' className='btn btn-block btn-neutral border-r-2 border-green-500 hover:border-cyan-500 mt-1 hover:text-green-400 font-semibold text-white'>
                 <FontAwesomeIcon className='text-2xl text-green-500 transition-colors hover:text-cyan-500' icon={faCirclePlay} />
@@ -172,7 +157,7 @@ function Compile() {
             ></Editor>
         </div>
         
-        <div className='md:w-2/5 md:px-2 px-6 w-4.5/5 over'
+        <div className='md:w-2/5 md:px-2 px-6 w-4.5/5'
         >
             <div className='my-2 text-white text-xl font-semibold'>
                 Output
