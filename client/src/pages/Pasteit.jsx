@@ -16,6 +16,7 @@ function Pasteit() {
   const [langforbutton, setlangforbutton] = useState("Languages")
   const [fileextention, setfileextention] = useState("txt")
   const [isLoading, setisLoading] = useState(false)
+  const [catchbot, setcatchbot] = useState(false)
 
   console.log(code)
   useEffect(() => {
@@ -39,6 +40,10 @@ function Pasteit() {
     setcode(deftmsg)
     setfileextention(value.extension)
 }
+const handlebot=()=>{
+  setcatchbot(true)
+}
+
 
 const handlesave = ()=>{
     console.log("save button clicked!",fileextention)
@@ -78,6 +83,7 @@ const handleTheme=(value,name)=>{
     <Loader about={"Loading Pasteit...."}/>):(
       <div className='bg-gray-900 overflow-auto'>
         <div className='flex justify-between items-center'>
+        <input type="checkbox" onClick={handlebot} className="checkbox hidden" />
         <CodeEditorButtons
                 handleTheme={handleTheme}
                 handlelanguage={handlelanguage}

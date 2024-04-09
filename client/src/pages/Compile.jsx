@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import dracula from "monaco-themes/themes/Dracula.json";
 import Footer from './../components/Footer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCirclePlay } from '@fortawesome/free-solid-svg-icons'
+import { faCirclePlay, faL } from '@fortawesome/free-solid-svg-icons'
 import axios from 'axios';
 import Loader from './../components/Loader';
 import CodeEditorButtons from '../components/CodeEditorButtons';
@@ -25,6 +25,7 @@ function Compile() {
     const [errorstatus, seterrorstatus] = useState(false)
     const [isLoading, setisLoading] = useState(false)
     const [outputLoading, setoutputLoading] = useState(false)
+    const [catchbot, setcatchbot] = useState(false)
 
     // console.log(import.meta.env.VITE_BACKEND_URL)
     // console.log(language)
@@ -50,26 +51,35 @@ function Compile() {
     }
 
     const runCode= async()=>{
-        const submitdata = {
-            'pref_language' : language,
-            'code': code
+        if (catchbot===true){
+        toast.error("bot found")
         }
-        try {
-            setoutputLoading(true)
-            const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/run/`, submitdata);
-            repetedusage(res)
-            setoutputLoading(false)
-            toast.success("Compiled Sucessfully")
-        } catch (error) {
-            toast.error(`Error ${error}`)
-            setoutputLoading(false)
-            // console.log(error);
+        else{
+            const submitdata = {
+                'pref_language' : language,
+                'code': code
+            }
+            try {
+                setoutputLoading(true)
+                const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/run/`, submitdata);
+                repetedusage(res)
+                toast.success("Compiled Sucessfully")
+                setoutputLoading(false)
+            } catch (error) {
+                toast.error(`Error ${error}`)
+                setoutputLoading(false)
+                // console.log(error);
+            }
         }
+
     }
     const handlechange=(value)=>{
         setcode(value)
     }
     // console.log(code)
+    const handlebot=()=>{
+        setcatchbot(true)
+    }
     
     const handleTheme=(value,name)=>{
         setTheme(value)
@@ -162,6 +172,7 @@ function Compile() {
             <div className='my-2 text-white text-xl font-semibold'>
                 Output
             </div>
+            <input type="checkbox" onClick={handlebot} className="checkbox hidden" />
             <div className={` w-full border ${errorstatus ? 'border-red-400': 'border-cyan-400'} rounded-md h-44 md:h-96 overflow-y-auto`}>
                 {/* text-green-500 : text-red-500 */}
                 <div className={`p-2 text-lg overflow-hidden font-mono ${errorstatus === true ? 'text-red-500' : 'text-green-500'}`}>
