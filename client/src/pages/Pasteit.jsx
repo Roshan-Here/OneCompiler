@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import Footer from './../components/Footer';
 import Editor,{ useMonaco } from '@monaco-editor/react';
+import { useParams } from 'react-router-dom';
 import dracula from "monaco-themes/themes/Dracula.json";
 import CodeEditorButtons from '../components/CodeEditorButtons';
 import Loader from '../components/Loader';
-import { faLink } from '@fortawesome/free-solid-svg-icons';
+import { faL, faLink } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 // onclick = link generate, =>
@@ -14,6 +15,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 
 function Pasteit() {
+  const pastelink = useParams()
+  console.log(pastelink)
+  if(Object.keys(pastelink).length===0){
+    console.log("Empty!")
+  }
+  else{
+    console.log("non Empty")
+  }
   const monaco = useMonaco()
   const [deftmsg,setdeftmsg] = useState("Enter your code to be Saved through link")
   const [code,setcode] = useState("")
@@ -24,6 +33,8 @@ function Pasteit() {
   const [fileextention, setfileextention] = useState("txt")
   const [isLoading, setisLoading] = useState(false)
   const [catchbot, setcatchbot] = useState(false)
+  const [newlink, setnewlink] = useState("")
+  const [linkclicked, setlinkclicked] = useState(true)
 
   console.log(code)
   useEffect(() => {
@@ -69,6 +80,16 @@ const handlesave = ()=>{
 
 const handlechange=(value)=>{
     setcode(value)
+    // setdeftmsg(value) => incomming data
+}
+
+const handlegetlink=()=>{
+  if(deftmsg===code){
+    setlinkclicked(false)
+  }
+  else{
+    setlinkclicked(true)
+  }
 }
 
 // console.log(code)
@@ -99,14 +120,14 @@ const handleTheme=(value,name)=>{
                 langforbutton={langforbutton}
             />
             {/* link will be hidden only active when getLink fetch saved -result */}
-            <div className='flex mt-3'>
+            <div className={`flex mt-3 ${linkclicked? 'hidden':''}`}>
                 <div className='hidden md:btn btn-active hover:btn-accent border border-gray-300 hover:border-violet-500 overflow-hidden'>
-                  <p className='p-4 text-md font-sans text-cyan-500 hover:text-black'>123456789</p>
+                  <p className='p-4 text-md font-sans text-cyan-500 hover:text-black'>{newlink}</p>
                 </div>
             </div>
 
             <div className='px-0.5 md:px-6 mt-3 overflow-hidden'>
-                <div role='button' className='btn btn-block btn-neutral border-r-2 border-green-500 hover:border-cyan-500  hover:text-green-400 font-semibold text-white'>
+                <div onClick={handlegetlink} role='button' className='btn btn-block btn-neutral border-r-2 border-green-500 hover:border-cyan-500  hover:text-green-400 font-semibold text-white'>
                 <FontAwesomeIcon className='text-2xl text-green-500 transition-colors hover:text-cyan-500' icon={faLink} />
                     Get Link
                 </div>
