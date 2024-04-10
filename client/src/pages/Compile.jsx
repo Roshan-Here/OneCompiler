@@ -103,7 +103,7 @@ function Compile() {
         setisLoading(true)
         setTimeout(() => {
             setisLoading(false);
-          }, 400);
+          }, 800);
       },[])
 
     const handlelanguage = (value) =>{
