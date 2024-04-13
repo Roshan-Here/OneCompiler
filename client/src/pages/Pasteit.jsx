@@ -1,12 +1,28 @@
 import React, { useEffect, useState } from 'react'
 import Footer from './../components/Footer';
 import Editor,{ useMonaco } from '@monaco-editor/react';
+import { useParams } from 'react-router-dom';
 import dracula from "monaco-themes/themes/Dracula.json";
 import CodeEditorButtons from '../components/CodeEditorButtons';
 import Loader from '../components/Loader';
+import { faL, faLink } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+// onclick = link generate, =>
+// check if link already generated : toast link already generated,
+// => else change the code!=>if changed delete old link data, 
+// ->also check if code changed ? then create new link,
 
 
 function Pasteit() {
+  const pastelink = useParams()
+  console.log(pastelink)
+  if(Object.keys(pastelink).length===0){
+    console.log("Empty!")
+  }
+  else{
+    console.log("non Empty")
+  }
   const monaco = useMonaco()
   const [deftmsg,setdeftmsg] = useState("Enter your code to be Saved through link")
   const [code,setcode] = useState("")
@@ -17,6 +33,8 @@ function Pasteit() {
   const [fileextention, setfileextention] = useState("txt")
   const [isLoading, setisLoading] = useState(false)
   const [catchbot, setcatchbot] = useState(false)
+  const [newlink, setnewlink] = useState("")
+  const [linkclicked, setlinkclicked] = useState(true)
 
   console.log(code)
   useEffect(() => {
@@ -30,7 +48,7 @@ function Pasteit() {
     setisLoading(true)
     setTimeout(() => {
         setisLoading(false);
-      }, 400);
+      }, 800);
   },[])
 
   const handlelanguage = (value) =>{
@@ -62,6 +80,16 @@ const handlesave = ()=>{
 
 const handlechange=(value)=>{
     setcode(value)
+    // setdeftmsg(value) => incomming data
+}
+
+const handlegetlink=()=>{
+  if(deftmsg===code){
+    setlinkclicked(false)
+  }
+  else{
+    setlinkclicked(true)
+  }
 }
 
 // console.log(code)
@@ -81,8 +109,8 @@ const handleTheme=(value,name)=>{
     <section>
     {isLoading ? (
     <Loader about={"Loading Pasteit...."}/>):(
-      <div className='bg-gray-900 overflow-auto'>
-        <div className='flex justify-between items-center'>
+      <div className='bg-gray-900 bg-auto h-auto overflow-hidden'>
+        <div className='flex flex-row justify-between items-center'>
         <input type="checkbox" onClick={handlebot} className="checkbox hidden" />
         <CodeEditorButtons
                 handleTheme={handleTheme}
@@ -91,16 +119,18 @@ const handleTheme=(value,name)=>{
                 themename={themename}
                 langforbutton={langforbutton}
             />
-            {/* <div className='flex justify-between p-5'>
-                <h1 className='p-5'>Theme</h1>
-                <h1 className='p-5'>Languages</h1>
-            </div> */}
             {/* link will be hidden only active when getLink fetch saved -result */}
-            <div className='flex justify-center '>
-                <h1>link</h1>
+            <div className={`flex mt-3 ${linkclicked? 'hidden':''}`}>
+                <div className='hidden md:btn btn-active hover:btn-accent border border-gray-300 hover:border-violet-500 overflow-hidden'>
+                  <p className='p-4 text-md font-sans text-cyan-500 hover:text-black'>{newlink}</p>
+                </div>
             </div>
-            <div className='flex p-5'>
-                <h1>GetLink</h1>
+
+            <div className='px-0.5 md:px-6 mt-3 overflow-hidden'>
+                <div onClick={handlegetlink} role='button' className='btn btn-block btn-neutral border-r-2 border-green-500 hover:border-cyan-500  hover:text-green-400 font-semibold text-white'>
+                <FontAwesomeIcon className='text-2xl text-green-500 transition-colors hover:text-cyan-500' icon={faLink} />
+                    Get Link
+                </div>
             </div>
         </div>
         <div className='flex-row mr-6 ml-6 mt-4'>

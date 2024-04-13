@@ -22,6 +22,7 @@ function App() {
         <Route path="/about" element={<Testing/>}/>
         <Route path="/login" element={<CommingSoon/>}/>
         <Route path="/pasteit" element={<Pasteit/>}/>
+        <Route path="/pasteit/:pastelink" element={<Pasteit/>}/>
         <Route path="*" element={<NotFound/>}/>
       </Routes>
     </BrowserRouter>
