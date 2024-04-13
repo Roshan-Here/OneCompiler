@@ -4,7 +4,8 @@ from .views import (
     CreateSaveLink,
     SaveLinkList,
     RetriveSaveLink,
-    DeleteSaveLink
+    DeleteSaveLink,
+    DestroyAllSavedData
     )
 
 from django.urls import path
@@ -17,4 +18,5 @@ urlpatterns = [
     path("viewsavedcode/",SaveLinkList.as_view(), name="view-all-savedcode"),
     path("savecode/<unique_link>", RetriveSaveLink.as_view(), name="save-code-link"),
     path("savecode/<unique_link>/delete", DeleteSaveLink.as_view(), name="delete-save-code"),
+    path("savecodedeleteall", DestroyAllSavedData.as_view(), name="delete-all-save-code"),
 ]

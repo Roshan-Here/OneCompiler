@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from rest_framework.views import APIView
 from rest_framework import status,serializers
 from rest_framework import generics
 from rest_framework.response import Response
@@ -109,3 +110,13 @@ class DeleteSaveLink(generics.DestroyAPIView):
     
     def perform_destroy(self, instance):
         return super().perform_destroy(instance)
+
+
+# to delete all unwanted datas while developing!
+class DestroyAllSavedData(APIView):
+    def delete(self,request,*args,**kwargs):
+        try:
+            Savelink.objects.all().delete()
+            return Response({"message": "All data deleted successfully"}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
