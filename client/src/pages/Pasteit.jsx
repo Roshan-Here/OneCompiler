@@ -30,7 +30,9 @@ function Pasteit() {
   const [newlink, setnewlink] = useState("")
   const [linkclicked, setlinkclicked] = useState(true)
   const [linkGenerated, setlinkGenerated] = useState(false)
+  const { pastelink } = useParams()
 
+  // console.log(pastelink)
   const geturl=async()=>{
     const submitdata = {
       'pref_language' : language,
@@ -45,7 +47,7 @@ function Pasteit() {
         }
         else{
             try{
-              const res = await axios.post('api/savecode/',submitdata)
+              const res = await axios.post('/api/savecode/',submitdata)
               setnewlink(res.data['unique_link'])
               // console.log(res.data['unique_link'])
               setdeftmsg(code)
@@ -60,6 +62,28 @@ function Pasteit() {
         }
   }
 
+  const getdatafromlink = async()=>{
+    try{
+      setisLoading(true)
+      console.log(pastelink)
+      const res = await axios.get(`/api/savecode/${pastelink}`)
+      // const res = await axios.get(`/api/viewsavedcode/`)
+      console.log(res.data)
+      setdeftmsg(res.data['code'])
+      setcode(deftmsg)
+      setlanguage(res.data['pref_language'])
+      setlangforbutton(language)
+      setTimeout(() => {
+        // setcode()
+        setisLoading(false)
+      }, 800);
+    }
+    catch(error){
+      console.log(error)
+      toast.error(error)
+    }
+  }
+
   const handlecopy = (value) =>{
     try{
       navigator.clipboard.write(value)
@@ -71,6 +95,15 @@ function Pasteit() {
   }
 
   console.log(code)
+
+  //calls the function whenever the pastlink changes 
+  useEffect(()=>{
+    if(pastelink){
+      console.log(pastelink)
+      getdatafromlink()
+    }
+  },[pastelink])
+
   useEffect(() => {
     if (monaco) {
       monaco.editor.defineTheme("newtheme", dracula);
@@ -90,7 +123,7 @@ function Pasteit() {
     setlanguage(value.value)
     setlangforbutton(value.name)
     setdeftmsg(value.initCode)
-    // setcode(deftmsg)
+    setcode(deftmsg)
     setfileextention(value.extension)
 }
 const handlebot=()=>{
@@ -120,7 +153,7 @@ const handlechange=(value)=>{
 
 const handlegetlink=()=>{
   if(linkGenerated){
-    toast.error('Link Already generated refreash')
+    toast.error('its already generated refreash, go back and create new')
   }
   else if(deftmsg===code){
     toast.error('try to add some keys')
