@@ -5,7 +5,9 @@ from .views import (
     SaveLinkList,
     RetriveSaveLink,
     DeleteSaveLink,
-    DestroyAllSavedData
+    DestroyAllSavedData,
+    ProblemCreate,
+    RetriveProblemSmallData
     )
 
 from django.urls import path
@@ -19,4 +21,6 @@ urlpatterns = [
     path("savecode/<unique_link>", RetriveSaveLink.as_view(), name="save-code-link"),
     path("savecode/<unique_link>/delete", DeleteSaveLink.as_view(), name="delete-save-code"),
     path("savecodedeleteall", DestroyAllSavedData.as_view(), name="delete-all-save-code"),
+    path("problem/", ProblemCreate.as_view(), name="problem-create"),
+    path("problemsmall/", RetriveProblemSmallData.as_view(), name="problem-for-listing-table")
 ]

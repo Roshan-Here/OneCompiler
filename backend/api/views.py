@@ -3,8 +3,8 @@ from rest_framework.views import APIView
 from rest_framework import status,serializers
 from rest_framework import generics
 from rest_framework.response import Response
-from .serializer import OneCodeSerializer, SaveLinkSerializer
-from .models import OneCode, Savelink
+from .serializer import OneCodeSerializer, SaveLinkSerializer, ProblemSerializer, ProblemDataSmallSerializer
+from .models import OneCode, Savelink, Problem
 from django.http import JsonResponse
 from .Compile import run_my_code, get_memory_usage
 import asyncio
@@ -120,3 +120,15 @@ class DestroyAllSavedData(APIView):
             return Response({"message": "All data deleted successfully"}, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+#######################################
+            #PROBLEM
+#######################################
+
+class ProblemCreate(generics.ListCreateAPIView):
+    queryset = Problem.objects.all()
+    serializer_class = ProblemSerializer
+    
+class RetriveProblemSmallData(generics.ListAPIView):
+    queryset = Problem.objects.all() 
+    serializer_class = ProblemDataSmallSerializer

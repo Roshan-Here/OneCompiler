@@ -10,7 +10,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+import os
+from dotenv import load_dotenv
 from pathlib import Path
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -62,8 +66,9 @@ if DEBUG:
     "http://192.168.1.4:8000",
     "http://192.168.1.5:8111",
     "http://127.0.0.1:8000",
-    "http://localhost:8000",
-]
+    os.environ.get("CORS_ALLOWED_ORIGIN")
+] 
+    
 
 ROOT_URLCONF = 'backend.urls'
 
