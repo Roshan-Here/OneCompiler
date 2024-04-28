@@ -1,5 +1,6 @@
+from django.contrib.auth.models import User
 from rest_framework import serializers
-from .models import OneCode, Savelink, Problem, Example
+from .models import OneCode, Savelink, Problem, Example, Blog
 
 
 class OneCodeSerializer(serializers.ModelSerializer):
@@ -83,3 +84,26 @@ SAMPLE DATA
 }
 
 """
+
+# jwt
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ["id","username","password"]
+        extra_kwargs = {"password": {"write_only":True}}
+        
+    def create(self, validate_data):
+        user = User.objects.create_user(**validate_data)
+        return user
+    
+    
+    
+# BlogSerializer
+
+class BlogSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Blog
+        fields = ["id","Title", "Content","created_at","author"]
+        extra_kwargs = {"author":{"read_only":True}}
+    

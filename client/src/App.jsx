@@ -6,6 +6,7 @@ import NotFound from "./components/NotFound"
 import Compile from "./pages/Compile"
 import CommingSoon from "./pages/CommingSoon"
 import Pasteit from "./pages/Pasteit"
+import ForInterview from "./components/ForInterview"
 function App() {
 
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/home" element={<Home/>}/>
         <Route path="/" element={<Compile/>}/>
         <Route path="/test" element={<Testing/>}/>
+        <Route path="/forinterview" element={<ForInterview/>}/>
         <Route path="/about" element={<Testing/>}/>
         <Route path="/login" element={<CommingSoon/>}/>
         <Route path="/pasteit" element={<Pasteit/>}/>

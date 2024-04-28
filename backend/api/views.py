@@ -1,10 +1,24 @@
 from django.shortcuts import render
+from django.contrib.auth.models import User
+from rest_framework.permissions import IsAuthenticated,AllowAny
 from rest_framework.views import APIView
 from rest_framework import status,serializers
 from rest_framework import generics
 from rest_framework.response import Response
-from .serializer import OneCodeSerializer, SaveLinkSerializer, ProblemSerializer, ProblemDataSmallSerializer
-from .models import OneCode, Savelink, Problem
+from .serializer import (
+                OneCodeSerializer,
+                SaveLinkSerializer,
+                ProblemSerializer,
+                ProblemDataSmallSerializer,
+                UserSerializer,
+                BlogSerializer)
+
+from .models import (
+                OneCode,
+                Savelink,
+                Problem,
+                Blog)
+
 from django.http import JsonResponse
 from .Compile import run_my_code, get_memory_usage
 import asyncio
@@ -132,3 +146,42 @@ class ProblemCreate(generics.ListCreateAPIView):
 class RetriveProblemSmallData(generics.ListAPIView):
     queryset = Problem.objects.all() 
     serializer_class = ProblemDataSmallSerializer
+    
+########################################
+                #user 
+########################################
+
+class CreateUserView(generics.CreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [AllowAny]
+    
+    
+########################################
+                #Blog 
+########################################
+
+class BlogListView(generics.ListAPIView):
+    serializer_class = BlogSerializer
+    permission_classes = [IsAuthenticated]
+    
+    def get_queryset(self):
+        user = self.request.user
+        queryset = Blog.objects.fliter(author=user)
+        return queryset
+    
+    def perform_create(self, serializer):
+        if serializer.is_valid():
+            serializer.save(author=self.request.user)
+        else:
+            print(serializer.errors)
+            
+            
+class BlogDeleteView(generics.DestroyAPIView):
+    serializer_class = BlogSerializer
+    permission_classes = [IsAuthenticated]
+    
+    def get_queryset(self):
+        user = self.request.user
+        queryset = Blog.objects.fliter(author=user)
+        return queryset
