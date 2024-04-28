@@ -7,6 +7,7 @@ import Compile from "./pages/Compile"
 import CommingSoon from "./pages/CommingSoon"
 import Pasteit from "./pages/Pasteit"
 import Blog from "./pages/Blog"
+import Challenges from "./pages/Challenges"
 
 function App() {
 
@@ -24,6 +25,7 @@ function App() {
         <Route path="/about" element={<Testing/>}/>
         <Route path="/login" element={<CommingSoon/>}/>
         <Route path="/blog" element={<Blog/>}/>
+        <Route path="/challenges" element={<Challenges/>}/>
         <Route path="/pasteit" element={<Pasteit/>}/>
         <Route path="/pasteit/:pastelink" element={<Pasteit/>}/>
         <Route path="*" element={<NotFound/>}/>

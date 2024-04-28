@@ -17,7 +17,7 @@ function Blog() {
     setisLoading(true)
     setTimeout(() => {
         setisLoading(false);
-        navigate('/test')
+        navigate('/about')
       }, 1800);
   },[])
 

@@ -1,6 +1,8 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
 import Footer from './Footer';
+import CompilerIMG from './Statiacimages/Compiler.PNG'
+import PasteitIMG from './Statiacimages/Pasteit.png'
 
 function Testing() {
   return (
@@ -46,7 +48,7 @@ function Testing() {
         <div className='flex flex-col md:flex-row justify-center items-center'>
           <div className='p-6 md:p-6'>
             <div className="card w-auto glass bg-base-100 shadow-xl ">
-              <figure><img src="https://daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg" alt="car!"/></figure>
+              <figure><img src={CompilerIMG} alt="car!"/></figure>
                 <div className="card-body">
                   <h2 className="card-title font-bold text-black  md:text-2xl">Code Compiler</h2>
                   <p className='text-sm text-md md:text-xl'>A simple platform to execute more than 80+ programming languages</p>
@@ -58,7 +60,7 @@ function Testing() {
           </div>
           <div className='p-3 md:p-6'>
             <div className="card w-auto glass bg-base-100 shadow-xl ">
-              <figure><img src="https://daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg" alt="car!"/></figure>
+              <figure><img src={PasteitIMG} alt="Pasteit"/></figure>
                 <div className="card-body">
                   <h2 className="card-title font-bold text-black  md:text-2xl">Paste it</h2>
                   <p className='text-sm text-md md:text-xl'>Online clipboard. Share text over the internet by generating a unique URL</p>
@@ -70,7 +72,7 @@ function Testing() {
           </div>
           <div className='p-6 md:p-6'>
             <div className="card w-auto glass bg-base-100 shadow-xl ">
-              <figure><img src="https://daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg" alt="car!"/></figure>
+              <figure><img src={PasteitIMG} alt="car!"/></figure>
                 <div className="card-body">
                   <h2 className="card-title font-bold text-black  md:text-2xl">Code Challenges</h2>
                   <p className='text-sm text-md md:text-xl'>Test your knowledge with code challenges based on real-world technical interviews</p>

@@ -22,5 +22,6 @@ export default defineConfig({
         secure: false,
       }
     }
-  }
+  },
+  assetsInclude: ['**/*.PNG']
 })
