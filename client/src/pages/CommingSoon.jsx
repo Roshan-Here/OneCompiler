@@ -1,7 +1,17 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Footer from './../components/Footer';
+import TokenAuth from '../utils/TokenAuth';
+// import privateaxious from '../utils/api';
+// import { useSelector } from 'react-redux';
+
+
 
 function CommingSoon() {
+  TokenAuth()
+//   const accessToken = useSelector((state) => state.user.ACESS_TOKEN)
+//   console.log(accessToken)
+// privateaxious()
+
   return (
       <>
       <div className='flex flex-col justify-center min-h-lvh bg-cyan-800 overflow-hidden p-5'>
