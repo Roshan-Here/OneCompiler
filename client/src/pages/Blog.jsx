@@ -10,6 +10,7 @@ import toast, { Toaster } from 'react-hot-toast';
 function Blog() {
   const authenticated = useSelector((state) => state.user.authenticated)
   console.log(authenticated)
+  // create new loading for authorized
   const [isLoading, setisLoading] = useState(false)
   const navigate = useNavigate()
 
