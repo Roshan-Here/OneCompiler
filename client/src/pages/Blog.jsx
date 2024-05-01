@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux'
 import Loader from '../components/Loader'
 import { useNavigate } from 'react-router-dom'
 import toast, { Toaster } from 'react-hot-toast';
+import TokenAuth from '../utils/TokenAuth';
 
 // Blog needs 
 // Titile,smalldescription, Author + img url
@@ -13,6 +14,8 @@ function Blog() {
   // create new loading for authorized
   const [isLoading, setisLoading] = useState(false)
   const navigate = useNavigate()
+
+  TokenAuth()
 
   useEffect(()=>{
     setisLoading(true)

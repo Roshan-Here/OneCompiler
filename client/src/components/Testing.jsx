@@ -53,7 +53,9 @@ function Testing() {
                   <h2 className="card-title font-bold text-black  md:text-2xl">Code Compiler</h2>
                   <p className='text-sm text-md md:text-xl'>A simple platform to execute more than 80+ programming languages</p>
                   <div className="card-actions justify-center md:justify-end">
-                    <button className="btn btn-primary">Compile now!</button>
+                    <Link to="/">
+                      <button className="btn btn-primary">Compile now!</button>
+                    </Link>
                   </div>
                 </div>
             </div>
@@ -65,7 +67,9 @@ function Testing() {
                   <h2 className="card-title font-bold text-black  md:text-2xl">Paste it</h2>
                   <p className='text-sm text-md md:text-xl'>Online clipboard. Share text over the internet by generating a unique URL</p>
                   <div className="card-actions justify-center md:justify-end">
-                    <button className="btn btn-primary">Pastit now!</button>
+                    <Link to='/pasteit'>
+                      <button className="btn btn-primary">Pastit now!</button>
+                    </Link>
                   </div>
                 </div>
             </div>

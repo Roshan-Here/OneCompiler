@@ -11,7 +11,8 @@ from .serializer import (
                 ProblemSerializer,
                 ProblemDataSmallSerializer,
                 UserSerializer,
-                BlogSerializer)
+                BlogSerializer
+                )
 
 from .models import (
                 OneCode,
@@ -34,6 +35,7 @@ def getRoutes(request):
 
 class GetRunCode(generics.CreateAPIView):
     serializer_class = OneCodeSerializer
+    permission_classes = [AllowAny]
     def create(self,request,*args,**kwargs):
         print(request.data)
         serializer = self.get_serializer(data = request.data)
@@ -102,6 +104,7 @@ class GetRunCode(generics.CreateAPIView):
 class CreateSaveLink(generics.CreateAPIView):
     queryset = Savelink.objects.all()
     serializer_class = SaveLinkSerializer
+    permission_classes = [AllowAny]
     
     def perform_create(self, serializer):
         unique_code = str(uuid.uuid4())
@@ -111,13 +114,16 @@ class CreateSaveLink(generics.CreateAPIView):
 class RetriveSaveLink(generics.RetrieveAPIView):
     queryset = Savelink.objects.all()
     serializer_class = SaveLinkSerializer
+    permission_classes = [AllowAny]
     lookup_field = 'unique_link'
     
 class SaveLinkList(generics.ListAPIView):
+    permission_classes = [AllowAny]
     queryset = Savelink.objects.all().order_by('-created')
     serializer_class = SaveLinkSerializer
     
 class DeleteSaveLink(generics.DestroyAPIView):
+    permission_classes = [AllowAny]
     queryset = Savelink.objects.all()
     serializer_class = SaveLinkSerializer
     lookup_field = 'unique_link'
@@ -142,10 +148,12 @@ class DestroyAllSavedData(APIView):
 class ProblemCreate(generics.ListCreateAPIView):
     queryset = Problem.objects.all()
     serializer_class = ProblemSerializer
+    permission_classes = [IsAuthenticated]
     
 class RetriveProblemSmallData(generics.ListAPIView):
     queryset = Problem.objects.all() 
     serializer_class = ProblemDataSmallSerializer
+    permission_classes = [IsAuthenticated]
     
 ########################################
                 #user 

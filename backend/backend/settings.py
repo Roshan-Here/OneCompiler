@@ -42,7 +42,7 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
+    "ACCESS_TOKEN_LIFETIME": timedelta(seconds=5),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
 }
 
@@ -75,6 +75,8 @@ MIDDLEWARE = [
 CORS_URLS_REGEX = r"^/.*"
 
 CORS_ALLOWED_ORIGINS = []
+
+CORS_ALLOW_ALL_ORIGINS = True
 
 if DEBUG:
     CORS_ALLOWED_ORIGINS += [

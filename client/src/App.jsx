@@ -28,6 +28,7 @@ function App() {
         <Route path="/challenges" element={<Challenges/>}/>
         <Route path="/pasteit" element={<Pasteit/>}/>
         <Route path="/login" element={<Login/>}/>
+        <Route path="/hei" element={<CommingSoon/>}/>
         <Route path="/pasteit/:pastelink" element={<Pasteit/>}/>
         <Route path="*" element={<NotFound/>}/>
       </Routes>
