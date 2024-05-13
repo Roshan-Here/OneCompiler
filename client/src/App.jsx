@@ -6,6 +6,10 @@ import NotFound from "./components/NotFound"
 import Compile from "./pages/Compile"
 import CommingSoon from "./pages/CommingSoon"
 import Pasteit from "./pages/Pasteit"
+import Blog from "./pages/Blog"
+import Challenges from "./pages/Challenges"
+import Login from './pages/Login';
+
 function App() {
 
   return (
@@ -20,8 +24,11 @@ function App() {
         <Route path="/" element={<Compile/>}/>
         <Route path="/test" element={<Testing/>}/>
         <Route path="/about" element={<Testing/>}/>
-        <Route path="/login" element={<CommingSoon/>}/>
+        <Route path="/blog" element={<Blog/>}/>
+        <Route path="/challenges" element={<Challenges/>}/>
         <Route path="/pasteit" element={<Pasteit/>}/>
+        <Route path="/login" element={<Login/>}/>
+        <Route path="/hei" element={<CommingSoon/>}/>
         <Route path="/pasteit/:pastelink" element={<Pasteit/>}/>
         <Route path="*" element={<NotFound/>}/>
       </Routes>

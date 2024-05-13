@@ -18,8 +18,12 @@ function Header() {
                 <Link to='/about'>
                     <li className='md:inline hover:opacity-75'>About</li>
                 </Link>
-                <li className='hidden md:inline hover:opacity-75'>Challenges</li>
-                <li className='md:inline hover:opacity-75'>Blog</li>
+                <Link to='/challenges'>
+                    <li className='hidden md:inline hover:opacity-75'>Challenges</li>
+                </Link>
+                <Link to='/blog'>
+                    <li className='md:inline hover:opacity-75'>Blog</li>
+                </Link>
                 <Link to='/login'>
                     <li className='md:inline hover:opacity-75'>Login</li>
                 </Link>
