@@ -10,7 +10,12 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+import os
+from dotenv import load_dotenv
 from pathlib import Path
+from datetime import timedelta
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,6 +31,20 @@ SECRET_KEY = 'django-insecure-dl0=0wi8m!pdn84^bu!m(y1t&8417_(t&z)$3v0n8dvu3#+uqh
 DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ),
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",
+    ],
+}
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(seconds=5),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+}
 
 
 # Application definition
@@ -57,12 +76,16 @@ CORS_URLS_REGEX = r"^/.*"
 
 CORS_ALLOWED_ORIGINS = []
 
+
 if DEBUG:
     CORS_ALLOWED_ORIGINS += [
     "http://192.168.1.4:8000",
     "http://192.168.1.5:8111",
-    "http://localhost:8000",
-]
+    "http://127.0.0.1:8000",
+    "http://192.168.1.7:8000",
+    os.environ.get("CORS_ALLOWED_ORIGIN")
+] 
+    
 
 ROOT_URLCONF = 'backend.urls'
 
