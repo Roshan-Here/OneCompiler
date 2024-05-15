@@ -212,7 +212,7 @@ const handleTheme=(value,name)=>{
         <div className='flex-row mr-6 ml-6 mt-4'>
             <div className='border p-1 border-cyan-400 w-full h-96 rounded-lg'>
                 <Editor
-                theme={theme || dracula}
+                // theme={theme || dracula}
                 language={language || 'python'}
                 value={deftmsg ||code}
                 onChange={handlechange}

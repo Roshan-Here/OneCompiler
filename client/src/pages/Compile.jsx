@@ -160,7 +160,7 @@ function Compile() {
             <Editor
             // error ! - border-red-500 : border-cyan-500
             className={`border rounded-lg border-cyan-500 ${errorstatus ? 'border-red-500': 'border-cyan-500'}`}
-            theme={theme || "Dracula"}
+            // theme={theme || "Dracula"}
             language={language || "python"}
             value={deftmsg}
             onChange={handlechange}

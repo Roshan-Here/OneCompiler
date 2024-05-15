@@ -127,11 +127,12 @@ function SingleChallenge() {
               </div>
             </div>
           </div>
-          <dir>
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nemo porro
-            illo autem rerum. Harum perferendis fugit commodi inventore repellat
-            atque debitis nihil ratione et, nostrum temporibus distinctio ut
-            quisquam impedit.
+          <dir className='mr-6'>
+            <Editor
+            className="w-full h-72"
+            language={language || "python"}
+            value={deftmsg}
+            />
           </dir>
           {/* for output */}
           <div className="m-8 card justify-center">
