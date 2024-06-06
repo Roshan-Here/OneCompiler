@@ -1,7 +1,10 @@
 from django.test import TestCase
 
 # Create your tests here.
+# https://github.com/nikhil-ravi/LeetScrape - used this package
+# due to some issue used https://github.com/eugenebaraka/LeetScrape.git for some updation
 from leetscrape import GetQuestionsList
+from leetscrape import GetQuestion
 import os
 import csv
 import json
@@ -59,4 +62,18 @@ def csv_to_json(filename,json_file_name):
 csv_filename = './tests/data/questions.csv'
 json_file_name = './tests/data/questions.json'
 
-csv_to_json(csv_filename,json_file_name)
+# csv_to_json(csv_filename,json_file_name)
+
+question = GetQuestion(titleSlug="binary-tree-upside-down").scrape()
+print(question.QID)
+print(question.title) # Question title
+# print(question.titleSlug) # Question title slug
+print(question.difficulty) # Question difficulty
+print(question.Hints) # Question hints
+# print(question.Companies) # Question companies
+print(question.topics) # Question topic tags
+print(question.SimilarQuestions) # Similar questions ids
+print(question.Code) # Code stubs
+# print(question.Body) # Question body / problem statement
+print(question.isPaidOnly) 
+
