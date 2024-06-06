@@ -17,13 +17,13 @@ function Testing() {
             <div className='text-2xl text-slate-400 font-bold'>OneCompiler is the best platform to help you enhance your skills, expand your knowledge,</div>
         </div>
         {/* new box*/}
-        <div className='m-8 flex flex-col rounded-2xl shadow-lg p-2 mt-10 md:ml-6 md:mr-6 md:flex-row bg-white overflow-x-auto'>
+        <div className='m-8 flex flex-col rounded-2xl shadow-lg p-2 mt-10 md:ml-6 md:mr-6 md:flex-row bg-gray-200 overflow-x-auto'>
           <img src="https://picsum.photos/800/400" alt=""
             className='h-60 md:w-80 rounded-xl bg-center bg-cover bg-gray-100'
           ></img>
           <div className='flex flex-col gap-1 p-2 md:p-6'>
             <div className='text-gray-700 font-bold text-4xl'>Developer</div>
-            <p className='text-gray-500'>
+            <p className='text-slate-900 md:text-lg text-xl'>
             We now support 
             <span className='font-bold text-gray-800'> 80 </span>
              popular coding languages. At our core, 
@@ -42,7 +42,7 @@ function Testing() {
           
         </div>
 
-        <div className='flex text-2xl md:text-4xl font-bold justify-center text-slate-100'>
+        <div className='flex text-4xl md:text-4xl font-bold justify-center text-slate-100'>
           What we Provide
         </div>
         <div className='flex flex-col md:flex-row justify-center items-center'>
@@ -50,8 +50,8 @@ function Testing() {
             <div className="card w-auto glass bg-base-100 shadow-xl ">
               <figure><img src={CompilerIMG} alt="car!"/></figure>
                 <div className="card-body">
-                  <h2 className="card-title font-bold text-black  md:text-2xl">Code Compiler</h2>
-                  <p className='text-sm text-md md:text-xl'>A simple platform to execute more than 80+ programming languages</p>
+                  <h2 className="card-title font-bold text-black  md:text-3xl text-2xl">Code Compiler</h2>
+                  <p className='text-md text-xl md:text-2xl'>A simple platform to execute more than 80+ programming languages</p>
                   <div className="card-actions justify-center md:justify-end">
                     <Link to="/">
                       <button className="btn btn-primary">Compile now!</button>
@@ -64,8 +64,8 @@ function Testing() {
             <div className="card w-auto glass bg-base-100 shadow-xl ">
               <figure><img src={PasteitIMG} alt="Pasteit"/></figure>
                 <div className="card-body">
-                  <h2 className="card-title font-bold text-black  md:text-2xl">Paste it</h2>
-                  <p className='text-sm text-md md:text-xl'>Online clipboard. Share text over the internet by generating a unique URL</p>
+                  <h2 className="card-title font-bold text-black  md:text-3xl text-2xl">Paste it</h2>
+                  <p className='text-xl md:text-2xl'>Online clipboard. Share text over the internet by generating a unique URL</p>
                   <div className="card-actions justify-center md:justify-end">
                     <Link to='/pasteit'>
                       <button className="btn btn-primary">Pastit now!</button>
@@ -78,8 +78,8 @@ function Testing() {
             <div className="card w-auto glass bg-base-100 shadow-xl ">
               <figure><img src={PasteitIMG} alt="car!"/></figure>
                 <div className="card-body">
-                  <h2 className="card-title font-bold text-black  md:text-2xl">Code Challenges</h2>
-                  <p className='text-sm text-md md:text-xl'>Test your knowledge with code challenges based on real-world technical interviews</p>
+                  <h2 className="card-title font-bold text-black  md:text-3xl text-2xl">Code Challenges</h2>
+                  <p className='text-xl md:text-2xl'>Test your knowledge with code challenges based on real-world technical interviews</p>
                   <div className="card-actions justify-center md:justify-end">
                     <button className="btn btn-primary">Compile now!</button>
                   </div>

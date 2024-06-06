@@ -9,10 +9,9 @@ import Pasteit from "./pages/Pasteit"
 import Blog from "./pages/Blog"
 import Challenges from "./pages/Challenges"
 import Login from './pages/Login';
-<<<<<<< HEAD
-=======
+
 import SingleChallenge from "./pages/SingleChallenge"
->>>>>>> frontend
+
 
 function App() {
 
@@ -33,10 +32,7 @@ function App() {
         <Route path="/pasteit" element={<Pasteit/>}/>
         <Route path="/login" element={<Login/>}/>
         <Route path="/hei" element={<CommingSoon/>}/>
-<<<<<<< HEAD
-=======
         <Route path="/uff" element={<SingleChallenge/>}/>
->>>>>>> frontend
         <Route path="/pasteit/:pastelink" element={<Pasteit/>}/>
         <Route path="*" element={<NotFound/>}/>
       </Routes>
