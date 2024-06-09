@@ -1,30 +1,25 @@
 1.
-    r"\*\*Example \d+:\*\*\s*```"  
-    r"\s*\*\*Input:\*\* (.*?)"     
-    r"\s*\*\*Output:\*\* (.*?)"    
-    r"(?:\s*\*\*Explanation:\*\* (.*?))?"  
-    r"\s*```",
-
-
-2.
-    r"\*\*Example \d+:\*\*\s*```"  
-    r"\s*\*\*Input\**:?\s*(.*?)"   
-    r"\s*\*\*Output\**:?\s*(.*?)"  
-    r"(?:\s*\*\*Explanation\**:?\s*(.*?))?"  
-    r"\s*```",
-
-3.
-    r"\*\*Example \d+:\*\*\s*"  
-    r"(\*\*Input\**:?[\s\S]*?)"  
-    r"(\*\*Output\**:?[\s\S]*?)"  
-    r"(\*\*Explanation\**:?[\s\S]*?)?"  
-    r"(?=\*\*Example|\Z)",  
-4.
     r"\*\*Example \d+:\*\*\s*"
     r"!?\[.*?\]\(.*?\)?\s*"
     r"```\s*"
-    r"\*\*Input:\*\*\s*(.*?)\s*"
-    r"\*\*Output:\*\*\s*(.*?)\s*"
-    r"(?:\*\*Explanation:\*\*\s*(.*?))?\s*"
+    r"\*\*Input\**:?\s*(.*?)\s*"
+    r"\*\*Output\**:?\s*(.*?)\s*"
+    r"(?:\*\*Explanation\**:?\s*(.*?))?\s*"
     r"```",
-    re.IGNORECASE
+    re.DOTALL
+2.
+    r"\*\*Example \d+:\*\*\s*"
+    r"```"
+    r"\s*\*\*Input\**:?\s*(.*?)"
+    r"\s*\*\*Output\**:?\s*(.*?)"
+    r"(?:\s*\*\*Explanation\**:?\s*(.*?))?"
+    r"\s*```",
+    re.DOTALL
+
+3.
+    r"\*\*Example \d+:\*\*\s*"
+    r"(\*\*Input\**:?[\s\S]*?)"
+    r"(\*\*Output\**:?[\s\S]*?)"
+    r"(\*\*Explanation\**:?[\s\S]*?)?"
+    r"(?=\*\*Example|\Z)",
+    re.DOTALL
