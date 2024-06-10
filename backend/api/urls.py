@@ -6,10 +6,13 @@ from .views import (
     RetriveSaveLink,
     DeleteSaveLink,
     DestroyAllSavedData,
-    ProblemCreate,
-    RetriveProblemSmallData,
+    # ProblemCreate, #not using due to no manual problem creation is adding, maybe latter.
+    RetriveAllProblemData,
+    RetriveAllMinProblemData,
+    RetriveIndividalProblemData,
+    DestroyAllProblemData,
     BlogListView,
-    BlogDeleteView
+    BlogDeleteView,
     )
 
 from django.urls import path
@@ -22,8 +25,11 @@ urlpatterns = [
     path("savecode/<unique_link>", RetriveSaveLink.as_view(), name="save-code-link"),
     path("savecode/<unique_link>/delete", DeleteSaveLink.as_view(), name="delete-save-code"),
     path("savecodedeleteall", DestroyAllSavedData.as_view(), name="delete-all-save-code"),
-    path("problem/", ProblemCreate.as_view(), name="problem-create"),
-    path("problemsmall/", RetriveProblemSmallData.as_view(), name="problem-for-listing-table"),
+    # path("problem/", ProblemCreate.as_view(), name="problem-create-load-problme"),
+    path("probleminimum", RetriveAllMinProblemData.as_view(), name="retive-all-problme-data"),
+    path("problem/<int:id>/", RetriveIndividalProblemData.as_view(), name="retrive-individual-problem-data-using-id"),
+    path("problemsmall/", RetriveAllProblemData.as_view(), name="problem-for-all-table"),
+    path("problemdeleteall", DestroyAllProblemData.as_view(), name="delete-all-problem-code"),
     path("blog/",BlogListView.as_view(), name="create-list-blog"),
     path("blog/delete/<int:pk>/", BlogDeleteView.as_view(), name="delete-blog")
 ]

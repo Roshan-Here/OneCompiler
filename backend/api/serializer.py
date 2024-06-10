@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from .models import OneCode, Savelink, Problem, Example, Blog
+from .models import OneCode, Savelink, Problem,Tag, Example, Blog
 
 
 class OneCodeSerializer(serializers.ModelSerializer):
@@ -19,6 +19,12 @@ class SaveLinkSerializer(serializers.ModelSerializer):
         model = Savelink
         fields = ['code','pref_language','unique_link']
         
+class TagSerilalizer(serializers.ModelSerializer):
+    class Meta:
+        model = Tag
+        fields = [
+            "name"
+        ]
 
 class ExapleSerializer(serializers.ModelSerializer):
     class Meta:
@@ -30,27 +36,87 @@ class ExapleSerializer(serializers.ModelSerializer):
         ]    
     
     
+# class ProblemSerializer(serializers.ModelSerializer):
+#     examples = ExapleSerializer(many=True)
+#     Tags = serializers.ListField(child=serializers.CharField())
+#     # Tags = serializers.SerializerMethodField()
+#     # Tags = serializers.ListField(child=serializers.CharField(max_length=2000))
+#     # Tags = serializers.ListField(child=serializers.CharField(max_length=2000), write_only=True)
+#     # tags = serializers.ListField(child=serializers.CharField(max_length=2000))
+    
 class ProblemSerializer(serializers.ModelSerializer):
+    """
+    used to load_problems.py
+    """
     examples = ExapleSerializer(many=True)
+    Tags = serializers.ListField(child=serializers.CharField())
+
     class Meta:
         model = Problem
         fields = [
-            "id",
-            "Title",
-            "slug",
-            "description",
-            "difficulty",
-            "examples"
-        ]    
+            'id',
+            'Title',
+            'slug',
+            'description',
+            'difficulty',
+            'Tags',
+            'examples',
+        ]
 
     def create(self, validated_data):
-        examples_data = validated_data.pop("examples",[])
+        tags_data = validated_data.pop('Tags')
+        examples_data = validated_data.pop('examples')
+        
         problema = Problem.objects.create(**validated_data)
-        examples = [Example.objects.create(problem=problema,**e_data) for e_data in examples_data]
+        
+        for tag_name in tags_data:
+            tag, created = Tag.objects.get_or_create(name=tag_name)
+            problema.Tags.add(tag)
+        
+        for example_data in examples_data:
+            Example.objects.create(problem=problema, **example_data)
+        
         return problema
+
+
+    # def create(self, validated_data):
+    #     tags_data = validated_data.pop('Tags')
+    #     examples_data = validated_data.pop('examples')
+        
+    #     problem = Problem.objects.create(**validated_data)
+        
+    #     for tag_name in tags_data:
+    #         tag, created = Tag.objects.get_or_create(name=tag_name)
+    #         problem.Tags.add(tag)
+        
+    #     for example_data in examples_data:
+    #         Example.objects.create(problem=problem, **example_data)
+        
+    #     return problem
+
+    # def get_Tags(self, obj):
+    #     # Returns the tags as a list of strings
+    #     return [tag.name for tag in obj.Tags.all()]
+
+    # def create(self, validated_data):
+    #     examples_data = validated_data.pop("examples", [])
+    #     tags_data = validated_data.pop("Tags", [])
+    #     problema = Problem.objects.create(**validated_data)
+    #     for tag_name in tags_data:
+    #         tag, _ = Tag.objects.get_or_create(name=tag_name)
+    #         problema.Tags.add(tag)
+
+    #     examples = [Example.objects.create(problem=problema, **e_data) for e_data in examples_data]
+    #     return problema
     
     
 class ProblemDataSmallSerializer(serializers.ModelSerializer):
+    """
+    Used to retrive all data of problems
+    """
+    examples = ExapleSerializer(many=True)
+    # Tags = TagSerilalizer(many=True)
+    Tags = serializers.SerializerMethodField()
     class Meta:
         model = Problem
         fields = [
@@ -59,7 +125,31 @@ class ProblemDataSmallSerializer(serializers.ModelSerializer):
             "slug",
             "description",
             "difficulty",
+            "Tags",
+            "examples",
         ]
+
+    def get_Tags(self, obj):
+        return [tag.name for tag in obj.Tags.all()]
+
+
+class ProblemMinumumDataSerializer(serializers.ModelSerializer):
+    """
+    Used to retrive all minimum data of problems
+    """
+    Tags = serializers.SerializerMethodField()
+    class Meta:
+        model = Problem
+        fields = [
+            "id",
+            "Title",
+            "slug",
+            "difficulty",
+            "Tags",
+        ]
+
+    def get_Tags(self, obj):
+        return [tag.name for tag in obj.Tags.all()]
 
 
 """

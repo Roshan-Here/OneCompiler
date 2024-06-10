@@ -66,7 +66,7 @@ required_json_file_name = './tests/data/required_format.json'
 
 # csv_to_json(csv_filename,json_file_name)
 
-# question = GetQuestion(titleSlug="minimum-sum-of-values-by-dividing-array").scrape()
+# question = GetQuestion(titleSlug="two-sum").scrape()
 # print(question)
 # print(question.title) # Question title
 # print(question.titleSlug) # Question title slug

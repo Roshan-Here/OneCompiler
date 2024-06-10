@@ -10,6 +10,7 @@ from .serializer import (
                 SaveLinkSerializer,
                 ProblemSerializer,
                 ProblemDataSmallSerializer,
+                ProblemMinumumDataSerializer,
                 UserSerializer,
                 BlogSerializer
                 )
@@ -148,12 +149,50 @@ class DestroyAllSavedData(APIView):
 class ProblemCreate(generics.ListCreateAPIView):
     queryset = Problem.objects.all()
     serializer_class = ProblemSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
+    # permission_classes = [IsAuthenticated]
     
-class RetriveProblemSmallData(generics.ListAPIView):
+    
+class RetriveAllProblemData(generics.ListAPIView):
+    """
+    Used to Retrive all the problem data
+    """
     queryset = Problem.objects.all() 
     serializer_class = ProblemDataSmallSerializer
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
+
+class RetriveAllMinProblemData(generics.ListAPIView):
+    """
+    Used to retive all data for table purpose
+    """
+    queryset = Problem.objects.all() 
+    serializer_class = ProblemMinumumDataSerializer
+    # permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
+
+class RetriveIndividalProblemData(generics.RetrieveAPIView):
+    """
+    Used to retive all Individal data of problems
+    """
+    queryset = Problem.objects.all() 
+    serializer_class = ProblemDataSmallSerializer
+    # permission_classes = [IsAuthenticated]
+    lookup_field = "id"
+    permission_classes = [AllowAny]
+    
+
+    
+class DestroyAllProblemData(APIView):
+    permission_classes = [AllowAny]    
+    def delete(self,request,*args,**kwargs):
+        try:
+            Problem.objects.all().delete()
+            return Response({"message": "All data deleted successfully"}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    
     
 ########################################
                 #user 
