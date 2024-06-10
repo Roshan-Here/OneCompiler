@@ -10,6 +10,7 @@ import Blog from "./pages/Blog"
 import Challenges from "./pages/Challenges"
 import Login from './pages/Login';
 import SingleChallenge from "./pages/SingleChallenge"
+import Problems from "./pages/Problems"
 
 function App() {
 
@@ -31,6 +32,7 @@ function App() {
         <Route path="/login" element={<Login/>}/>
         <Route path="/hei" element={<CommingSoon/>}/>
         <Route path="/uff" element={<SingleChallenge/>}/>
+        <Route path='/problems' element={<Problems/>}></Route>
         <Route path="/pasteit/:pastelink" element={<Pasteit/>}/>
         <Route path="*" element={<NotFound/>}/>
       </Routes>
