@@ -18,16 +18,28 @@ function Problems() {
   const [currentpage, setcurrentpage] = useState(1);
   const [postperpage] = useState(9);
   const [searchtag, setsearchtag] = useState("");
+  const [searchproblem, setsearchproblem] = useState("");
   const TagVisibleItems = 12;
 
   // console.log(filtereditems);
   // console.log(filtereditems.length);
-
+  // console.log(searchproblem);
   // get current problem Pagination part
 
   const Indexoflastpage = currentpage * postperpage;
   const IndexoFirstpage = Indexoflastpage - postperpage;
-  const currentproblems = ListProblemSamples.slice(
+
+  const filteredProblems = ListProblemSamples.filter((item) => {
+    const difficultyMatches =
+      difficulty === "" || item.difficulty === difficulty;
+    const searchProblemMatches =
+      searchproblem === "" ||
+      item.Title.toLowerCase().includes(searchproblem.toLowerCase().trim());
+
+    return difficultyMatches && searchProblemMatches;
+  });
+
+  const currentproblems = filteredProblems.slice(
     IndexoFirstpage,
     Indexoflastpage
   );
@@ -187,6 +199,8 @@ function Problems() {
             <input
               type="text"
               className="text-slate-300 grow"
+              onChange={(e) => setsearchproblem(e.target.value)}
+              value={searchproblem}
               placeholder="Search Problems"
             />
           </label>
@@ -254,37 +268,31 @@ function Problems() {
           </thead>
           <tbody className="">
             {/* row 1 */}
-            {currentproblems
-              .filter((item) =>
-                item.difficulty.includes(difficulty)
-                  ? item
-                  : item.difficulty.includes(difficulty)
-              )
-              .map((itm) => (
-                <tr key={itm.id}>
-                  <th>{itm.id}</th>
-                  <td>{itm.Title}</td>
-                  <td
-                    className={
-                      itm.difficulty === "Easy"
-                        ? "text-green-400"
-                        : itm.difficulty === "Medium"
-                        ? "text-yellow-300"
-                        : "text-red-600"
-                    }
-                  >
-                    {itm.difficulty}
-                  </td>
-                </tr>
-              ))}
+            {currentproblems.map((itm) => (
+              <tr key={itm.id}>
+                <th>{itm.id}</th>
+                <td>{itm.Title}</td>
+                <td
+                  className={
+                    itm.difficulty === "Easy"
+                      ? "text-green-400"
+                      : itm.difficulty === "Medium"
+                      ? "text-yellow-300"
+                      : "text-red-600"
+                  }
+                >
+                  {itm.difficulty}
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
       <Pagination
-      postPerPage = {postperpage}
-      totalPages = {ListProblemSamples.length}
-      paginate = {paginate}
-      currentPage = {currentpage}
+        postPerPage={postperpage}
+        totalPages={ListProblemSamples.length}
+        paginate={paginate}
+        currentPage={currentpage}
       />
       <Footer />
     </div>
