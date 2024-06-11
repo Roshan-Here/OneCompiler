@@ -1,24 +1,53 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMagnifyingGlass, faShuffle } from "@fortawesome/free-solid-svg-icons";
+import { faArrowsRotate, faMagnifyingGlass, faShuffle } from "@fortawesome/free-solid-svg-icons";
+import TopicList from './../utils/TopicLists';
 
 function Problems() {
     const difficultyList = ["Easy","Medium","Hard"]
     const [difficulty, setdifficulty] = useState("NonOrder")
-    console.log(difficulty)
+    const [tagexpanded, settagexpanded] = useState(false)
+    const [filtereditems, setfiltereditems] = useState([])
+    const TagVisibleItems = 12;
+
+    console.log(filtereditems);
+    // console.log(filtereditems.length);
 
     const handleDifficulty=(value)=>{
         setdifficulty(value)
+        handleTopicFilter(value)
     }
+
+    const handleResetTags=()=>{
+      setfiltereditems([])
+    }
+
+    const handleTopicFilter = (topic)=>{
+      const isDifficult = difficultyList.includes(topic)
+        let updated_items = filtereditems? [...filtereditems] : []
+
+      if(isDifficult){
+        updated_items = updated_items.filter(item=>!difficultyList.includes(item))
+      }
+
+      if(updated_items.includes(topic)){
+        updated_items = setfiltereditems(updated_items.filter(item=> item !== topic ))
+      }else{
+        updated_items.push(topic)
+      }
+      setfiltereditems(updated_items)
+    }
+
   return (
-    <div className="w-full bg-gray-900 bg-auto h-auto overflow-hidden">
+    <div className="w-full bg-gray-900 bg-auto h-screen overflow-hidden">
       <div className="flex justify-center text-4xl font-bold text-gray-200 overflow-hidden">
         <div className="p-5 underline">Problem List</div>
       </div>
       <div className="flex justify-around gap-2">
+        {/* filters part */}
         <div className="hidden md:flex p-3 text-xl font-medium">SortBy:</div>
-        {/* Difficulty button */}
         <div className="dropdown dropdown-hover relative">
+        {/* Difficulty button */}
             <div tabIndex={0} role="button" className="btn btn-block btn-neutral btn-outline btn-accent mt-1">Difficulty</div>
             <ul tabIndex={0} className="dropdown-content px-3 absolute z-50 shadow bg-slate-800 rounded-box w-44  overflow-y-auto collapse-open hover:cursor-pointer">
                 {
@@ -42,31 +71,90 @@ function Problems() {
         </ul>
         </div>
         <div className="">
-            <div className="px-6 md:px-9 btn btn-block btn-info btn-outline btn-accent mt-1">
-                Tags
+          {/* Tag selctor button */}
+            <div className="open:dropdown dropdown-bottom" open>
+            <div tabIndex={0} role="button" className="px-6 md:px-9 btn btn-block btn-neutral btn-outline btn-accent mt-1">Tags</div>
+              <div tabIndex={0} className="card mt-1 compact dropdown-content z-[1] shadow bg-slate-500 w-96 h-12">
+                  <div tabIndex={0} className="card-body bg-slate-800 text-green-500 rounded-xl">
+                    <label className=" input input-bordered input-success flex items-center gap-2 mt-1">
+                      <FontAwesomeIcon icon={faMagnifyingGlass} />
+                      <input type="text" className="grow text-slate-200" placeholder="Filter Topics" />
+                    </label>
+                    <div className="flex">
+                    <p className="text-slate-300 text-lg font-bold">Topics</p>
+                    <button className="btn btn-sm text-slate-300 text-lg font-bold" onClick={handleResetTags}>
+                    <FontAwesomeIcon icon={faArrowsRotate} />
+                    </button>
+
+                    </div>
+                    <div className={!tagexpanded?"grid grid-cols-4 gap-2 h-44": "grid grid-cols-4 gap-2 h-56 overflow-y-scroll"}>
+                      {[...TopicList,...difficultyList].slice(0, tagexpanded? TopicList.length + difficultyList.length : TagVisibleItems).map((tags)=>(
+
+                        <input 
+                          key={tags.tag_name}
+                          type="checkbox" 
+                          aria-label={tags.f_name}
+                          checked={filtereditems?.includes(tags.f_name)}
+                          onChange={()=>handleTopicFilter(tags.f_name)}
+                          className="btn btn-md text-xs"/>
+
+                      ))}
+                    </div>
+                    {
+                        !tagexpanded && (
+                          <button onClick={()=>settagexpanded(true)}>Expand</button>
+                        )
+                      }
+                      {
+                        tagexpanded && (
+                          <button onClick={()=>settagexpanded(false)}>Collapse</button>
+                        )
+                      }
+                  </div>
+              </div>
             </div>
         </div>
         <div className="">
-            {/* <input type="text" placeholder="Search Problems" className="px-4 md:px-12 input input-bordered input-success w-full max-w-xs mt-1" /> */}
+          {/* top search bar */}
             <label className=" input input-bordered input-success flex items-center gap-2 mt-1">
             <FontAwesomeIcon icon={faMagnifyingGlass} />
-            {/* <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="w-4 h-4 opacity-70"><path fillRule="evenodd" d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z" clipRule="evenodd" /></svg> */}
-            <input type="text" className="grow" placeholder="Search Problems" />
+            <input type="text" className="text-slate-300 grow" placeholder="Search Problems" />
             </label>
-
         </div>
         <div className="">
+          {/* Random question select button */}
             <div className="p-3 rounded-3xl bg-green-600 dropdown dropdown-left dropdown-bottom  dropdown-hover">
             <FontAwesomeIcon className="text-2xl text-black" icon={faShuffle} />
             <div tabIndex={0} className="card compact dropdown-content z-[1] shadow bg-base-100 rounded-box w-48">
                 <div tabIndex={0} className="card-body bg-gray-900 text-green-500">
-                {/* <h2 className="card-title">You needed more info?</h2>  */}
                 <p>Random Question selector!</p>
                 </div>
             </div>
             </div>
         </div>
       </div>
+      {
+        filtereditems?.length===0?"":
+        <div className="flex p-6">
+        <div className="flex px-12 gap-2">
+        {
+          filtereditems?.map((itm)=>(
+            <button key={itm} 
+            className={itm==="Easy"? 
+              "text-green-400 btn btn-xs"
+              : itm === "Medium"?
+              "text-yellow-300 btn btn-xs"
+              : itm === "Hard"?
+              "text-red-600 btn btn-xs"
+              : "btn-neutral btn btn-xs"
+          }
+            >{itm}</button>
+          ))
+
+        }
+        </div>
+    </div>
+      }
       <div className="md:px-40 flex justify-center overflow-x-auto">
         <table className="table">
           {/* head */}
