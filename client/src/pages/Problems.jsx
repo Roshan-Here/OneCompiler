@@ -6,17 +6,33 @@ import {
   faShuffle,
 } from "@fortawesome/free-solid-svg-icons";
 import TopicList from "./../utils/TopicLists";
+import ListProblemSamples from "./../utils/ListProblemSample";
+import Footer from "../components/Footer";
+import Pagination from "./../components/Pagination";
 
 function Problems() {
   const difficultyList = ["Easy", "Medium", "Hard"];
-  const [difficulty, setdifficulty] = useState("NonOrder");
+  const [difficulty, setdifficulty] = useState("");
   const [tagexpanded, settagexpanded] = useState(false);
   const [filtereditems, setfiltereditems] = useState([]);
+  const [currentpage, setcurrentpage] = useState(1);
+  const [postperpage] = useState(9);
   const [searchtag, setsearchtag] = useState("");
   const TagVisibleItems = 12;
 
   // console.log(filtereditems);
   // console.log(filtereditems.length);
+
+  // get current problem Pagination part
+
+  const Indexoflastpage = currentpage * postperpage;
+  const IndexoFirstpage = Indexoflastpage - postperpage;
+  const currentproblems = ListProblemSamples.slice(
+    IndexoFirstpage,
+    Indexoflastpage
+  );
+
+  const paginate = (pageNumber) => setcurrentpage(pageNumber);
 
   const handleDifficulty = (value) => {
     setdifficulty(value);
@@ -24,6 +40,7 @@ function Problems() {
   };
 
   const handleResetTags = () => {
+    setdifficulty("");
     setfiltereditems([]);
   };
 
@@ -48,11 +65,11 @@ function Problems() {
   };
 
   return (
-    <div className="w-full bg-gray-900 bg-auto h-screen overflow-hidden">
+    <div className="w-full bg-gray-900 bg-auto min-h-screen overflow-hidden">
       <div className="flex justify-center text-4xl font-bold text-gray-200 overflow-hidden">
         <div className="p-5 underline">Problem List</div>
       </div>
-      <div className="flex justify-around gap-2">
+      <div className="flex flex-grow justify-around gap-2">
         {/* filters part */}
         <div className="hidden md:flex p-3 text-xl font-medium">SortBy:</div>
         <div className="dropdown dropdown-hover relative">
@@ -174,7 +191,7 @@ function Problems() {
             />
           </label>
         </div>
-        <div className="">
+        <div className="hidden md:flex">
           {/* Random question select button */}
           <div className="p-3 rounded-3xl bg-green-600 dropdown dropdown-left dropdown-bottom  dropdown-hover">
             <FontAwesomeIcon className="text-2xl text-black" icon={faShuffle} />
@@ -195,8 +212,8 @@ function Problems() {
       {filtereditems?.length === 0 ? (
         ""
       ) : (
-        <div className="flex p-6">
-          <div className="flex px-12 gap-2">
+        <div className="p-6">
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-10 px-12 gap-2">
             {filtereditems?.map((itm) => (
               <button
                 key={itm}
@@ -207,47 +224,69 @@ function Problems() {
                     ? "text-yellow-300 btn btn-xs"
                     : itm === "Hard"
                     ? "text-red-600 btn btn-xs"
-                    : "btn-neutral btn btn-xs"
+                    : "btn-neutral btn btn-xs font-bold"
                 }
               >
                 {itm}
               </button>
             ))}
+            <button
+              className="btn btn-xs text-slate-300 text-lg font-bold"
+              onClick={handleResetTags}
+            >
+              <FontAwesomeIcon
+                className="text-green-500"
+                icon={faArrowsRotate}
+              />
+            </button>
           </div>
         </div>
       )}
-      <div className="md:px-40 flex justify-center overflow-x-auto">
+      <div className="md:px-40 flex flex-grow justify-center overflow-y-visible">
         <table className="table">
           {/* head */}
-          <thead className="text-xl font-normal">
+          <thead className="text-xl font-normal text-slate-200">
             <tr>
               <th>No</th>
               <th>Title</th>
               <th>Difficulty</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="">
             {/* row 1 */}
-            <tr>
-              <th>1</th>
-              <td>Cy Ganderton</td>
-              <td>Quality Control Specialist</td>
-            </tr>
-            {/* row 2 */}
-            <tr>
-              <th>2</th>
-              <td>Hart Hagerty</td>
-              <td>Desktop Support Technician</td>
-            </tr>
-            {/* row 3 */}
-            <tr>
-              <th>3</th>
-              <td>Brice Swyre</td>
-              <td>Tax Accountant</td>
-            </tr>
+            {currentproblems
+              .filter((item) =>
+                item.difficulty.includes(difficulty)
+                  ? item
+                  : item.difficulty.includes(difficulty)
+              )
+              .map((itm) => (
+                <tr key={itm.id}>
+                  <th>{itm.id}</th>
+                  <td>{itm.Title}</td>
+                  <td
+                    className={
+                      itm.difficulty === "Easy"
+                        ? "text-green-400"
+                        : itm.difficulty === "Medium"
+                        ? "text-yellow-300"
+                        : "text-red-600"
+                    }
+                  >
+                    {itm.difficulty}
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>
+      <Pagination
+      postPerPage = {postperpage}
+      totalPages = {ListProblemSamples.length}
+      paginate = {paginate}
+      currentPage = {currentpage}
+      />
+      <Footer />
     </div>
   );
 }
