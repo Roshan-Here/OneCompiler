@@ -11,6 +11,7 @@ import Footer from "../components/Footer";
 import Pagination from "./../components/Pagination";
 import ProblemTable from "./../components/ProblemTable";
 import ProblemFilterList from "./../components/ProblemFilterList";
+import toast, { Toaster } from 'react-hot-toast';
 
 function Problems() {
   const difficultyList = ["Easy", "Medium", "Hard"];
@@ -96,10 +97,12 @@ function Problems() {
     let randomNum = Math.floor(Math.random() * currentproblems.length);
     console.log(randomNum);
     console.log(currentPageQids[randomNum]);
+    toast.success(`Randomly selcted Question No : ${currentPageQids[randomNum]}`)
   };
 
   return (
     <div className="w-full bg-gray-900 bg-auto min-h-screen overflow-hidden">
+      <Toaster/>
       <div className="flex justify-center text-4xl font-bold text-gray-200 overflow-hidden">
         <div className="p-5 underline">Problem List</div>
       </div>
@@ -152,7 +155,7 @@ function Problems() {
             </div>
             <div
               tabIndex={0}
-              className="card mt-1 compact dropdown-content z-[1] shadow bg-slate-500 w-96 h-12"
+              className="card mt-1 compact dropdown-content z-[1] shadow bg-slate-500 w-80 md:w-96 h-12"
             >
               <div
                 tabIndex={0}
