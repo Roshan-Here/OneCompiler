@@ -10,6 +10,7 @@ import ListProblemSamples from "./../utils/ListProblemSample";
 import Footer from "../components/Footer";
 import Pagination from "./../components/Pagination";
 import ProblemTable from "./../components/ProblemTable";
+import ProblemFilterList from "./../components/ProblemFilterList";
 
 function Problems() {
   const difficultyList = ["Easy", "Medium", "Hard"];
@@ -22,7 +23,7 @@ function Problems() {
   const [searchproblem, setsearchproblem] = useState("");
   const TagVisibleItems = 12;
 
-  console.log(filtereditems);
+  // console.log(filtereditems);
   // console.log(filtereditems.length);
   // console.log(searchproblem);
   // get current problem Pagination part
@@ -36,14 +37,18 @@ function Problems() {
 
   // console.log(DifficultyFilter)
 
-
   const filteredProblems = ListProblemSamples.filter((item) => {
-    const difficultyMatch = difficulty === '' || item.difficulty === difficulty;
+    const difficultyMatch = difficulty === "" || item.difficulty === difficulty;
     // console.log(difficultyMatch);
-    const searchQid = searchproblem === "" || item.id === parseInt(searchproblem);
+    const searchQid =
+      searchproblem === "" || item.id === parseInt(searchproblem);
     // console.log(searchQid);
-    const searchProblemMatches = searchproblem === "" || item.Title.toLowerCase().includes(searchproblem.toLowerCase().trim());
-    const tagsMatch = filtereditems?.length === 0 || item.tags.some(tag => filtereditems?.includes(tag));
+    const searchProblemMatches =
+      searchproblem === "" ||
+      item.Title.toLowerCase().includes(searchproblem.toLowerCase().trim());
+    const tagsMatch =
+      filtereditems?.length === 0 ||
+      item.tags.some((tag) => filtereditems?.includes(tag));
 
     return difficultyMatch && (searchProblemMatches || searchQid) && tagsMatch;
   });
@@ -83,6 +88,14 @@ function Problems() {
       updated_items.push(topic);
     }
     setfiltereditems(updated_items);
+  };
+
+  const handeRandomProblem = () => {
+    // console.log(currentproblems.length);
+    const currentPageQids = currentproblems.map((item) => item.id);
+    let randomNum = Math.floor(Math.random() * currentproblems.length);
+    console.log(randomNum);
+    console.log(currentPageQids[randomNum]);
   };
 
   return (
@@ -217,7 +230,11 @@ function Problems() {
         <div className="hidden md:flex">
           {/* Random question select button */}
           <div className="p-3 rounded-3xl bg-green-600 dropdown dropdown-left dropdown-bottom  dropdown-hover">
-            <FontAwesomeIcon className="text-2xl text-black" icon={faShuffle} />
+            <FontAwesomeIcon
+              onClick={handeRandomProblem}
+              className="text-2xl text-black"
+              icon={faShuffle}
+            />
             <div
               tabIndex={0}
               className="card compact dropdown-content z-[1] shadow bg-base-100 rounded-box w-48"
@@ -232,39 +249,10 @@ function Problems() {
           </div>
         </div>
       </div>
-      {filtereditems?.length === 0 ? (
-        ""
-      ) : (
-        <div className="p-6">
-          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-10 px-12 gap-2">
-            {filtereditems?.map((itm) => (
-              <button
-                key={itm}
-                className={
-                  itm === "Easy"
-                    ? "text-green-400 btn btn-xs"
-                    : itm === "Medium"
-                    ? "text-yellow-300 btn btn-xs"
-                    : itm === "Hard"
-                    ? "text-red-600 btn btn-xs"
-                    : "btn-neutral btn btn-xs font-bold"
-                }
-              >
-                {itm}
-              </button>
-            ))}
-            <button
-              className="btn btn-xs text-slate-300 text-lg font-bold"
-              onClick={handleResetTags}
-            >
-              <FontAwesomeIcon
-                className="text-green-500"
-                icon={faArrowsRotate}
-              />
-            </button>
-          </div>
-        </div>
-      )}
+      <ProblemFilterList
+        FilteredItems={filtereditems}
+        HandleResetTags={handleResetTags}
+      />
       <ProblemTable CurrentProblems={currentproblems} />
       <Pagination
         postPerPage={postperpage}
