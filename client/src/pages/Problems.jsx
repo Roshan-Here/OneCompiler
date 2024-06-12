@@ -9,6 +9,7 @@ import TopicList from "./../utils/TopicLists";
 import ListProblemSamples from "./../utils/ListProblemSample";
 import Footer from "../components/Footer";
 import Pagination from "./../components/Pagination";
+import ProblemTable from "./../components/ProblemTable";
 
 function Problems() {
   const difficultyList = ["Easy", "Medium", "Hard"];
@@ -21,7 +22,7 @@ function Problems() {
   const [searchproblem, setsearchproblem] = useState("");
   const TagVisibleItems = 12;
 
-  // console.log(filtereditems);
+  console.log(filtereditems);
   // console.log(filtereditems.length);
   // console.log(searchproblem);
   // get current problem Pagination part
@@ -29,14 +30,22 @@ function Problems() {
   const Indexoflastpage = currentpage * postperpage;
   const IndexoFirstpage = Indexoflastpage - postperpage;
 
-  const filteredProblems = ListProblemSamples.filter((item) => {
-    const difficultyMatches =
-      difficulty === "" || item.difficulty === difficulty;
-    const searchProblemMatches =
-      searchproblem === "" ||
-      item.Title.toLowerCase().includes(searchproblem.toLowerCase().trim());
+  // const DifficultyFilter = ListProblemSamples.filter(
+  //   (item) => difficulty === "" ? item : item.difficulty === difficulty
+  // );
 
-    return difficultyMatches && searchProblemMatches;
+  // console.log(DifficultyFilter)
+
+
+  const filteredProblems = ListProblemSamples.filter((item) => {
+    const difficultyMatch = difficulty === '' || item.difficulty === difficulty;
+    // console.log(difficultyMatch);
+    const searchQid = searchproblem === "" || item.id === parseInt(searchproblem);
+    // console.log(searchQid);
+    const searchProblemMatches = searchproblem === "" || item.Title.toLowerCase().includes(searchproblem.toLowerCase().trim());
+    const tagsMatch = filtereditems?.length === 0 || item.tags.some(tag => filtereditems?.includes(tag));
+
+    return difficultyMatch && (searchProblemMatches || searchQid) && tagsMatch;
   });
 
   const currentproblems = filteredProblems.slice(
@@ -256,38 +265,7 @@ function Problems() {
           </div>
         </div>
       )}
-      <div className="md:px-40 flex flex-grow justify-center overflow-y-visible">
-        <table className="table">
-          {/* head */}
-          <thead className="text-xl font-normal text-slate-200">
-            <tr>
-              <th>No</th>
-              <th>Title</th>
-              <th>Difficulty</th>
-            </tr>
-          </thead>
-          <tbody className="">
-            {/* row 1 */}
-            {currentproblems.map((itm) => (
-              <tr key={itm.id}>
-                <th>{itm.id}</th>
-                <td>{itm.Title}</td>
-                <td
-                  className={
-                    itm.difficulty === "Easy"
-                      ? "text-green-400"
-                      : itm.difficulty === "Medium"
-                      ? "text-yellow-300"
-                      : "text-red-600"
-                  }
-                >
-                  {itm.difficulty}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <ProblemTable CurrentProblems={currentproblems} />
       <Pagination
         postPerPage={postperpage}
         totalPages={ListProblemSamples.length}

@@ -18,7 +18,19 @@ function Pagination({ postPerPage, totalPages, paginate, currentPage }) {
     <div className="mt-24 flex justify-center">
       <div className="join">
         <button onClick={handleprevious} className="join-item btn text-green-300">«</button>
+        {
+          currentPage!==1?
+          <button onClick={()=>paginate(1)} className="join-item btn text-green-300">First</button>
+          : ""  
+        }
+        {/* <button onClick={()=>paginate(1)} className="join-item btn text-green-300">First</button> */}
         <button className="join-item btn text-green-300">Page {currentPage}</button>
+        {/* <button onClick={()=>paginate(pageNumbers)} className="join-item btn text-green-300">last</button> */}
+        {
+          currentPage !==1?
+          <button onClick={()=>paginate(pageNumbers)} className="join-item btn text-green-300">Last</button>
+          : ""
+          }
         <button onClick={handlenext} className="join-item btn text-green-300">»</button>
       </div>
     </div>
