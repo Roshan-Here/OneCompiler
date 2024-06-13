@@ -1,9 +1,78 @@
+###################### AS I SAID, I IMPROVISE ON EACH COMMIT ###################
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from .models import OneCode, Savelink, Problem,Tag, Example, Blog
+from django.contrib.auth import authenticate
+from .models import OneCode, Savelink, Problem,Tag, Example, Blog, CustomUser, UserProfile
+from rest_framework_simplejwt.tokens import RefreshToken
 
+
+##################### CUSTOM USER SERIALIZERS ###################
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    """
+    Used to Create and Update UserProfile
+    """
+    username = serializers.CharField(source='user.username', read_only=True)
+    email = serializers.EmailField(source='user.email', read_only=True)
+    picture_url = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = UserProfile
+        fields = ['username','email','full_name','about','score','picture', 'picture_url']
+     
+    def get_picture_url(self, obj):
+        request = self.context.get('request')
+        if request and hasattr(obj.picture, 'url'):
+            return request.build_absolute_uri(obj.picture.url)
+        return None   
+
+class CustomUserSerializer(serializers.ModelSerializer):
+    """
+    Used to Register the User
+    """
+    userprofile = UserProfileSerializer(required=False)
+    
+    class Meta:
+        model = CustomUser
+        fields = ['email','username','password','userprofile']
+        extra_kwargs = {'password': {'write_only': True}}
+        
+    def create(self, validated_data):
+        userprofile_data = validated_data.pop('userprofile', None)
+        user = CustomUser.objects.create_user(**validated_data)
+        if userprofile_data:
+            UserProfile.objects.create(user=user, **userprofile_data)
+        return user
+    
+class LoginSerializer(serializers.Serializer):
+    """
+    Used to Login the User to provide jwt tokens
+    """
+    username = serializers.CharField()
+    password = serializers.CharField(write_only=True)
+    access = serializers.CharField(read_only=True)
+    refresh = serializers.CharField(read_only=True)
+
+    def validate(self, data):
+        username = data.get('username')
+        password = data.get('password')
+        user = authenticate(username=username, password=password)
+        if user and user.is_active:
+            refresh = RefreshToken.for_user(user)
+            return {
+                'username': user.username,
+                'access': str(refresh.access_token),
+                'refresh': str(refresh),
+            }
+        raise serializers.ValidationError("Invalid Credentials")
+    
+    
+################## COMPILE MODEL SERIALIZER #####################
 
 class OneCodeSerializer(serializers.ModelSerializer):
+    """
+    Compilation model
+    """
     class Meta:
         model = OneCode
         fields = ['pref_language','code']
@@ -15,10 +84,15 @@ class OneCodeSerializer(serializers.ModelSerializer):
         return data
     
 class SaveLinkSerializer(serializers.ModelSerializer):
+    """
+    Save Text/Code into Link
+    """
     class Meta:
         model = Savelink
         fields = ['code','pref_language','unique_link']
         
+##################### Problem Serializer ####################    
+    
 class TagSerilalizer(serializers.ModelSerializer):
     class Meta:
         model = Tag
@@ -36,17 +110,11 @@ class ExapleSerializer(serializers.ModelSerializer):
         ]    
     
     
-# class ProblemSerializer(serializers.ModelSerializer):
-#     examples = ExapleSerializer(many=True)
-#     Tags = serializers.ListField(child=serializers.CharField())
-#     # Tags = serializers.SerializerMethodField()
-#     # Tags = serializers.ListField(child=serializers.CharField(max_length=2000))
-#     # Tags = serializers.ListField(child=serializers.CharField(max_length=2000), write_only=True)
-#     # tags = serializers.ListField(child=serializers.CharField(max_length=2000))
-    
 class ProblemSerializer(serializers.ModelSerializer):
     """
-    used to load_problems.py
+    used to load_problems.py with this command :
+    python manage.py load_problems api\json\ required_format.json
+    required_format contains the scrapped data of leetcode problems
     """
     examples = ExapleSerializer(many=True)
     Tags = serializers.ListField(child=serializers.CharField())
@@ -155,21 +223,21 @@ class ProblemMinumumDataSerializer(serializers.ModelSerializer):
 """
 SAMPLE DATA
 {
-    "Title": "Minimum Height Trees",
-    "slug": "",
-    "description": "A tree is an undirected graph in which any two vertices are connected by exactly one path. In other words, any connected graph without simple cycles is a tree. Given a tree of n nodes labelled from 0 to n - 1, and an array of n - 1 edges where edges[i] = [ai, bi] indicates that there is an undirected edge between the two nodes ai and bi in the tree, you can choose any node of the tree as the root. When you select a node x as the root, the result tree has height h. Among all possible rooted trees, those with minimum height (i.e. min(h))  are called minimum height trees (MHTs).Return a list of all MHTs' root labels. You can return the answer in any order. The height of a rooted tree is the number of edges on the longest downward path between the root and a leaf.",
-    "difficulty": "easy",
-    "examples": [
-{
-"Input" : "n = 4, edges = [[1,0],[1,2],[1,3]]",
-"Output" : "[1]",
-"Explanation" : "As shown, the height of the tree is 1 when the root is the node with label 1 which is the only MHT."
-},
-{
-"Input" : "n = 6, edges = [[3,0],[3,1],[3,2],[3,4],[5,4]]",
-"Output" : "[3,4]",
-"Explanation" : "As shown, the height of the tree is 1 when the root is the node with label 1 which is the only MHT."
-}
+"Title": "Add Two Numbers",
+"slug": "add-two-numbers",
+"description": "You are given two **non-empty** linked lists representing two non-negative integers. The digits are stored in **reverse order**, and each of their nodes contains a single digit. Add the two numbers and return the sum\u00a0as a linked list.\n\n\nYou may assume the two numbers do not contain any leading zero, except the number 0 itself.\n\n\n\u00a0\n\n",
+"difficulty": "Medium",
+"Tags": [
+    "Linked List",
+    "Math",
+    "Recursion"
+],
+"examples": [
+    {
+    "Input": "** l1 = [2,4,3], l2 = [5,6,4]",
+    "Output": "** [7,0,8]",
+    "Explanation": "** 342 + 465 = 807."
+    }
 ]
 }
 
@@ -177,21 +245,24 @@ SAMPLE DATA
 
 # jwt
 
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ["id","username","password"]
-        extra_kwargs = {"password": {"write_only":True}}
+# class UserSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = User
+#         fields = ["id","username","password"]
+#         extra_kwargs = {"password": {"write_only":True}}
         
-    def create(self, validate_data):
-        user = User.objects.create_user(**validate_data)
-        return user
+#     def create(self, validate_data):
+#         user = User.objects.create_user(**validate_data)
+#         return user
     
     
     
-# BlogSerializer
+################### BlogSerializer ###################
 
 class BlogSerializer(serializers.ModelSerializer):
+    """
+    this part is not including in version 1.
+    """
     class Meta:
         model = Blog
         fields = ["id","Title", "Content","created_at","author"]

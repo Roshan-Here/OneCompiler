@@ -10,9 +10,13 @@ from .views import (
     RetriveAllProblemData,
     RetriveAllMinProblemData,
     RetriveIndividalProblemData,
-    DestroyAllProblemData,
-    BlogListView,
-    BlogDeleteView,
+    # DestroyAllProblemData,
+    # BlogListView,
+    # BlogDeleteView,
+    UserRegisterView,
+    LoginView,
+    UserProfileView,
+    UserProfileUpdateView
     )
 
 from django.urls import path
@@ -25,11 +29,17 @@ urlpatterns = [
     path("savecode/<unique_link>", RetriveSaveLink.as_view(), name="save-code-link"),
     path("savecode/<unique_link>/delete", DeleteSaveLink.as_view(), name="delete-save-code"),
     path("savecodedeleteall", DestroyAllSavedData.as_view(), name="delete-all-save-code"),
-    # path("problem/", ProblemCreate.as_view(), name="problem-create-load-problme"),
     path("probleminimum", RetriveAllMinProblemData.as_view(), name="retive-all-problme-data"),
     path("problem/<int:id>/", RetriveIndividalProblemData.as_view(), name="retrive-individual-problem-data-using-id"),
     path("problemsmall/", RetriveAllProblemData.as_view(), name="problem-for-all-table"),
-    path("problemdeleteall", DestroyAllProblemData.as_view(), name="delete-all-problem-code"),
-    path("blog/",BlogListView.as_view(), name="create-list-blog"),
-    path("blog/delete/<int:pk>/", BlogDeleteView.as_view(), name="delete-blog")
+    # path("problemdeleteall", DestroyAllProblemData.as_view(), name="delete-all-problem-code"),
+    # path("blog/",BlogListView.as_view(), name="create-list-blog"),
+    # path("blog/delete/<int:pk>/", BlogDeleteView.as_view(), name="delete-blog"),
+    path('register/',UserRegisterView.as_view(),name='user-account-register'),
+    path('login/',LoginView.as_view(), name='login-view'),
+    path('profile/',UserProfileView.as_view(), name='user-profile-view'),
+    path('profile/update/',UserProfileUpdateView.as_view(), name='user-profile-update')
 ]
+
+
+# Commented items not using in this Version 1

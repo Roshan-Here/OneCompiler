@@ -1,17 +1,21 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
-from rest_framework.permissions import IsAuthenticated,AllowAny
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.views import APIView
 from rest_framework import status,serializers
 from rest_framework import generics
 from rest_framework.response import Response
+from rest_framework.parsers import MultiPartParser, FormParser
 from .serializer import (
                 OneCodeSerializer,
                 SaveLinkSerializer,
                 ProblemSerializer,
                 ProblemDataSmallSerializer,
                 ProblemMinumumDataSerializer,
-                UserSerializer,
+                # UserSerializer,
+                CustomUserSerializer,
+                UserProfileSerializer,
+                LoginSerializer,
                 BlogSerializer
                 )
 
@@ -19,6 +23,8 @@ from .models import (
                 OneCode,
                 Savelink,
                 Problem,
+                CustomUser,
+                UserProfile,
                 Blog)
 
 from django.http import JsonResponse
@@ -31,8 +37,63 @@ import uuid
 # Create your views here.
 
 
+################### CUSTOM USER MODEL ###################
+
+class UserRegisterView(generics.CreateAPIView):
+    # post view
+    permission_classes = [AllowAny]
+    queryset = CustomUser.objects.all()
+    serializer_class = CustomUserSerializer
+
+class LoginView(APIView):
+    permission_classes = [AllowAny]
+    
+    def post(self, request, *args, **kwargs):
+        serializer = LoginSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            return Response(serializer.validated_data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class UserProfileView(APIView):
+    # permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
+
+
+    def get(self, request, *args, **kwargs):
+        user_profile = UserProfile.objects.get(user=request.user)
+        serializer = UserProfileSerializer(user_profile)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+class UserProfileUpdateView(generics.UpdateAPIView):
+    serializer_class = UserProfileSerializer
+    parser_classes = [MultiPartParser, FormParser]
+    permission_classes = [IsAuthenticated]
+    # permission_classes = [AllowAny]
+    
+    
+    def get_object(self):
+        return UserProfile.objects.get(user=self.request.user)
+    
+    def update(self, request, *args, **kwargs):
+        user_profile = self.get_object()
+        serializer = self.get_serializer(user_profile, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response(serializer.data)
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context.update({"request": self.request})
+        return context
+
+
+################### Inital view #############
+
 def getRoutes(request):
     return JsonResponse("Starting..... ", safe=False)
+
+################# Compiler view ###############
 
 class GetRunCode(generics.CreateAPIView):
     serializer_class = OneCodeSerializer
@@ -149,8 +210,8 @@ class DestroyAllSavedData(APIView):
 class ProblemCreate(generics.ListCreateAPIView):
     queryset = Problem.objects.all()
     serializer_class = ProblemSerializer
-    permission_classes = [AllowAny]
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
+    # permission_classes = [AllowAny]
     
     
 class RetriveAllProblemData(generics.ListAPIView):
@@ -159,12 +220,12 @@ class RetriveAllProblemData(generics.ListAPIView):
     """
     queryset = Problem.objects.all() 
     serializer_class = ProblemDataSmallSerializer
-    # permission_classes = [IsAuthenticated]
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
+    # permission_classes = [AllowAny]
 
 class RetriveAllMinProblemData(generics.ListAPIView):
     """
-    Used to retive all data for table purpose
+    Used to retive all data for Table purpose
     """
     queryset = Problem.objects.all() 
     serializer_class = ProblemMinumumDataSerializer
@@ -177,9 +238,9 @@ class RetriveIndividalProblemData(generics.RetrieveAPIView):
     """
     queryset = Problem.objects.all() 
     serializer_class = ProblemDataSmallSerializer
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
     lookup_field = "id"
-    permission_classes = [AllowAny]
+    # permission_classes = [AllowAny]
     
 
     
@@ -198,10 +259,10 @@ class DestroyAllProblemData(APIView):
                 #user 
 ########################################
 
-class CreateUserView(generics.CreateAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-    permission_classes = [AllowAny]
+# class CreateUserView(generics.CreateAPIView):
+#     queryset = User.objects.all()
+#     serializer_class = UserSerializer
+#     permission_classes = [AllowAny]
     
     
 ########################################
