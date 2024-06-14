@@ -73,7 +73,7 @@ class UserProfile(models.Model):
         return self.user.username
     
 class UserSolvedQuestionList(models.Model):
-    user = models.ForeignKey(UserProfile,related_name="examples",on_delete=models.CASCADE)
+    user = models.ForeignKey(UserProfile,related_name="usersolvedquestionlist",on_delete=models.CASCADE)
     Q_slug = models.CharField(max_length=75,null=False,blank=False)
     Q_title = models.CharField(max_length=225,null=False,blank=False)
     Q_difficulty = models.CharField(max_length=75,null=False,blank=False)

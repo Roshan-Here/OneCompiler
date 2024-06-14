@@ -2,29 +2,133 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 from django.contrib.auth import authenticate
-from .models import OneCode, Savelink, Problem,Tag, Example, Blog, CustomUser, UserProfile
 from rest_framework_simplejwt.tokens import RefreshToken
+from .models import (
+    OneCode,
+    Savelink,
+    Problem,Tag,
+    Example,
+    Blog,
+    CustomUser,
+    UserProfile,
+    UserSolvedQuestionList
+    )
 
 
 ##################### CUSTOM USER SERIALIZERS ###################
 
+class UserSolvedQuestionListSerializer(serializers.ModelSerializer):
+    """
+    Used for listing Solved Problems
+    """
+    class Meta:
+        model = UserSolvedQuestionList
+        fields = ['Q_slug','Q_title','Q_difficulty']
+
+
 class UserProfileSerializer(serializers.ModelSerializer):
     """
-    Used to Create and Update UserProfile
+    Used to Create and Update all the UserProfile fields
     """
+    usersolvedquestionlist = UserSolvedQuestionListSerializer(many=True)
     username = serializers.CharField(source='user.username', read_only=True)
     email = serializers.EmailField(source='user.email', read_only=True)
     picture_url = serializers.SerializerMethodField()
     
     class Meta:
         model = UserProfile
-        fields = ['username','email','full_name','about','score','picture', 'picture_url']
+        fields = ['username','email','full_name','about','score','picture', 'picture_url','usersolvedquestionlist']
      
     def get_picture_url(self, obj):
         request = self.context.get('request')
         if request and hasattr(obj.picture, 'url'):
             return request.build_absolute_uri(obj.picture.url)
+        return None
+    
+    def update(self, instance, validated_data):
+        solved_questions_data = validated_data.pop('usersolvedquestionlist', None)
+        if solved_questions_data:
+            for solved_question_data in solved_questions_data:
+                Q_slug = solved_question_data.get('Q_slug')
+                if not instance.usersolvedquestionlist.filter(Q_slug=Q_slug).exists():
+                    UserSolvedQuestionList.objects.create(user=instance, **solved_question_data)
+        
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+            
+        instance.save()
+        return instance
+    
+class UserDetailsUpdateSerializer(serializers.ModelField):
+    """
+    Special Updater for UserSide Update, name, & about, score amd usersolvedquestionlist will be updated without user knowledge  
+    """
+    picture_url = serializers.SerializerMethodField()
+    # usersolvedquestionlist = UserSolvedQuestionListSerializer(many=True)
+    
+    class Meta:
+        model = UserProfile
+        fields = ['full_name','about','picture', 'picture_url']
+         
+    def get_picture_url(self, obj):
+        request = self.context.get('request')
+        if request and hasattr(obj.picture, 'url'):
+            return request.build_absolute_uri(obj.picture.url)
+        return None
+    
+    # def update(self, instance, validated_data):
+    #     for attr, value in validated_data.items():
+    #         setattr(instance, attr, value)
+        
+    #     instance.save()
+    #     return instance
+    
+    
+
+class SpecialDataUpdateSerializer(serializers.ModelSerializer):
+    """
+    Used to update score and usersolvedquestionlist
+    """
+    usersolvedquestionlist = UserSolvedQuestionListSerializer(many=True, required=False)
+    
+    class Meta:
+        model = UserProfile
+        fields = ['score', 'usersolvedquestionlist']
+
+    def update(self, instance, validated_data):
+        solved_questions_data = validated_data.pop('usersolvedquestionlist', None)
+        
+        if solved_questions_data:
+            for solved_question_data in solved_questions_data:
+                Q_slug = solved_question_data.get('Q_slug')
+                if not instance.usersolvedquestionlist.filter(Q_slug=Q_slug).exists():
+                    UserSolvedQuestionList.objects.create(user=instance, **solved_question_data)
+        
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        
+        instance.save()
+        return instance
+
+
+class SpecialUserProfileSerializer(serializers.ModelSerializer):
+    """
+    Useed to retrive user data without jwt
+    """
+    usersolvedquestionlist = UserSolvedQuestionListSerializer(many=True, read_only=True)
+    username = serializers.CharField(source='user.username', read_only=True)
+    picture_url = serializers.SerializerMethodField()
+
+    class Meta:
+        model = UserProfile
+        fields = ['username', 'full_name', 'about', 'score', 'picture_url', 'usersolvedquestionlist']
+
+    def get_picture_url(self, obj):
+        request = self.context.get('request')
+        if request and hasattr(obj.picture, 'url'):
+            return request.build_absolute_uri(obj.picture.url)
         return None   
+
 
 class CustomUserSerializer(serializers.ModelSerializer):
     """

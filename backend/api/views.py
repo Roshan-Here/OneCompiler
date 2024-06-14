@@ -6,6 +6,7 @@ from rest_framework import status,serializers
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
+from django.shortcuts import get_object_or_404
 from .serializer import (
                 OneCodeSerializer,
                 SaveLinkSerializer,
@@ -16,6 +17,9 @@ from .serializer import (
                 CustomUserSerializer,
                 UserProfileSerializer,
                 LoginSerializer,
+                SpecialUserProfileSerializer,
+                UserDetailsUpdateSerializer,
+                SpecialDataUpdateSerializer,
                 BlogSerializer
                 )
 
@@ -66,6 +70,9 @@ class UserProfileView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 class UserProfileUpdateView(generics.UpdateAPIView):
+    """
+    Used to update all the user filed on single step, including usersolvedquestionlist
+    """
     serializer_class = UserProfileSerializer
     parser_classes = [MultiPartParser, FormParser]
     permission_classes = [IsAuthenticated]
@@ -87,7 +94,67 @@ class UserProfileUpdateView(generics.UpdateAPIView):
         context.update({"request": self.request})
         return context
 
+class UserRequiedFieldsUpdateView(generics.UpdateAPIView):
+    """
+    Used to Update Specified field only! not giving access to change username, email, score, usersolvedquestionlist
+    """
+    serializer_class = UserDetailsUpdateSerializer
+    parser_classes = [MultiPartParser, FormParser]
+    permission_classes = [IsAuthenticated]
 
+    def get_object(self):
+        print(self.request.data)
+        return UserProfile.objects.get(user=self.request.user)
+    
+    
+    # def update(self, request, *args, **kwargs):
+    #     user_profile = self.get_object()
+    #     serializer = self.get_serializer(user_profile, data=request.data, partial=True)
+    #     serializer.is_valid(raise_exception=True)
+    #     self.perform_update(serializer)
+    #     return Response(serializer.data)
+
+    # def get_serializer_context(self):
+    #     context = super().get_serializer_context()
+    #     context.update({"request": self.request})
+    #     return context
+
+class UserSpecialFieldUpdater(generics.UpdateAPIView):
+    """
+    Used to update score, and usersolvedquestionlist
+    """
+    serializer_class = SpecialDataUpdateSerializer
+    permission_classes = [IsAuthenticated]
+    
+    def get_object(self):
+        return UserProfile.objects.get(user=self.request.user)
+    
+    def update(self, request, *args, **kwargs):
+        user_profile = self.get_object()
+        serializer = self.get_serializer(user_profile, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response(serializer.data)
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context.update({"request": self.request})
+        return context
+
+class UserProfileViewWithoutJWT(generics.RetrieveAPIView):
+    """
+    Used to View User Profile Public || any one  can view
+    """
+    queryset = UserProfile.objects.all()
+    serializer_class = SpecialUserProfileSerializer
+    permission_classes = [AllowAny]
+    lookup_field = 'user__username' # userprofile model has no attribute username, so taking username from user object
+    
+    def get_object(self):
+        username = self.kwargs['username']
+        return get_object_or_404(UserProfile, user__username=username)
+    
+    
 ################### Inital view #############
 
 def getRoutes(request):
@@ -180,12 +247,12 @@ class RetriveSaveLink(generics.RetrieveAPIView):
     lookup_field = 'unique_link'
     
 class SaveLinkList(generics.ListAPIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     queryset = Savelink.objects.all().order_by('-created')
     serializer_class = SaveLinkSerializer
     
 class DeleteSaveLink(generics.DestroyAPIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     queryset = Savelink.objects.all()
     serializer_class = SaveLinkSerializer
     lookup_field = 'unique_link'
@@ -196,6 +263,7 @@ class DeleteSaveLink(generics.DestroyAPIView):
 
 # to delete all unwanted datas while developing!
 class DestroyAllSavedData(APIView):
+    permission_classes = [IsAuthenticated]
     def delete(self,request,*args,**kwargs):
         try:
             Savelink.objects.all().delete()
@@ -239,9 +307,10 @@ class RetriveIndividalProblemData(generics.RetrieveAPIView):
     queryset = Problem.objects.all() 
     serializer_class = ProblemDataSmallSerializer
     permission_classes = [IsAuthenticated]
-    lookup_field = "id"
+    lookup_field = "slug"
     # permission_classes = [AllowAny]
     
+
 
     
 class DestroyAllProblemData(APIView):

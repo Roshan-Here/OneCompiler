@@ -16,7 +16,10 @@ from .views import (
     UserRegisterView,
     LoginView,
     UserProfileView,
-    UserProfileUpdateView
+    UserProfileUpdateView,
+    UserProfileViewWithoutJWT,
+    UserSpecialFieldUpdater,
+    UserRequiedFieldsUpdateView
     )
 
 from django.urls import path
@@ -30,7 +33,7 @@ urlpatterns = [
     path("savecode/<unique_link>/delete", DeleteSaveLink.as_view(), name="delete-save-code"),
     path("savecodedeleteall", DestroyAllSavedData.as_view(), name="delete-all-save-code"),
     path("probleminimum", RetriveAllMinProblemData.as_view(), name="retive-all-problme-data"),
-    path("problem/<int:id>/", RetriveIndividalProblemData.as_view(), name="retrive-individual-problem-data-using-id"),
+    path("problem/<slug:slug>/", RetriveIndividalProblemData.as_view(), name="retrive-individual-problem-data-using-id"),
     path("problemsmall/", RetriveAllProblemData.as_view(), name="problem-for-all-table"),
     # path("problemdeleteall", DestroyAllProblemData.as_view(), name="delete-all-problem-code"),
     # path("blog/",BlogListView.as_view(), name="create-list-blog"),
@@ -38,7 +41,9 @@ urlpatterns = [
     path('register/',UserRegisterView.as_view(),name='user-account-register'),
     path('login/',LoginView.as_view(), name='login-view'),
     path('profile/',UserProfileView.as_view(), name='user-profile-view'),
-    path('profile/update/',UserProfileUpdateView.as_view(), name='user-profile-update')
+    path("profile/score/update", UserSpecialFieldUpdater.as_view(), name="user-score-solvedlist-updater"),
+    path('profile/update/',UserRequiedFieldsUpdateView.as_view(), name='user-profile-update'),
+    path("user/<slug:username>", UserProfileViewWithoutJWT.as_view(), name="user-profile-without-jwt")
 ]
 
 
