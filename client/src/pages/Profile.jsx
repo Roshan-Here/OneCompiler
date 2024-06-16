@@ -8,7 +8,7 @@ import Loader from "../components/Loader";
 import { useSelector } from "react-redux";
 
 function Profile() {
-  const authenticated = useSelector((state) => state.user.authenticated)
+  const authenticated = useSelector((state) => state.user.authenticated);
   const [enableupdate, setenableupdate] = useState(false);
   const [postperpage] = useState(9);
   const [currentpage, setcurrentpage] = useState(1);
@@ -42,16 +42,22 @@ function Profile() {
             {/* Profile pic & usernme part */}
             <div className="flex-col">
               <div className="avatar mt-7">
-                <div className="relative  w-40 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+                <div className="relative w-40 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
                   <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
                   {/* hide button on enable update */}
-                  <button
+                  <input
+                    type="file"
+                    accept="image/*"
                     className={`${
                       enableupdate ? "" : "hidden"
-                    } mt-9 w-full absolute -bottom-1 btn btn-outline btn-error btn-ghost`}
-                  >
-                    Upload Image
-                  </button>
+                    } px-7 absolute grid grid-cols-1 -bottom-1  w-full text-sm text-slate-500
+      file:m-4 file:py-2 file:px-1
+      file:rounded-full file:border-0
+      file:text-sm file:font-semibold
+      file:bg-violet-50 file:text-violet-700
+      hover:file:bg-slate-500
+`}
+                  />
                 </div>
               </div>
               <div className="flex justify-center text-2xl font-bold">
@@ -60,7 +66,9 @@ function Profile() {
               <div className="mt-2 flex justify-center text-2xl font-semibold">
                 {/* hidden if not authenticated */}
                 <button
-                  className={`${authenticated?"":"hidden"} btn btn-sm border-t-green-600 btn-accent`}
+                  className={`${
+                    !authenticated ? "" : "hidden"
+                  } btn btn-sm border-t-green-600 btn-accent`}
                   onClick={() => setenableupdate(true)}
                 >
                   Update
