@@ -48,14 +48,14 @@ function Profile() {
                   <input
                     type="file"
                     accept="image/*"
-                    className={`${
-                      enableupdate ? "" : "hidden"
-                    } px-7 absolute grid grid-cols-1 -bottom-1  w-full text-sm text-slate-500
-      file:m-4 file:py-2 file:px-1
-      file:rounded-full file:border-0
-      file:text-sm file:font-semibold
-      file:bg-violet-50 file:text-violet-700
-      hover:file:bg-slate-500
+                    className={`${enableupdate ? "" : "hidden"} 
+                    px-7 absolute 
+                    -bottom-1  w-full text-sm text-slate-500
+                    file:m-4 file:py-2 file:px-1
+                    file:rounded-full file:border-0
+                    file:text-sm file:font-semibold
+                  file:bg-violet-50 file:text-violet-700
+                  hover:file:bg-slate-500
 `}
                   />
                 </div>
@@ -63,7 +63,7 @@ function Profile() {
               <div className="flex justify-center text-2xl font-bold">
                 @Username
               </div>
-              <div className="mt-2 flex justify-center text-2xl font-semibold">
+              <div className="mt-2 flex justify-center text-2xl font-semibold gap-3">
                 {/* hidden if not authenticated */}
                 <button
                   className={`${
@@ -72,6 +72,14 @@ function Profile() {
                   onClick={() => setenableupdate(true)}
                 >
                   Update
+                </button>
+                <button
+                  className={`${
+                    !authenticated ? "" : "hidden"
+                  } btn btn-sm  btn-error`}
+                  onClick={() => setenableupdate(true)}
+                >
+                  Delete
                 </button>
               </div>
             </div>

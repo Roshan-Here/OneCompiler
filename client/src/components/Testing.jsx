@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import Footer from './Footer';
 import CompilerIMG from './Statiacimages/Compiler.PNG'
 import PasteitIMG from './Statiacimages/Pasteit.png'
+import ListProblemIMG from './Statiacimages/ProblemList.png'
 
 function Testing() {
   return (
@@ -76,12 +77,12 @@ function Testing() {
           </div>
           <div className='p-6 md:p-6'>
             <div className="card w-auto glass bg-base-100 shadow-xl ">
-              <figure><img src={PasteitIMG} alt="car!"/></figure>
+              <figure><img src={ListProblemIMG} alt="car!"/></figure>
                 <div className="card-body">
                   <h2 className="card-title font-bold text-black  md:text-2xl">Code Challenges</h2>
                   <p className='text-sm text-md md:text-xl'>Test your knowledge with code challenges based on real-world technical interviews</p>
                   <div className="card-actions justify-center md:justify-end">
-                    <button className="btn btn-primary">Compile now!</button>
+                    <button className="btn btn-primary">Challenge Now!</button>
                   </div>
                 </div>
             </div>
