@@ -24,9 +24,9 @@ function App() {
           <p className='text-xl text-violet-800 border-b-indigo-400'>Welcome to OneCompiler</p>
         }/>
         <Route path="/home" element={<Home/>}/>
-        <Route path="/" element={<Compile/>}/>
+        <Route path="/compiler" element={<Compile/>}/>
         <Route path="/test" element={<Testing/>}/>
-        <Route path="/about" element={<Testing/>}/>
+        <Route path="/" element={<Testing/>}/>
         <Route path="/blog" element={<Blog/>}/>
         <Route path="/challenges" element={<Challenges/>}/>
         <Route path="/pasteit" element={<Pasteit/>}/>

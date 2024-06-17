@@ -25,12 +25,12 @@ function Login() {
                   },
             })
             const data = res.data
-            console.log(data)
+            // console.log(data)
             dispatch(SetTokenSucess(data.access))
             dispatch(SetRefreshToken(data.refresh))
             toast.success("User Signin Sucessfully")
             setTimeout(() => {
-                navigate('/hei')
+                navigate('/about')
             }, 1000);
         }catch(error){
             dispatch(SetTokenFailed())

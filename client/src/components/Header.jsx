@@ -1,15 +1,27 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { SetTokenFailed } from "../redux/User/userSlice";
 
+
 function Header() {
-    const dispatch = useDispatch()
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [openvault, setopenvault] = useState(false);
   const authenticated = useSelector((state) => state.user.authenticated);
 
-  const logout = () =>{
-    dispatch(SetTokenFailed())
-  }
+  // console.log(openvault);
+
+  const logout = () => {
+    dispatch(SetTokenFailed());
+    setTimeout(() => {
+      navigate("/about");
+    }, 1800);
+  };
+
+  const handleVault = () => {
+    openvault ? setopenvault(false) : setopenvault(true);
+  };
 
   return (
     <div>
@@ -24,8 +36,8 @@ function Header() {
         </Link>
         <div>
           <ul className="flex items-center gap-4 text-base text-slate-300">
-            <Link to="/about">
-              <li className="md:inline hover:opacity-75">About</li>
+            <Link to="/compiler">
+              <li className="md:inline hover:opacity-75">Compiler</li>
             </Link>
             <Link to="/problems">
               <li className="hidden md:inline hover:opacity-75">Problems</li>
@@ -34,9 +46,38 @@ function Header() {
               <li className="md:inline hover:opacity-75">Pasteit</li>
             </Link>
             {authenticated ? (
-
-                <li onClick={logout} className="md:inline hover:opacity-75">Logout</li>
+              <>
+                <div>
+                  <button onClick={handleVault}>Options</button>
+                </div>
+                <div
+                  className={`${
+                    !openvault
+                      ? "hidden"
+                      : "absolute ml-24 mt-32 w-36 rounded-md bg-slate-600 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                  }`}
+                >
+                  <ul className="py-1">
+                    <li
+                      onClick={() => {
+                        setopenvault(false)
+                        navigate("/profile");
+                      }}
+                      className="block px-4 py-2 text-sm text-slate-100"
+                    >
+                      View Profile
+                    </li>
+                    <li
+                      onClick={logout}
+                      className="block px-4 py-2 text-sm text-slate-50"
+                    >
+                      Logout
+                    </li>
+                  </ul>
+                </div>
+              </>
             ) : (
+              // <li onClick={logout} className="md:inline hover:opacity-75">Logout</li>
               <Link to="/login">
                 <li className="md:inline hover:opacity-75">Login</li>
               </Link>

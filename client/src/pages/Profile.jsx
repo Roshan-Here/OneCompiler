@@ -5,18 +5,20 @@ import ListProblemSamples from "../utils/ListProblemSample";
 import ProblemTable from "../components/ProblemTable";
 import Pagination from "../components/Pagination";
 import Loader from "../components/Loader";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import BlankProfilePNG from "../components/Statiacimages/BlankUserProfile.png";
 import privateaxious from "../utils/api";
 import { useNavigate, useParams } from "react-router-dom";
-import TokenAuth from "../utils/TokenAuth";
 import axios from "axios";
+import { SetTokenFailed } from "../redux/User/userSlice";
+import TokenAuth from "../utils/TokenAuth";
 
 function Profile() {
-  TokenAuth() // refreahing token
+  TokenAuth(); // refreahing token
   const authenticated = useSelector((state) => state.user.authenticated);
   const { username } = useParams();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const dispatch = useDispatch()
   const [incommingdata, setincommingdata] = useState([]);
   const [enableupdate, setenableupdate] = useState(false);
   const [postperpage] = useState(9);
@@ -31,7 +33,7 @@ function Profile() {
   });
 
   // console.log(formdata);
-console.log(username);
+  // console.log(username);
   // console.log(NewImage);
 
   const fetchUserProfile = async () => {
@@ -45,26 +47,26 @@ console.log(username);
     }
   };
 
-  const fetchUserProfileWithoutJWT = async() =>{
-    try{
-      setisLoading(true)
-      const res = await axios.get(`/api/user/${username}`)
-      console.log(res.data)
-      setincommingdata(res.data)
-      setImagePreview(res.data.picture_url)
-    }catch(error){
-      toast.error(`error while fetching user ${error}`)
+  const fetchUserProfileWithoutJWT = async () => {
+    try {
+      setisLoading(true);
+      const res = await axios.get(`/api/user/${username}`);
+      console.log(res.data);
+      setincommingdata(res.data);
+      setImagePreview(res.data.picture_url);
+    } catch (error) {
+      toast.error(`error while fetching user ${error}`);
       setTimeout(() => {
         setisLoading(false);
         // navigate('/about')
       }, 300);
     }
-  }
+  };
 
   const handleImageChange = (event) => {
     setNewImage(event.target.files[0]);
-    if (NewImage) {
-      const imageurl = URL.createObjectURL(NewImage);
+    if (event.target.files[0]) {
+      const imageurl = URL.createObjectURL(event.target.files[0]);
       setImagePreview(imageurl);
       setformdata({
         ...formdata,
@@ -76,12 +78,14 @@ console.log(username);
 
   useEffect(() => {
     setisLoading(true);
-    if(username){
-      console.log(username)
-      fetchUserProfileWithoutJWT()
-    }
-    else{
-      fetchUserProfile();
+    if(username===undefined && authenticated){
+      fetchUserProfile()
+    }else{
+      console.log(username);
+      fetchUserProfileWithoutJWT();
+      setTimeout(() => {
+        navigate("/about");
+      }, 1800);
     }
     setTimeout(() => {
       setisLoading(false);
@@ -121,26 +125,30 @@ console.log(username);
   };
 
   const HandleDeleteProfile = async () => {
-    try{
+    try {
       const res = await privateaxious.delete("/api/profile/delete/");
-      console.log(res)
-      toast.success('Account Deleted Sucessfully!')
+      console.log(res);
+      toast.success("Account Deleted Sucessfully!");
+      dispatch(SetTokenFailed())
       setTimeout(() => {
         setisLoading(false);
-        navigate('/about')
+        navigate("/about");
       }, 1800);
-    }catch(error){
-      toast.error(`Err while deleting account ${error}`)
+    } catch (error) {
+      toast.error(`Err while deleting account ${error}`);
     }
-    
   };
+
+  const LoadingText = (username===undefined && authenticated)?`Welcome ${incommingdata.username}`:"Profile Loading ..."
 
   const Indexoflastpage = currentpage * postperpage;
   const IndexoFirstpage = Indexoflastpage - postperpage;
+  
   const totalPages = incommingdata?.usersolvedquestionlist
     ? incommingdata?.usersolvedquestionlist?.length
     : 0;
-  const paginate = (pageNumber) => setcurrentpage(pageNumber);
+  
+    const paginate = (pageNumber) => setcurrentpage(pageNumber);
 
   const currentproblems = incommingdata.usersolvedquestionlist?.slice(
     IndexoFirstpage,
@@ -150,7 +158,7 @@ console.log(username);
   return (
     <div className="w-full bg-gray-900 bg-auto min-h-screen overflow-hidden">
       {isloading ? (
-        <Loader about={"Profile Loading ..."} />
+        <Loader about={LoadingText} />
       ) : (
         <>
           <Toaster />

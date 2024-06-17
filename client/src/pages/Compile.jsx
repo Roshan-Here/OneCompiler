@@ -8,8 +8,10 @@ import axios from 'axios';
 import Loader from './../components/Loader';
 import CodeEditorButtons from '../components/CodeEditorButtons';
 import toast, { Toaster } from 'react-hot-toast';
+import TokenAuth from '../utils/TokenAuth';
 
 function Compile() {
+    TokenAuth(); // refreahing token
     const monaco = useMonaco()
     const [deftmsg,setdeftmsg] = useState("Welcome to Onecompiler where anything can be compiled")
     const [themename,setThemename] = useState("Theme")

@@ -9,6 +9,7 @@ import { faL, faLink } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import toast, { Toaster } from 'react-hot-toast';
 import axios from 'axios';
+import TokenAuth from '../utils/TokenAuth';
 
 // onclick = link generate, =>
 // check if link already generated : toast link already generated,
@@ -17,6 +18,7 @@ import axios from 'axios';
 
 
 function Pasteit() {
+  TokenAuth(); // refreahing token
   const monaco = useMonaco()
   const [deftmsg,setdeftmsg] = useState("Enter your code to be Saved through link")
   const [code,setcode] = useState("")

@@ -1,6 +1,8 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 function ProblemTable({CurrentProblems,}) {
+  const navigate = useNavigate()
   return (
     <div className="md:px-40 flex flex-grow justify-center overflow-y-visible">
       <table className="table">
@@ -17,7 +19,7 @@ function ProblemTable({CurrentProblems,}) {
           {CurrentProblems?.map((itm) => (
             <tr key={itm.id}>
               <th>{itm.id}</th>
-              <td>{itm.Title}</td>
+              <td className="link link-hover" onClick={()=>{navigate(`/problem/${itm.slug}`)}} >{itm.Title}</td>
               <td
                 className={
                   itm.difficulty === "Easy"

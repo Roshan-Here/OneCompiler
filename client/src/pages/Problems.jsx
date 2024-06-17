@@ -14,8 +14,10 @@ import ProblemFilterList from "./../components/ProblemFilterList";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
 import Loader from './../components/Loader';
+import TokenAuth from "../utils/TokenAuth";
 
 function Problems() {
+  TokenAuth(); // refreahing token
   const [IncommingProblemList, setIncommingProblemList] = useState([]);
   const difficultyList = ["Easy", "Medium", "Hard"];
   const [difficulty, setdifficulty] = useState("");
