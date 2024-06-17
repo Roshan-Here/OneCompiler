@@ -1,32 +1,148 @@
 import React, { useEffect, useState } from "react";
-import { Toaster } from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import Footer from "../components/Footer";
 import ListProblemSamples from "../utils/ListProblemSample";
 import ProblemTable from "../components/ProblemTable";
 import Pagination from "../components/Pagination";
 import Loader from "../components/Loader";
 import { useSelector } from "react-redux";
+import BlankProfilePNG from "../components/Statiacimages/BlankUserProfile.png";
+import privateaxious from "../utils/api";
+import { useNavigate, useParams } from "react-router-dom";
+import TokenAuth from "../utils/TokenAuth";
+import axios from "axios";
 
 function Profile() {
+  TokenAuth() // refreahing token
   const authenticated = useSelector((state) => state.user.authenticated);
+  const { username } = useParams();
+  const navigate = useNavigate()
+  const [incommingdata, setincommingdata] = useState([]);
   const [enableupdate, setenableupdate] = useState(false);
   const [postperpage] = useState(9);
   const [currentpage, setcurrentpage] = useState(1);
   const [isloading, setisLoading] = useState(false);
+  const [NewImage, setNewImage] = useState();
+  const [ImagePreview, setImagePreview] = useState();
+  const [formdata, setformdata] = useState({
+    full_name: "",
+    about: "",
+    picture: null,
+  });
+
+  // console.log(formdata);
+console.log(username);
+  // console.log(NewImage);
+
+  const fetchUserProfile = async () => {
+    try {
+      const res = await privateaxious.get("/api/profile/");
+      console.log(res.data);
+      setincommingdata(res.data);
+      setImagePreview(res.data.picture_url);
+    } catch (error) {
+      toast.error(`Error fetching ${username} profile ${error}`);
+    }
+  };
+
+  const fetchUserProfileWithoutJWT = async() =>{
+    try{
+      setisLoading(true)
+      const res = await axios.get(`/api/user/${username}`)
+      console.log(res.data)
+      setincommingdata(res.data)
+      setImagePreview(res.data.picture_url)
+    }catch(error){
+      toast.error(`error while fetching user ${error}`)
+      setTimeout(() => {
+        setisLoading(false);
+        // navigate('/about')
+      }, 300);
+    }
+  }
+
+  const handleImageChange = (event) => {
+    setNewImage(event.target.files[0]);
+    if (NewImage) {
+      const imageurl = URL.createObjectURL(NewImage);
+      setImagePreview(imageurl);
+      setformdata({
+        ...formdata,
+        picture: NewImage,
+      });
+      // HandleUpdateProfile();
+    }
+  };
 
   useEffect(() => {
     setisLoading(true);
+    if(username){
+      console.log(username)
+      fetchUserProfileWithoutJWT()
+    }
+    else{
+      fetchUserProfile();
+    }
     setTimeout(() => {
       setisLoading(false);
-    }, 800);
+    }, 1400);
   }, []);
+
+  const handleUpdateChange = (e) => {
+    const { name, value } = e.target;
+    setformdata({
+      ...formdata,
+      [name]: value,
+    });
+  };
+
+  const HandleUpdateProfile = async (e) => {
+    e.preventDefault();
+    const data = new FormData();
+    data.append("full_name", formdata.full_name);
+    data.append("about", formdata.about);
+    if (formdata.picture) {
+      data.append("picture", formdata.picture);
+    }
+    try {
+      const res = await privateaxious.put("/api/profile/update/", data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      console.log(res.data);
+      toast.success("Profile Updated Sucessfully");
+      fetchUserProfile();
+      setenableupdate(false);
+    } catch (error) {
+      toast.error(`Err : ${error}`);
+    }
+    console.log(formdata);
+  };
+
+  const HandleDeleteProfile = async () => {
+    try{
+      const res = await privateaxious.delete("/api/profile/delete/");
+      console.log(res)
+      toast.success('Account Deleted Sucessfully!')
+      setTimeout(() => {
+        setisLoading(false);
+        navigate('/about')
+      }, 1800);
+    }catch(error){
+      toast.error(`Err while deleting account ${error}`)
+    }
+    
+  };
 
   const Indexoflastpage = currentpage * postperpage;
   const IndexoFirstpage = Indexoflastpage - postperpage;
-
+  const totalPages = incommingdata?.usersolvedquestionlist
+    ? incommingdata?.usersolvedquestionlist?.length
+    : 0;
   const paginate = (pageNumber) => setcurrentpage(pageNumber);
 
-  const currentproblems = ListProblemSamples.slice(
+  const currentproblems = incommingdata.usersolvedquestionlist?.slice(
     IndexoFirstpage,
     Indexoflastpage
   );
@@ -43,11 +159,12 @@ function Profile() {
             <div className="flex-col">
               <div className="avatar mt-7">
                 <div className="relative w-40 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-                  <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
+                  <img src={ImagePreview ? ImagePreview : BlankProfilePNG} />
                   {/* hide button on enable update */}
                   <input
                     type="file"
                     accept="image/*"
+                    onChange={handleImageChange}
                     className={`${enableupdate ? "" : "hidden"} 
                     px-7 absolute 
                     -bottom-1  w-full text-sm text-slate-500
@@ -61,13 +178,13 @@ function Profile() {
                 </div>
               </div>
               <div className="flex justify-center text-2xl font-bold">
-                @Username
+                {`@${incommingdata.username}`}
               </div>
               <div className="mt-2 flex justify-center text-2xl font-semibold gap-3">
                 {/* hidden if not authenticated */}
                 <button
                   className={`${
-                    !authenticated ? "" : "hidden"
+                    authenticated ? "" : "hidden"
                   } btn btn-sm border-t-green-600 btn-accent`}
                   onClick={() => setenableupdate(true)}
                 >
@@ -75,9 +192,9 @@ function Profile() {
                 </button>
                 <button
                   className={`${
-                    !authenticated ? "" : "hidden"
+                    authenticated ? "" : "hidden"
                   } btn btn-sm  btn-error`}
-                  onClick={() => setenableupdate(true)}
+                  onClick={HandleDeleteProfile}
                 >
                   Delete
                 </button>
@@ -88,9 +205,9 @@ function Profile() {
             <div className="card ml-12 mr-12 md:ml-44 md:mr-44 w-full bg-slate-500 text-primary-content">
               <div className={`${enableupdate ? "hidden" : ""} card-body`}>
                 {/* // change hidden onupdate */}
-                <h1 className="flex justify-center text-2xl">Full Name</h1>
-                <p className="flex justify-center text-xl">
-                  i'm a professional Developer
+                <h1 className="flex justify-center text-2xl text-zinc-100">{`${incommingdata.full_name}`}</h1>
+                <p className="flex justify-center text-xl text-red-100">
+                  {`${incommingdata.about}`}
                 </p>
               </div>
               <div className={`${!enableupdate ? "hidden" : ""} card-body`}>
@@ -108,7 +225,8 @@ function Profile() {
                         className="grow text-slate-200"
                         type="text"
                         placeholder="Full Name"
-                        name="fullname"
+                        name="full_name"
+                        onChange={handleUpdateChange}
                         id=""
                       />
                     </label>
@@ -120,12 +238,16 @@ function Profile() {
                         className="grow text-slate-200"
                         type="text-area"
                         placeholder="About"
-                        name="fullname"
+                        name="about"
+                        onChange={handleUpdateChange}
                         id=""
                       />
                     </label>
                     <div className="mt-3 flex text-2xl font-semibold">
-                      <button className="btn  border-t-green-600 btn-success">
+                      <button
+                        onClick={HandleUpdateProfile}
+                        className="btn  border-t-green-600 btn-success"
+                      >
                         Update
                       </button>
                     </div>
@@ -145,7 +267,9 @@ function Profile() {
           {/* solution table part */}
           <div
             className={`mt-3 ${
-              currentproblems.length === 0 ? "hidden" : ""
+              incommingdata?.usersolvedquestionlist?.length === 0
+                ? "hidden"
+                : ""
             } flex flex-col justify-center`}
           >
             {/* // hide with respect to length */}
@@ -156,7 +280,7 @@ function Profile() {
               <ProblemTable CurrentProblems={currentproblems} />
               <Pagination
                 postPerPage={postperpage}
-                totalPages={ListProblemSamples.length}
+                totalPages={totalPages}
                 paginate={paginate}
                 currentPage={currentpage}
               />

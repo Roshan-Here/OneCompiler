@@ -14,7 +14,7 @@ function ProblemTable({CurrentProblems,}) {
         </thead>
         <tbody className="">
           {/* row 1 */}
-          {CurrentProblems.map((itm) => (
+          {CurrentProblems?.map((itm) => (
             <tr key={itm.id}>
               <th>{itm.id}</th>
               <td>{itm.Title}</td>

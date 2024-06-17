@@ -7,8 +7,12 @@ import { faCirclePlay, faL } from "@fortawesome/free-solid-svg-icons";
 import { faGoogle, faYoutube } from "@fortawesome/free-brands-svg-icons";
 import CodeEditorButtonforChallenge from "./../components/CodeEditorButtonforChallenge";
 import toast from "react-hot-toast";
+import privateaxious from "./../utils/api";
+import { useParams } from "react-router-dom";
+import TokenAuth from "../utils/TokenAuth";
 
 function SingleChallenge() {
+  TokenAuth()
   const monaco = useMonaco();
   const [deftmsg, setdeftmsg] = useState(
     "Welcome to Onecompiler where anything can be compiled"
@@ -21,8 +25,10 @@ function SingleChallenge() {
   const [langforbutton, setlangforbutton] = useState("Languages");
   const [outputLoading, setoutputLoading] = useState(false);
   const [catchbot, setcatchbot] = useState(false);
-  const [solexpand, setsolexpand] = useState(false)
-
+  const [solexpand, setsolexpand] = useState(false);
+  const [problemdata, setproblemdata] = useState([]);
+  const { Qslug } = useParams();
+  console.log(Qslug);
   const handlelanguage = (value) => {
     setlanguage(value.value);
     setlangforbutton(value.name);
@@ -38,8 +44,18 @@ function SingleChallenge() {
     }
   }, [monaco]);
 
+  const fetchSingleProblem = async () => {
+    const res = await privateaxious.get(`/api/problem/${Qslug}/`);
+    setproblemdata(res.data);
+  };
+
+  // const attemptedProblem = async() =>{
+  //   const res = await privateaxious.put(`/api/profile/score/update`)
+  // }
+
   useEffect(() => {
     setisLoading(true);
+    fetchSingleProblem();
     setTimeout(() => {
       setisLoading(false);
     }, 800);
@@ -71,12 +87,12 @@ function SingleChallenge() {
     setcode(value);
   };
 
-  const replace=(data)=>{
-    return data.replace(/ /g,"+")
-  }
+  const replace = (data) => {
+    return data.replace(/ /g, "+");
+  };
 
   const handleYoutubeSolution = (Title) => {
-    let title = replace(Title)
+    let title = replace(Title);
     let query = `https://www.youtube.com/results?search_query=${title}+using+${
       language === "Languages" ? "" : language
     }`;
@@ -84,11 +100,11 @@ function SingleChallenge() {
     window.open(query, "_blank");
   };
 
-  const handelGoogleTopicSearch = (Title) =>{
-    let title =  replace(Title)
+  const handelGoogleTopicSearch = (Title) => {
+    let title = replace(Title);
     let query = `https://www.google.com/search?q=${title}`;
-    window.open(query, "_blank")
-  }
+    window.open(query, "_blank");
+  };
 
   const handleTheme = (value, name) => {
     setTheme(value);
@@ -128,12 +144,23 @@ function SingleChallenge() {
             <h1 className="text-xl">Output: [1,2]</h1>
           </div>
           {!solexpand && (
-            <button className="px-4 text-lg text-red-400 btn-link" onClick={() => setsolexpand(true)}>Trouble Finding Solution ?</button>
+            <button
+              className="px-4 text-lg text-red-400 btn-link"
+              onClick={() => setsolexpand(true)}
+            >
+              Trouble Finding Solution ?
+            </button>
           )}
           {/* <h1>Trouble Finding Solution ?</h1> */}
-          <div className={`${solexpand?"":"hidden"} p-4 flex flex-col justify-start`}>
+          <div
+            className={`${
+              solexpand ? "" : "hidden"
+            } p-4 flex flex-col justify-start`}
+          >
             <div className="flex">
-              <h1 className="text-2xl mt-1 font-medium">Find Solution on Youtube : </h1>
+              <h1 className="text-2xl mt-1 font-medium">
+                Find Solution on Youtube :{" "}
+              </h1>
               <button
                 className=" px-2 btn btn-ghost btn-md"
                 onClick={() => handleYoutubeSolution("Hello World")} // change sting to qustion.id
@@ -164,23 +191,75 @@ function SingleChallenge() {
             <div className="mt-1">
               <div className="flex gap-4">
                 <h1 className="text-xl">Learn more about this Topic on </h1>
-                <FontAwesomeIcon className="text-3xl text-amber-100" icon={faGoogle} />
-
+                <FontAwesomeIcon
+                  className="text-3xl text-amber-100"
+                  icon={faGoogle}
+                />
               </div>
               <div className="mt-2 grid grid-cols-6 gap-2">
-                <button onClick={()=>handelGoogleTopicSearch("Hash map")} className="btn-neutral btn btn-xs font-bold hover:text-slate-200 hover:btn-success">Array </button>
-                <button onClick={()=>handelGoogleTopicSearch("Array")} className="btn-neutral btn btn-xs font-bold hover:text-slate-200 hover:btn-success">Array </button>
-                <button onClick={()=>handelGoogleTopicSearch("Array")} className="btn-neutral btn btn-xs font-bold hover:text-slate-200 hover:btn-success">Array </button>
-                <button onClick={()=>handelGoogleTopicSearch("Array")} className="btn-neutral btn btn-xs font-bold hover:text-slate-200 hover:btn-success">Array </button>
-                <button onClick={()=>handelGoogleTopicSearch("Array")} className="btn-neutral btn btn-xs font-bold hover:text-slate-200 hover:btn-success">Array </button>
-                <button onClick={()=>handelGoogleTopicSearch("Array")} className="btn-neutral btn btn-xs font-bold hover:text-slate-200 hover:btn-success">Array </button>
-                <button onClick={()=>handelGoogleTopicSearch("Array")} className="btn-neutral btn btn-xs font-bold hover:text-slate-200 hover:btn-success">Array </button>
-                <button onClick={()=>handelGoogleTopicSearch("Array")} className="btn-neutral btn btn-xs font-bold hover:text-slate-200 hover:btn-success">Array </button>
-                <button onClick={()=>handelGoogleTopicSearch("Array")} className="btn-neutral btn btn-xs font-bold hover:text-slate-200 hover:btn-success">Array </button>
+                <button
+                  onClick={() => handelGoogleTopicSearch("Hash map")}
+                  className="btn-neutral btn btn-xs font-bold hover:text-slate-200 hover:btn-success"
+                >
+                  Array{" "}
+                </button>
+                <button
+                  onClick={() => handelGoogleTopicSearch("Array")}
+                  className="btn-neutral btn btn-xs font-bold hover:text-slate-200 hover:btn-success"
+                >
+                  Array{" "}
+                </button>
+                <button
+                  onClick={() => handelGoogleTopicSearch("Array")}
+                  className="btn-neutral btn btn-xs font-bold hover:text-slate-200 hover:btn-success"
+                >
+                  Array{" "}
+                </button>
+                <button
+                  onClick={() => handelGoogleTopicSearch("Array")}
+                  className="btn-neutral btn btn-xs font-bold hover:text-slate-200 hover:btn-success"
+                >
+                  Array{" "}
+                </button>
+                <button
+                  onClick={() => handelGoogleTopicSearch("Array")}
+                  className="btn-neutral btn btn-xs font-bold hover:text-slate-200 hover:btn-success"
+                >
+                  Array{" "}
+                </button>
+                <button
+                  onClick={() => handelGoogleTopicSearch("Array")}
+                  className="btn-neutral btn btn-xs font-bold hover:text-slate-200 hover:btn-success"
+                >
+                  Array{" "}
+                </button>
+                <button
+                  onClick={() => handelGoogleTopicSearch("Array")}
+                  className="btn-neutral btn btn-xs font-bold hover:text-slate-200 hover:btn-success"
+                >
+                  Array{" "}
+                </button>
+                <button
+                  onClick={() => handelGoogleTopicSearch("Array")}
+                  className="btn-neutral btn btn-xs font-bold hover:text-slate-200 hover:btn-success"
+                >
+                  Array{" "}
+                </button>
+                <button
+                  onClick={() => handelGoogleTopicSearch("Array")}
+                  className="btn-neutral btn btn-xs font-bold hover:text-slate-200 hover:btn-success"
+                >
+                  Array{" "}
+                </button>
               </div>
-            {solexpand && (
-            <button className="mt-3 text-lg text-amber-300 btn-link" onClick={() => setsolexpand(false)}>show less...</button>
-          )}
+              {solexpand && (
+                <button
+                  className="mt-3 text-lg text-amber-300 btn-link"
+                  onClick={() => setsolexpand(false)}
+                >
+                  show less...
+                </button>
+              )}
             </div>
           </div>
         </div>

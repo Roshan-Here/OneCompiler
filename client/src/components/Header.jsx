@@ -33,7 +33,7 @@ function Header() {
             <Link to="/pasteit">
               <li className="md:inline hover:opacity-75">Pasteit</li>
             </Link>
-            {!authenticated ? (
+            {authenticated ? (
 
                 <li onClick={logout} className="md:inline hover:opacity-75">Logout</li>
             ) : (

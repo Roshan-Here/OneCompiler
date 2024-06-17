@@ -32,9 +32,10 @@ function App() {
         <Route path="/pasteit" element={<Pasteit/>}/>
         <Route path="/login" element={<Login/>}/>
         <Route path="/hei" element={<CommingSoon/>}/>
-        <Route path="/uff" element={<SingleChallenge/>}/>
+        <Route path="/problem/:Qslug" element={<SingleChallenge/>}/>
         <Route path='/problems' element={<Problems/>}></Route>
         <Route path='/profile' element={<Profile/>}></Route>
+        <Route path='/profile/:username' element={<Profile/>}></Route>
         <Route path="/pasteit/:pastelink" element={<Pasteit/>}/>
         <Route path="*" element={<NotFound/>}/>
       </Routes>
