@@ -44,7 +44,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
     def get_picture_url(self, obj):
         request = self.context.get('request')
         if request and obj.picture and hasattr(obj.picture, 'url'):
-            return request.build_absolute_uri(obj.picture.url)
+            return settings.BASE_URL + obj.picture.url
         return None
     
     def update(self, instance, validated_data):
@@ -73,7 +73,7 @@ class UserDetailsUpdateSerializer(serializers.ModelSerializer):
     def get_picture_url(self, obj):
         request = self.context.get('request')
         if request and hasattr(obj.picture, 'url'):
-            return request.build_absolute_uri(obj.picture.url)
+            return settings.BASE_URL + obj.picture.url
         return None
     
     def update(self, instance, validated_data):

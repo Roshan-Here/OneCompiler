@@ -23,6 +23,10 @@ from .views import (
     UserProfileDelete
     )
 
+from rest_framework_simplejwt.views import TokenRefreshView
+
+
+
 from django.urls import path
 
 urlpatterns = [
@@ -45,7 +49,8 @@ urlpatterns = [
     path("profile/score/update", UserSpecialFieldUpdater.as_view(), name="user-score-solvedlist-updater"),
     path('profile/update/',UserRequiedFieldsUpdateView.as_view(), name='user-profile-update'),
     path('profile/delete/',UserProfileDelete.as_view(), name='user-profile-delete'),
-    path("user/<slug:username>", UserProfileViewWithoutJWT.as_view(), name="user-profile-without-jwt")
+    path("user/<slug:username>", UserProfileViewWithoutJWT.as_view(), name="user-profile-without-jwt"),
+    path("token/refresh/", TokenRefreshView.as_view(), name="refresh-token"),
 ]
 
 
