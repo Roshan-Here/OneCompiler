@@ -15,7 +15,7 @@ function Header() {
   const logout = () => {
     dispatch(SetTokenFailed());
     setTimeout(() => {
-      navigate("/about");
+      navigate("/");
     }, 1800);
   };
 

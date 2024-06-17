@@ -36,19 +36,19 @@ function Compile() {
         setmemusage(value.data["memory usage"])
         if (value.data["Error"]){
             seterrorstatus(true)
-            console.log(value.data["Error"])
+            // console.log(value.data["Error"])
             setoutputdata(value.data["Error"])
             setcodestatus("Failure")
-            console.log(value.data["memory usage"]); 
-            console.log(value.data["run time"]);
+            // console.log(value.data["memory usage"]); 
+            // console.log(value.data["run time"]);
         }
         else{
             seterrorstatus(false)
             setoutputdata(value.data["Compiled Output"])
             setcodestatus("Success")
-            console.log(value.data["Compiled Output"]); 
-            console.log(value.data["memory usage"]); 
-            console.log(value.data["run time"]);
+            // console.log(value.data["Compiled Output"]); 
+            // console.log(value.data["memory usage"]); 
+            // console.log(value.data["run time"]);
         }
     }
 
@@ -115,12 +115,12 @@ function Compile() {
         setcode(deftmsg)
         setfileextention(value.extension)
     }
-    console.log(code)
+    // console.log(code)
 
     const handlesave = ()=>{
-        console.log("save button clicked!",fileextention)
+        // console.log("save button clicked!",fileextention)
         let filename = "OneCompiler."+String(fileextention)
-        console.log(filename)
+        // console.log(filename)
         const blob = new Blob([code],{type:"text/plain"})
         const url = URL.createObjectURL(blob)
         const link = document.createElement('a')

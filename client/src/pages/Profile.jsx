@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import Footer from "../components/Footer";
 import ListProblemSamples from "../utils/ListProblemSample";
-import ProblemTable from "../components/ProblemTable";
+import AttemptedProblemList from "../components/AttemptedProblemList";
 import Pagination from "../components/Pagination";
 import Loader from "../components/Loader";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,6 +12,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { SetTokenFailed } from "../redux/User/userSlice";
 import TokenAuth from "../utils/TokenAuth";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faShareNodes } from "@fortawesome/free-solid-svg-icons";
+
 
 function Profile() {
   TokenAuth(); // refreahing token
@@ -32,14 +35,27 @@ function Profile() {
     picture: null,
   });
 
+  // console.log(import.meta.env.VITE_FRONTEND_URL);
   // console.log(formdata);
   // console.log(username);
   // console.log(NewImage);
 
+  const handlecopy = () =>{
+// for share button
+    try{
+      let value = `https://${import.meta.env.VITE_FRONTEND_URL}/profile/${incommingdata.username}`
+      navigator.clipboard.write(value)
+      toast.success("Link added to clipboard")
+    }
+    catch(error){
+      toast.error("Unable to copy to clipboard")
+    }
+  }
+
   const fetchUserProfile = async () => {
     try {
       const res = await privateaxious.get("/api/profile/");
-      console.log(res.data);
+      // console.log(res.data);
       setincommingdata(res.data);
       setImagePreview(res.data.picture_url);
     } catch (error) {
@@ -51,7 +67,7 @@ function Profile() {
     try {
       setisLoading(true);
       const res = await axios.get(`/api/user/${username}`);
-      console.log(res.data);
+      // console.log(res.data);
       setincommingdata(res.data);
       setImagePreview(res.data.picture_url);
     } catch (error) {
@@ -81,11 +97,11 @@ function Profile() {
     if(username===undefined && authenticated){
       fetchUserProfile()
     }else{
-      console.log(username);
+      // console.log(username);
       fetchUserProfileWithoutJWT();
-      setTimeout(() => {
-        navigate("/about");
-      }, 1800);
+      // setTimeout(() => {
+      //   navigate("/about");
+      // }, 1800);
     }
     setTimeout(() => {
       setisLoading(false);
@@ -114,20 +130,20 @@ function Profile() {
           "Content-Type": "multipart/form-data",
         },
       });
-      console.log(res.data);
+      // console.log(res.data);
       toast.success("Profile Updated Sucessfully");
       fetchUserProfile();
       setenableupdate(false);
     } catch (error) {
       toast.error(`Err : ${error}`);
     }
-    console.log(formdata);
+    // console.log(formdata);
   };
 
   const HandleDeleteProfile = async () => {
     try {
       const res = await privateaxious.delete("/api/profile/delete/");
-      console.log(res);
+      // console.log(res);
       toast.success("Account Deleted Sucessfully!");
       dispatch(SetTokenFailed())
       setTimeout(() => {
@@ -154,6 +170,8 @@ function Profile() {
     IndexoFirstpage,
     Indexoflastpage
   );
+
+  // console.log(currentproblems);
 
   return (
     <div className="w-full bg-gray-900 bg-auto min-h-screen overflow-hidden">
@@ -205,6 +223,15 @@ function Profile() {
                   onClick={HandleDeleteProfile}
                 >
                   Delete
+                </button>
+              </div>
+              <div className="mt-2 flex justify-center">
+                <button
+                onClick={handlecopy}
+                  className="btn btn-sm btn-ghost text-sky-500"
+                >
+              <FontAwesomeIcon className="text-2xl" icon={faShareNodes} />
+              Share
                 </button>
               </div>
             </div>
@@ -283,9 +310,9 @@ function Profile() {
             {/* // hide with respect to length */}
             <div className="ml-12 mr-12 md:ml-44 md:mr-44 card bg-gray-950 shadow xl">
               <div className="py-3 flex justify-center">
-                <h1 className="text-3xl font-bold">Solved Questions</h1>
+                <h1 className="text-3xl font-bold">Attended Questions</h1>
               </div>
-              <ProblemTable CurrentProblems={currentproblems} />
+              <AttemptedProblemList CurrentProblems={currentproblems} />
               <Pagination
                 postPerPage={postperpage}
                 totalPages={totalPages}

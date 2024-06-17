@@ -15,9 +15,11 @@ import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
 import Loader from './../components/Loader';
 import TokenAuth from "../utils/TokenAuth";
+import { useNavigate } from "react-router-dom";
 
 function Problems() {
   TokenAuth(); // refreahing token
+  const navigate = useNavigate()
   const [IncommingProblemList, setIncommingProblemList] = useState([]);
   const difficultyList = ["Easy", "Medium", "Hard"];
   const [difficulty, setdifficulty] = useState("");
@@ -119,11 +121,15 @@ function Problems() {
     // console.log(currentproblems.length);
     const currentPageQids = currentproblems.map((item) => item.id);
     let randomNum = Math.floor(Math.random() * currentproblems.length);
-    console.log(randomNum);
-    console.log(currentPageQids[randomNum]);
+    // console.log(randomNum);
+    // console.log(currentPageQids[randomNum]);
+    let val = currentPageQids[randomNum]
+    // console.log(currentproblems.find((y)=>val==y.id).slug);
+    const randomquestion =  currentproblems.find((y)=>val==y.id).slug
     toast.success(
-      `Randomly selcted Question No : ${currentPageQids[randomNum]}`
+      `Randomly selcted Question No : ${val}`
     );
+    navigate(`/problem/${randomquestion}`)
   };
 
   return (

@@ -30,7 +30,7 @@ function Login() {
             dispatch(SetRefreshToken(data.refresh))
             toast.success("User Signin Sucessfully")
             setTimeout(() => {
-                navigate('/about')
+                navigate('/')
             }, 1000);
         }catch(error){
             dispatch(SetTokenFailed())
