@@ -3,6 +3,7 @@ from django.utils.text import slugify
 from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.utils import timezone
+import os
 
 # Create your models here.
 ################## custom user model #################
@@ -72,11 +73,35 @@ class UserProfile(models.Model):
     def __str__(self):
         return self.user.username
     
+    def save(self, *args, **kwargs):
+        """
+        Auto Delete old profile pic
+        """
+        try:
+            this = UserProfile.objects.get(id=self.id)
+            if this.picture != self.picture:  
+                this.picture.delete(save=False)
+        except UserProfile.DoesNotExist: #new acc ? no need to delete old pic.
+            pass
+
+        super(UserProfile, self).save(*args, **kwargs)
+        
+        
+    def delete(self, *args, **kwargs):
+        """
+        Auto delete profile image while deleting account
+        """
+        if self.picture:
+            if os.path.isfile(self.picture.path):
+                os.remove(self.picture.path)
+        super(UserProfile, self).delete(*args, **kwargs)
+    
+    
 class UserSolvedQuestionList(models.Model):
     user = models.ForeignKey(UserProfile,related_name="usersolvedquestionlist",on_delete=models.CASCADE)
-    Q_slug = models.CharField(max_length=75,null=False,blank=False)
-    Q_title = models.CharField(max_length=225,null=False,blank=False)
-    Q_difficulty = models.CharField(max_length=75,null=False,blank=False)
+    Q_slug = models.CharField(max_length=75,null=True,blank=True)
+    Q_title = models.CharField(max_length=225,null=True,blank=True)
+    Q_difficulty = models.CharField(max_length=75,null=True,blank=True)
     
     def __str__(self):
         return self.Q_title

@@ -34,7 +34,7 @@ MANIFEST
 *.pyc
 __pycache__
 db.sqlite3
-media/profile_pictures/*
+media/profile_pictures/
 
 # PyInstaller
 #  Usually these files are written by a python script from a template

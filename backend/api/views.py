@@ -66,7 +66,7 @@ class UserProfileView(APIView):
 
     def get(self, request, *args, **kwargs):
         user_profile = UserProfile.objects.get(user=request.user)
-        serializer = UserProfileSerializer(user_profile)
+        serializer = UserProfileSerializer(user_profile, context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 class UserProfileUpdateView(generics.UpdateAPIView):
@@ -103,7 +103,6 @@ class UserRequiedFieldsUpdateView(generics.UpdateAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_object(self):
-        print(self.request.data)
         return UserProfile.objects.get(user=self.request.user)
     
     
@@ -154,6 +153,19 @@ class UserProfileViewWithoutJWT(generics.RetrieveAPIView):
         username = self.kwargs['username']
         return get_object_or_404(UserProfile, user__username=username)
     
+    
+class UserProfileDelete(generics.DestroyAPIView):
+    queryset = UserProfile.objects.all()
+    serializer_class = UserProfileSerializer
+    permission_classes = [IsAuthenticated]
+    
+    def get_object(self):
+        return UserProfile.objects.get(user=self.request.user)
+    
+    def perform_destroy(self, instance):
+        user = instance.user
+        instance.delete()  # to delete the picture file
+        user.delete()
     
 ################### Inital view #############
 

@@ -19,7 +19,8 @@ from .views import (
     UserProfileUpdateView,
     UserProfileViewWithoutJWT,
     UserSpecialFieldUpdater,
-    UserRequiedFieldsUpdateView
+    UserRequiedFieldsUpdateView,
+    UserProfileDelete
     )
 
 from django.urls import path
@@ -43,6 +44,7 @@ urlpatterns = [
     path('profile/',UserProfileView.as_view(), name='user-profile-view'),
     path("profile/score/update", UserSpecialFieldUpdater.as_view(), name="user-score-solvedlist-updater"),
     path('profile/update/',UserRequiedFieldsUpdateView.as_view(), name='user-profile-update'),
+    path('profile/delete/',UserProfileDelete.as_view(), name='user-profile-delete'),
     path("user/<slug:username>", UserProfileViewWithoutJWT.as_view(), name="user-profile-without-jwt")
 ]
 

@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from rest_framework import serializers
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
+from django.conf import settings
 from .models import (
     OneCode,
     Savelink,
@@ -30,9 +31,10 @@ class UserProfileSerializer(serializers.ModelSerializer):
     """
     Used to Create and Update all the UserProfile fields
     """
-    usersolvedquestionlist = UserSolvedQuestionListSerializer(many=True)
+    usersolvedquestionlist = UserSolvedQuestionListSerializer(many=True, required=False)
     username = serializers.CharField(source='user.username', read_only=True)
     email = serializers.EmailField(source='user.email', read_only=True)
+    picture = serializers.ImageField(required=False, allow_empty_file=True,allow_null=True)
     picture_url = serializers.SerializerMethodField()
     
     class Meta:
@@ -41,7 +43,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
      
     def get_picture_url(self, obj):
         request = self.context.get('request')
-        if request and hasattr(obj.picture, 'url'):
+        if request and obj.picture and hasattr(obj.picture, 'url'):
             return request.build_absolute_uri(obj.picture.url)
         return None
     
@@ -59,29 +61,34 @@ class UserProfileSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
     
-class UserDetailsUpdateSerializer(serializers.ModelField):
+class UserDetailsUpdateSerializer(serializers.ModelSerializer):
     """
     Special Updater for UserSide Update, name, & about, score amd usersolvedquestionlist will be updated without user knowledge  
     """
     picture_url = serializers.SerializerMethodField()
-    # usersolvedquestionlist = UserSolvedQuestionListSerializer(many=True)
-    
     class Meta:
         model = UserProfile
-        fields = ['full_name','about','picture', 'picture_url']
-         
+        fields = ['full_name', 'about', 'picture', 'picture_url']
+
     def get_picture_url(self, obj):
         request = self.context.get('request')
         if request and hasattr(obj.picture, 'url'):
             return request.build_absolute_uri(obj.picture.url)
         return None
     
-    # def update(self, instance, validated_data):
-    #     for attr, value in validated_data.items():
-    #         setattr(instance, attr, value)
+    def update(self, instance, validated_data):
+        # solved_questions_data = validated_data.pop('usersolvedquestionlist', None)
+        # if solved_questions_data:
+        #     for solved_question_data in solved_questions_data:
+        #         Q_slug = solved_question_data.get('Q_slug')
+        #         if not instance.usersolvedquestionlist.filter(Q_slug=Q_slug).exists():
+        #             UserSolvedQuestionList.objects.create(user=instance, **solved_question_data)
         
-    #     instance.save()
-    #     return instance
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+            
+        instance.save()
+        return instance
     
     
 
@@ -125,9 +132,10 @@ class SpecialUserProfileSerializer(serializers.ModelSerializer):
 
     def get_picture_url(self, obj):
         request = self.context.get('request')
-        if request and hasattr(obj.picture, 'url'):
-            return request.build_absolute_uri(obj.picture.url)
-        return None   
+        if request and obj.picture and hasattr(obj.picture, 'url'):
+            return settings.BASE_URL + obj.picture.url
+            # return request.build_absolute_uri(obj.picture.url)
+        return None
 
 
 class CustomUserSerializer(serializers.ModelSerializer):
@@ -145,7 +153,12 @@ class CustomUserSerializer(serializers.ModelSerializer):
         userprofile_data = validated_data.pop('userprofile', None)
         user = CustomUser.objects.create_user(**validated_data)
         if userprofile_data:
-            UserProfile.objects.create(user=user, **userprofile_data)
+            solved_questions_data = userprofile_data.pop('usersolvedquestionlist', [])
+            user_profile = UserProfile.objects.create(user=user, **userprofile_data)
+            if solved_questions_data:
+                for question_data in solved_questions_data:
+                    if question_data:  # Check if question_data is not empty
+                        UserSolvedQuestionList.objects.create(user=user_profile, **question_data)
         return user
     
 class LoginSerializer(serializers.Serializer):

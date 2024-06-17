@@ -49,6 +49,8 @@ REST_FRAMEWORK = {
     # 'PAGE_SIZE': 10,
 }
 
+BASE_URL = 'http://127.0.0.1:8000'
+
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
