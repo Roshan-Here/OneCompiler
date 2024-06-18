@@ -104,12 +104,20 @@ class SpecialDataUpdateSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         solved_questions_data = validated_data.pop('usersolvedquestionlist', None)
-        
+        new_score = validated_data.get('score')
         if solved_questions_data:
             for solved_question_data in solved_questions_data:
                 Q_slug = solved_question_data.get('Q_slug')
-                if not instance.usersolvedquestionlist.filter(Q_slug=Q_slug).exists():
+                if not instance.usersolvedquestionlist.filter(Q_slug=Q_slug).exists() and new_score is not None:
                     UserSolvedQuestionList.objects.create(user=instance, **solved_question_data)
+                    instance.score = (instance.score or 0) + new_score
+                    validated_data.pop('score')
+                else:
+                    validated_data.pop('score')
+                    
+        # if  new_score is not None:
+        #     instance.score = (instance.score or 0) + new_score
+        #     validated_data.pop('score') 
         
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
