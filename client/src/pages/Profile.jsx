@@ -153,7 +153,7 @@ function Profile() {
       dispatch(SetTokenFailed());
       setTimeout(() => {
         setisLoading(false);
-        navigate("/about");
+        navigate("/");
       }, 1800);
     } catch (error) {
       toast.error(`Err while deleting account ${error}`);

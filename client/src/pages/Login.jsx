@@ -1,20 +1,32 @@
 import { faLock, faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import toast, { Toaster } from 'react-hot-toast';
 import axios from 'axios';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { SetRefreshToken, SetTokenFailed, SetTokenSucess } from '../redux/User/userSlice';
 
 function Login() {
     const dispatch = useDispatch()
     const navigate = useNavigate()
+    const authenticated = useSelector((state) => state.user.authenticated);
     const [formdata, setformdata] =  useState({})
     const handlechange = (e)=>{
         setformdata({...formdata, [e.target.id]:e.target.value})
     }
-    console.log(formdata)
+    // console.log(formdata)
+
+    const LoaderText = authenticated?"Aleady Logined..":""
+
+    useEffect(()=>{
+        if(authenticated){
+            toast.error("Aleady Logined.")
+            setTimeout(() => {
+                navigate('/')
+            }, 200);
+        }
+    },[])
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -61,7 +73,7 @@ function Login() {
                         </div>
                     </form>
                 <div className='flex flex-col items-center mt-3'>
-                    <span>New Here? <Link to="/about">Create one</Link></span>
+                    <span>New Here? <Link to="/">Create one</Link></span>
                 </div>
             </div>
         </div>

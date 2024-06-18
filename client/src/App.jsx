@@ -12,6 +12,8 @@ import Login from './pages/Login';
 import SingleChallenge from "./pages/SingleChallenge"
 import Problems from "./pages/Problems"
 import Profile from "./pages/Profile"
+import NewLogin from "./pages/NewLogin"
+import Register from "./pages/Register"
 
 function App() {
 
@@ -30,7 +32,9 @@ function App() {
         <Route path="/blog" element={<Blog/>}/>
         <Route path="/challenges" element={<Challenges/>}/>
         <Route path="/pasteit" element={<Pasteit/>}/>
-        <Route path="/login" element={<Login/>}/>
+        {/* <Route path="/login" element={<Login/>}/> */}
+        <Route path="/login" element={<NewLogin/>}/>
+        <Route path="/register" element={<Register/>}/>
         <Route path="/hei" element={<CommingSoon/>}/>
         <Route path="/problem/:Qslug" element={<SingleChallenge/>}/>
         <Route path='/problems' element={<Problems/>}></Route>
