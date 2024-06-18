@@ -15,7 +15,7 @@ import { useSelector } from "react-redux";
 import Loader from "../components/Loader";
 
 function SingleChallenge() {
-  TokenAuth();
+  TokenAuth()
   const navigate = useNavigate();
   const authenticated = useSelector((state) => state.user.authenticated);
   console.log(authenticated);
@@ -24,6 +24,7 @@ function SingleChallenge() {
     "Welcome to Onecompiler where anything can be compiled"
   );
   const [themename, setThemename] = useState("Theme");
+  const [score, setscore] = useState(0);
   const [theme, setTheme] = useState();
   const [language, setlanguage] = useState("Languages");
   const [code, setcode] = useState("");
@@ -51,7 +52,7 @@ function SingleChallenge() {
     setcode(deftmsg);
   };
 
-  const LoaderaboutText = authenticated?"Loading problem...":"Please Login"
+  const LoaderaboutText = authenticated ? "Loading problem..." : "Please Login";
 
   useEffect(() => {
     setcode(deftmsg); // initial state
@@ -65,12 +66,17 @@ function SingleChallenge() {
     const res = await privateaxious.get(`/api/problem/${Qslug}/`);
     console.log(res.data);
     setproblemdata(res.data);
+    handleSetScore()
   };
+
+  const handleSetScore =()=>{
+    problemdata?.difficulty==="Easy"?setscore(10):problemdata?.difficulty==="Medium"?setscore(20):setscore(50)
+  }
 
   const handleQuestionAttempt = async () => {
     try {
       let formdata = {
-        score: 10,
+        score: score,
         usersolvedquestionlist: [
           {
             Q_slug: Qslug,

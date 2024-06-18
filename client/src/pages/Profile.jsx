@@ -13,15 +13,19 @@ import axios from "axios";
 import { SetTokenFailed } from "../redux/User/userSlice";
 import TokenAuth from "../utils/TokenAuth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faShareNodes } from "@fortawesome/free-solid-svg-icons";
-
+import {
+  faMedal,
+  faShareNodes,
+  faShieldHalved,
+  faStar,
+} from "@fortawesome/free-solid-svg-icons";
 
 function Profile() {
   TokenAuth(); // refreahing token
   const authenticated = useSelector((state) => state.user.authenticated);
   const { username } = useParams();
   const navigate = useNavigate();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const [incommingdata, setincommingdata] = useState([]);
   const [enableupdate, setenableupdate] = useState(false);
   const [postperpage] = useState(9);
@@ -40,17 +44,18 @@ function Profile() {
   // console.log(username);
   // console.log(NewImage);
 
-  const handlecopy = () =>{
-// for share button
-    try{
-      let value = `https://${import.meta.env.VITE_FRONTEND_URL}/profile/${incommingdata.username}`
-      navigator.clipboard.write(value)
-      toast.success("Link added to clipboard")
+  const handlecopy = () => {
+    // for share button
+    try {
+      let value = `https://${import.meta.env.VITE_FRONTEND_URL}/profile/${
+        incommingdata.username
+      }`;
+      navigator.clipboard.write(value);
+      toast.success("Link added to clipboard");
+    } catch (error) {
+      toast.error("Unable to copy to clipboard");
     }
-    catch(error){
-      toast.error("Unable to copy to clipboard")
-    }
-  }
+  };
 
   const fetchUserProfile = async () => {
     try {
@@ -74,7 +79,7 @@ function Profile() {
       toast.error(`error while fetching user ${error}`);
       setTimeout(() => {
         setisLoading(false);
-        // navigate('/about')
+        navigate("/");
       }, 300);
     }
   };
@@ -94,9 +99,9 @@ function Profile() {
 
   useEffect(() => {
     setisLoading(true);
-    if(username===undefined && authenticated){
-      fetchUserProfile()
-    }else{
+    if (username === undefined && authenticated) {
+      fetchUserProfile();
+    } else {
       // console.log(username);
       fetchUserProfileWithoutJWT();
       // setTimeout(() => {
@@ -145,7 +150,7 @@ function Profile() {
       const res = await privateaxious.delete("/api/profile/delete/");
       // console.log(res);
       toast.success("Account Deleted Sucessfully!");
-      dispatch(SetTokenFailed())
+      dispatch(SetTokenFailed());
       setTimeout(() => {
         setisLoading(false);
         navigate("/about");
@@ -155,16 +160,19 @@ function Profile() {
     }
   };
 
-  const LoadingText = (username===undefined && authenticated)?`Welcome ${incommingdata.username}`:"Profile Loading ..."
+  const LoadingText =
+    username === undefined && authenticated
+      ? `Welcome ${incommingdata.username}`
+      : "Profile Loading ...";
 
   const Indexoflastpage = currentpage * postperpage;
   const IndexoFirstpage = Indexoflastpage - postperpage;
-  
+
   const totalPages = incommingdata?.usersolvedquestionlist
     ? incommingdata?.usersolvedquestionlist?.length
     : 0;
-  
-    const paginate = (pageNumber) => setcurrentpage(pageNumber);
+
+  const paginate = (pageNumber) => setcurrentpage(pageNumber);
 
   const currentproblems = incommingdata.usersolvedquestionlist?.slice(
     IndexoFirstpage,
@@ -204,6 +212,18 @@ function Profile() {
                 </div>
               </div>
               <div className="flex justify-center text-2xl font-bold">
+                {incommingdata.score >= 250 ? (
+                  <>
+                    <FontAwesomeIcon
+                      className="text-3xl text-amber-300"
+                      icon={faMedal}
+                    />
+                  </>
+                ) : (
+                  <></>
+                )}
+              </div>
+              <div className="flex justify-center text-2xl font-bold">
                 {`@${incommingdata.username}`}
               </div>
               <div className="mt-2 flex justify-center text-2xl font-semibold gap-3">
@@ -227,11 +247,11 @@ function Profile() {
               </div>
               <div className="mt-2 flex justify-center">
                 <button
-                onClick={handlecopy}
+                  onClick={handlecopy}
                   className="btn btn-sm btn-ghost text-sky-500"
                 >
-              <FontAwesomeIcon className="text-2xl" icon={faShareNodes} />
-              Share
+                  <FontAwesomeIcon className="text-2xl" icon={faShareNodes} />
+                  Share
                 </button>
               </div>
             </div>
@@ -239,6 +259,28 @@ function Profile() {
           <div className="flex mt-6">
             <div className="card ml-12 mr-12 md:ml-44 md:mr-44 w-full bg-slate-500 text-primary-content">
               <div className={`${enableupdate ? "hidden" : ""} card-body`}>
+                <div className="flex justify-center text-2xl font-bold gap-2">
+                  Total Score :{" "}
+                  {incommingdata.score <= 50 ? (
+                    <>
+                      {`${incommingdata.score}`}
+                      <FontAwesomeIcon
+                        className="text-3xl text-amber-900"
+                        icon={faShieldHalved}
+                      />
+                    </>
+                  ) : incommingdata.score <= 249 ? (
+                    <>
+                      {`${incommingdata.score}`}
+                      <FontAwesomeIcon
+                        className="text-3xl text-indigo-600"
+                        icon={faStar}
+                      />
+                    </>
+                  ) : (
+                    <>{`${incommingdata.score}`}</>
+                  )}
+                </div>
                 {/* // change hidden onupdate */}
                 <h1 className="flex justify-center text-2xl text-zinc-100">{`${incommingdata.full_name}`}</h1>
                 <p className="flex justify-center text-xl text-red-100">
