@@ -16,18 +16,37 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
+<<<<<<< HEAD
 from api.views import CreateUserView
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView
 )
+=======
+from django.conf import settings
+from django.conf.urls.static import static
+# from api.views import CreateUserView
+# from rest_framework_simplejwt.views import (
+     # TokenObtainPairView,
+#     TokenRefreshView
+# )
+>>>>>>> backend
 from rest_framework.permissions import AllowAny
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("api/", include('api.urls')),
+<<<<<<< HEAD
     path("api/user/register/", CreateUserView.as_view(), name="create-user"),
     path("api/token/", TokenObtainPairView.as_view(), name="get-token"),
     path("api/token/refresh/", TokenRefreshView.as_view(), name="refresh-token"),
     path('api-auth/', include('rest_framework.urls')),
 ]
+=======
+    # path("api/user/register/", CreateUserView.as_view(), name="create-user"),
+    # path("api/token/", TokenObtainPairView.as_view(), name="get-token"),
+    path('api-auth/', include('rest_framework.urls')),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+# urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) 
+>>>>>>> backend
