@@ -137,7 +137,7 @@ function Compile() {
     <section>
         {isLoading ? (
         <Loader about={"Loading PlayGround...."}/>):(
-        <div className=' bg-gray-900 bg-auto h-auto overflow-hidden'>
+        <div className=' bg-gray-900 bg-auto min-h-screen overflow-hidden'>
         <Toaster/>
         {/* theme selector,language selector,run button */}
         <div className='flex flex-row justify-between'>

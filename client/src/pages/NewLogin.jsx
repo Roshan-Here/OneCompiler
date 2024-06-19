@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { SetRefreshToken, SetTokenSucess } from "../redux/User/userSlice";
+import { SetRefreshToken, SetTokenFailed, SetTokenSucess } from "../redux/User/userSlice";
 import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import Loader from "../components/Loader";
