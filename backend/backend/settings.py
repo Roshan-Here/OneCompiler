@@ -32,6 +32,8 @@ SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 # print(os.environ.get('IS_DEBUG'))
 CORS_URLS_REGEX = r"^/.*"
 
+DEBUG = True
+
 CORS_ALLOWED_ORIGINS = []
 
 """
@@ -40,7 +42,7 @@ Activating Debug mode or Production mode.
 
 if os.environ.get('IS_DEBUG')==True:
     print('Deployment Mode Activated')
-    DEBUG = True
+    # DEBUG = True
     ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
@@ -52,7 +54,7 @@ if os.environ.get('IS_DEBUG')==True:
 ]
 else:
     print('Debug Mode Not Activated')
-    DEBUG = False
+    # DEBUG = False
     ALLOWED_HOSTS = ['*']
     CORS_ALLOWED_ORIGINS += [
     os.environ.get('BACKEND_URL'),

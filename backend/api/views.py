@@ -74,7 +74,7 @@ class UserProfileUpdateView(generics.UpdateAPIView):
     Used to update all the user filed on single step, including usersolvedquestionlist
     """
     serializer_class = UserProfileSerializer
-    parser_classes = [MultiPartParser, FormParser]
+    # parser_classes = [MultiPartParser, FormParser]
     permission_classes = [IsAuthenticated]
     # permission_classes = [AllowAny]
     
@@ -99,7 +99,7 @@ class UserRequiedFieldsUpdateView(generics.UpdateAPIView):
     Used to Update Specified field only! not giving access to change username, email, score, usersolvedquestionlist
     """
     serializer_class = UserDetailsUpdateSerializer
-    parser_classes = [MultiPartParser, FormParser]
+    # parser_classes = [MultiPartParser, FormParser]
     permission_classes = [IsAuthenticated]
 
     def get_object(self):
