@@ -14,11 +14,7 @@ import os
 from dotenv import load_dotenv
 from pathlib import Path
 from datetime import timedelta
-<<<<<<< HEAD
-
-=======
 from api.cloud import str2bool
->>>>>>> backend
 load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -146,23 +142,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-<<<<<<< HEAD
-
-CORS_URLS_REGEX = r"^/.*"
-
-CORS_ALLOWED_ORIGINS = []
-
-
-if DEBUG:
-    CORS_ALLOWED_ORIGINS += [
-    "http://192.168.1.4:8000",
-    "http://192.168.1.5:8111",
-    "http://127.0.0.1:8000",
-    "http://192.168.1.7:8000",
-    os.environ.get("CORS_ALLOWED_ORIGIN")
-] 
-=======
->>>>>>> backend
     
 
 ROOT_URLCONF = 'backend.urls'

@@ -1,13 +1,9 @@
 from django.db import models
 from django.utils.text import slugify
-<<<<<<< HEAD
-from django.contrib.auth.models import User
-=======
 from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.utils import timezone
 import os
->>>>>>> backend
 
 # Create your models here.
 ################## custom user model #################
@@ -128,13 +124,6 @@ class Savelink(models.Model):
     unique_link = models.CharField(max_length=200,null=True,blank=True)
     created = models.DateTimeField(auto_now_add=True)
     
-<<<<<<< HEAD
-class Problem(models.Model):
-    Title = models.CharField(max_length=225,null=False,blank=False)
-    slug = models.SlugField(max_length=225,blank=True)
-    description = models.TextField()
-    difficulty = models.CharField(max_length=75,null=False,blank=False)
-=======
 ############## Problem Model ########################    
 
 class Tag(models.Model):
@@ -149,7 +138,6 @@ class Problem(models.Model):
     description = models.TextField(null=True, blank=True)  
     difficulty = models.CharField(max_length=75,null=False,blank=False)
     Tags = models.ManyToManyField(Tag)
->>>>>>> backend
     
     def save(self,*args,**kwargs):
         if not self.slug:
@@ -159,29 +147,17 @@ class Problem(models.Model):
 class Example(models.Model):
     # related_name should be same as custom serializer
     problem = models.ForeignKey(Problem,related_name="examples",on_delete=models.CASCADE)
-<<<<<<< HEAD
-    Input = models.CharField(max_length=225,null=False,blank=False)
-    Output = models.CharField(max_length=225,null=False,blank=False)
-    Explanation = models.CharField(max_length=255,null=False,blank=False)
-    
-# Blog
-=======
     Input = models.TextField(null=False,blank=False)
     Output = models.TextField(null=False,blank=False)
     Explanation = models.TextField(null=True, blank=True)
     
 ################## Blog Model #########################
->>>>>>> backend
 
 class Blog(models.Model):
     Title = models.CharField(max_length=256, blank=False, null=False)
     Content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-<<<<<<< HEAD
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="Blogs")
-=======
     author = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="Blogs")
->>>>>>> backend
     
     def __str__(self):
         return self.Title

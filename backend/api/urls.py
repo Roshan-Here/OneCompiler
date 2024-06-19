@@ -6,12 +6,6 @@ from .views import (
     RetriveSaveLink,
     DeleteSaveLink,
     DestroyAllSavedData,
-<<<<<<< HEAD
-    ProblemCreate,
-    RetriveProblemSmallData,
-    BlogListView,
-    BlogDeleteView
-=======
     # ProblemCreate, #not using due to no manual problem creation is adding, maybe latter.
     RetriveAllProblemData,
     RetriveAllMinProblemData,
@@ -27,18 +21,14 @@ from .views import (
     UserSpecialFieldUpdater,
     UserRequiedFieldsUpdateView,
     UserProfileDelete
->>>>>>> backend
     )
 
 from rest_framework_simplejwt.views import TokenRefreshView
 
-<<<<<<< HEAD
-=======
 
 
 from django.urls import path
 
->>>>>>> backend
 urlpatterns = [
     path("", getRoutes, name="sample-check"),
     path("run/", GetRunCode.as_view(), name="sample-run-code"),
@@ -47,12 +37,6 @@ urlpatterns = [
     path("savecode/<unique_link>", RetriveSaveLink.as_view(), name="save-code-link"),
     path("savecode/<unique_link>/delete", DeleteSaveLink.as_view(), name="delete-save-code"),
     path("savecodedeleteall", DestroyAllSavedData.as_view(), name="delete-all-save-code"),
-<<<<<<< HEAD
-    path("problem/", ProblemCreate.as_view(), name="problem-create"),
-    path("problemsmall/", RetriveProblemSmallData.as_view(), name="problem-for-listing-table"),
-    path("blog/",BlogListView.as_view(), name="create-list-blog"),
-    path("blog/delete/<int:pk>/", BlogDeleteView.as_view(), name="delete-blog")
-=======
     path("probleminimum", RetriveAllMinProblemData.as_view(), name="retive-all-problme-data"),
     path("problem/<slug:slug>/", RetriveIndividalProblemData.as_view(), name="retrive-individual-problem-data-using-id"),
     path("problemsmall/", RetriveAllProblemData.as_view(), name="problem-for-all-table"),
@@ -67,7 +51,6 @@ urlpatterns = [
     path('profile/delete/',UserProfileDelete.as_view(), name='user-profile-delete'),
     path("user/<slug:username>", UserProfileViewWithoutJWT.as_view(), name="user-profile-without-jwt"),
     path("token/refresh/", TokenRefreshView.as_view(), name="refresh-token"),
->>>>>>> backend
 ]
 
 

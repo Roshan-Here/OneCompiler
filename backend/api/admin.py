@@ -1,13 +1,4 @@
 from django.contrib import admin
-<<<<<<< HEAD
-from .models import OneCode, Problem, Example
-
-# Register your models here.
-
-admin.site.register(OneCode)
-admin.site.register(Problem)
-admin.site.register(Example)
-=======
 from .models import OneCode, Problem, Example, UserProfile, CustomUser
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.utils.translation import gettext_lazy as _
@@ -50,4 +41,3 @@ admin.site.register(OneCode)
 admin.site.register(Problem)
 admin.site.register(Example)
 admin.site.register(UserProfile)
->>>>>>> backend

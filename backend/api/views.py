@@ -1,27 +1,17 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
-<<<<<<< HEAD
-from rest_framework.permissions import IsAuthenticated,AllowAny
-=======
 from rest_framework.permissions import IsAuthenticated, AllowAny
->>>>>>> backend
 from rest_framework.views import APIView
 from rest_framework import status,serializers
 from rest_framework import generics
 from rest_framework.response import Response
-<<<<<<< HEAD
-=======
 from rest_framework.parsers import MultiPartParser, FormParser
 from django.shortcuts import get_object_or_404
->>>>>>> backend
 from .serializer import (
                 OneCodeSerializer,
                 SaveLinkSerializer,
                 ProblemSerializer,
                 ProblemDataSmallSerializer,
-<<<<<<< HEAD
-                UserSerializer,
-=======
                 ProblemMinumumDataSerializer,
                 # UserSerializer,
                 CustomUserSerializer,
@@ -30,7 +20,6 @@ from .serializer import (
                 SpecialUserProfileSerializer,
                 UserDetailsUpdateSerializer,
                 SpecialDataUpdateSerializer,
->>>>>>> backend
                 BlogSerializer
                 )
 
@@ -38,11 +27,8 @@ from .models import (
                 OneCode,
                 Savelink,
                 Problem,
-<<<<<<< HEAD
-=======
                 CustomUser,
                 UserProfile,
->>>>>>> backend
                 Blog)
 
 from django.http import JsonResponse
@@ -273,20 +259,12 @@ class RetriveSaveLink(generics.RetrieveAPIView):
     lookup_field = 'unique_link'
     
 class SaveLinkList(generics.ListAPIView):
-<<<<<<< HEAD
-    permission_classes = [AllowAny]
-=======
     permission_classes = [IsAuthenticated]
->>>>>>> backend
     queryset = Savelink.objects.all().order_by('-created')
     serializer_class = SaveLinkSerializer
     
 class DeleteSaveLink(generics.DestroyAPIView):
-<<<<<<< HEAD
-    permission_classes = [AllowAny]
-=======
     permission_classes = [IsAuthenticated]
->>>>>>> backend
     queryset = Savelink.objects.all()
     serializer_class = SaveLinkSerializer
     lookup_field = 'unique_link'
@@ -297,10 +275,7 @@ class DeleteSaveLink(generics.DestroyAPIView):
 
 # to delete all unwanted datas while developing!
 class DestroyAllSavedData(APIView):
-<<<<<<< HEAD
-=======
     permission_classes = [IsAuthenticated]
->>>>>>> backend
     def delete(self,request,*args,**kwargs):
         try:
             Savelink.objects.all().delete()
@@ -316,13 +291,6 @@ class ProblemCreate(generics.ListCreateAPIView):
     queryset = Problem.objects.all()
     serializer_class = ProblemSerializer
     permission_classes = [IsAuthenticated]
-<<<<<<< HEAD
-    
-class RetriveProblemSmallData(generics.ListAPIView):
-    queryset = Problem.objects.all() 
-    serializer_class = ProblemDataSmallSerializer
-    permission_classes = [IsAuthenticated]
-=======
     # permission_classes = [AllowAny]
     
     
@@ -367,23 +335,15 @@ class DestroyAllProblemData(APIView):
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     
->>>>>>> backend
     
 ########################################
                 #user 
 ########################################
 
-<<<<<<< HEAD
-class CreateUserView(generics.CreateAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-    permission_classes = [AllowAny]
-=======
 # class CreateUserView(generics.CreateAPIView):
 #     queryset = User.objects.all()
 #     serializer_class = UserSerializer
 #     permission_classes = [AllowAny]
->>>>>>> backend
     
     
 ########################################
