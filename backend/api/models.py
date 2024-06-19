@@ -67,34 +67,35 @@ class UserProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL,on_delete=models.CASCADE) # update User as new custom user model
     full_name = models.CharField(max_length=300,blank=True,null=True)
     about = models.TextField(null=True,blank=True)
-    picture = models.ImageField(upload_to='profile_pictures/', blank=True, null=True)
+    # picture = models.ImageField(upload_to='profile_pictures/', blank=True, null=True)
+    picture_url = models.URLField(max_length=500, blank=True, null=True)
     score = models.IntegerField(null=True,blank=True)
 
     def __str__(self):
         return self.user.username
     
-    def save(self, *args, **kwargs):
-        """
-        Auto Delete old profile pic
-        """
-        try:
-            this = UserProfile.objects.get(id=self.id)
-            if this.picture != self.picture:  
-                this.picture.delete(save=False)
-        except UserProfile.DoesNotExist: #new acc ? no need to delete old pic.
-            pass
+    # def save(self, *args, **kwargs):
+    #     """
+    #     Auto Delete old profile pic
+    #     """
+    #     try:
+    #         this = UserProfile.objects.get(id=self.id)
+    #         if this.picture != self.picture:  
+    #             this.picture.delete(save=False)
+    #     except UserProfile.DoesNotExist: #new acc ? no need to delete old pic.
+    #         pass
 
-        super(UserProfile, self).save(*args, **kwargs)
+    #     super(UserProfile, self).save(*args, **kwargs)
         
         
-    def delete(self, *args, **kwargs):
-        """
-        Auto delete profile image while deleting account
-        """
-        if self.picture:
-            if os.path.isfile(self.picture.path):
-                os.remove(self.picture.path)
-        super(UserProfile, self).delete(*args, **kwargs)
+    # def delete(self, *args, **kwargs):
+    #     """
+    #     Auto delete profile image while deleting account
+    #     """
+    #     if self.picture:
+    #         if os.path.isfile(self.picture.path):
+    #             os.remove(self.picture.path)
+    #     super(UserProfile, self).delete(*args, **kwargs)
     
     
 class UserSolvedQuestionList(models.Model):

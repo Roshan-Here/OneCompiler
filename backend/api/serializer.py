@@ -34,18 +34,21 @@ class UserProfileSerializer(serializers.ModelSerializer):
     usersolvedquestionlist = UserSolvedQuestionListSerializer(many=True, required=False)
     username = serializers.CharField(source='user.username', read_only=True)
     email = serializers.EmailField(source='user.email', read_only=True)
-    picture = serializers.ImageField(required=False, allow_empty_file=True,allow_null=True)
-    picture_url = serializers.SerializerMethodField()
+    # picture = serializers.ImageField(required=False, allow_empty_file=True,allow_null=True,use_url=True)
+    # picture_url = serializers.SerializerMethodField()
+    picture_url = serializers.URLField(max_length=2000, min_length=None, allow_blank=False)
+
     
     class Meta:
         model = UserProfile
-        fields = ['username','email','full_name','about','score','picture', 'picture_url','usersolvedquestionlist']
+        fields = ['username','email','full_name','about','score','picture_url','usersolvedquestionlist']
      
-    def get_picture_url(self, obj):
-        request = self.context.get('request')
-        if request and obj.picture and hasattr(obj.picture, 'url'):
-            return settings.BASE_URL + obj.picture.url
-        return None
+    # def get_picture_url(self, obj):
+    #     request = self.context.get('request')
+    #     if request and obj.picture and hasattr(obj.picture, 'url'):
+    #         print(obj.picture)
+    #         return settings.BASE_URL + obj.picture.url
+    #     return None
     
     def update(self, instance, validated_data):
         solved_questions_data = validated_data.pop('usersolvedquestionlist', None)
@@ -65,18 +68,24 @@ class UserDetailsUpdateSerializer(serializers.ModelSerializer):
     """
     Special Updater for UserSide Update, name, & about, score amd usersolvedquestionlist will be updated without user knowledge  
     """
-    picture_url = serializers.SerializerMethodField()
+    picture_url = serializers.URLField(max_length=2000, min_length=None, allow_blank=False)
+    
     class Meta:
         model = UserProfile
-        fields = ['full_name', 'about', 'picture', 'picture_url']
+        # fields = ['full_name', 'about', 'picture', 'picture_url']
+        fields = ['full_name', 'about', 'picture_url']
 
-    def get_picture_url(self, obj):
-        request = self.context.get('request')
-        if request and hasattr(obj.picture, 'url'):
-            return settings.BASE_URL + obj.picture.url
-        return None
+    # def get_picture_url(self, obj):
+    #     request = self.context.get('request')
+    #     if request and hasattr(obj.picture, 'url'):
+    #         print(obj.picture)
+    #         Upload_to_Cloudinary(obj.picture)
+    #         return settings.BASE_URL + obj.picture.url
+    #     return None
     
     def update(self, instance, validated_data):
+        if 'picture_url' in validated_data:
+            instance.picture_url = validated_data.pop('picture_url')
         # solved_questions_data = validated_data.pop('usersolvedquestionlist', None)
         # if solved_questions_data:
         #     for solved_question_data in solved_questions_data:
@@ -132,18 +141,19 @@ class SpecialUserProfileSerializer(serializers.ModelSerializer):
     """
     usersolvedquestionlist = UserSolvedQuestionListSerializer(many=True, read_only=True)
     username = serializers.CharField(source='user.username', read_only=True)
-    picture_url = serializers.SerializerMethodField()
+    # picture_url = serializers.SerializerMethodField()
+    picture_url = serializers.URLField(required=False, allow_blank=True, allow_null=True)
 
     class Meta:
         model = UserProfile
         fields = ['username', 'full_name', 'about', 'score', 'picture_url', 'usersolvedquestionlist']
 
-    def get_picture_url(self, obj):
-        request = self.context.get('request')
-        if request and obj.picture and hasattr(obj.picture, 'url'):
-            return settings.BASE_URL + obj.picture.url
-            # return request.build_absolute_uri(obj.picture.url)
-        return None
+    # def get_picture_url(self, obj):
+    #     request = self.context.get('request')
+    #     if request and obj.picture and hasattr(obj.picture, 'url'):
+    #         return settings.BASE_URL + obj.picture.url
+    #         # return request.build_absolute_uri(obj.picture.url)
+    #     return None
 
 
 class CustomUserSerializer(serializers.ModelSerializer):

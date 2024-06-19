@@ -51,7 +51,7 @@ if os.environ.get('IS_DEBUG')==True:
     os.environ.get("CORS_ALLOWED_ORIGIN")
 ]
 else:
-    print('Debug Mode Activated')
+    print('Debug Mode Not Activated')
     DEBUG = False
     ALLOWED_HOSTS = ['*']
     CORS_ALLOWED_ORIGINS += [
@@ -109,9 +109,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # 'cloudinary', # now working as expected!
     'api',
     'rest_framework',
-    'corsheaders'
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -150,7 +151,7 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-if os.environ.get('DB_CONFIGURE'):
+if os.environ.get('DB_CONFIGURE')==True:
     print("Using Custom Db")
     DATABASES =         {
         'default': {
@@ -208,7 +209,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
