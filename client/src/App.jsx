@@ -11,6 +11,10 @@ import Challenges from "./pages/Challenges"
 import Login from './pages/Login';
 
 import SingleChallenge from "./pages/SingleChallenge"
+import Problems from "./pages/Problems"
+import Profile from "./pages/Profile"
+import NewLogin from "./pages/NewLogin"
+import Register from "./pages/Register"
 
 
 function App() {
@@ -24,15 +28,20 @@ function App() {
           <p className='text-xl text-violet-800 border-b-indigo-400'>Welcome to OneCompiler</p>
         }/>
         <Route path="/home" element={<Home/>}/>
-        <Route path="/" element={<Compile/>}/>
+        <Route path="/compiler" element={<Compile/>}/>
         <Route path="/test" element={<Testing/>}/>
-        <Route path="/about" element={<Testing/>}/>
+        <Route path="/" element={<Testing/>}/>
         <Route path="/blog" element={<Blog/>}/>
         <Route path="/challenges" element={<Challenges/>}/>
         <Route path="/pasteit" element={<Pasteit/>}/>
-        <Route path="/login" element={<Login/>}/>
+        {/* <Route path="/login" element={<Login/>}/> */}
+        <Route path="/login" element={<NewLogin/>}/>
+        <Route path="/register" element={<Register/>}/>
         <Route path="/hei" element={<CommingSoon/>}/>
-        <Route path="/uff" element={<SingleChallenge/>}/>
+        <Route path="/problem/:Qslug" element={<SingleChallenge/>}/>
+        <Route path='/problems' element={<Problems/>}></Route>
+        <Route path='/profile' element={<Profile/>}></Route>
+        <Route path='/profile/:username' element={<Profile/>}></Route>
         <Route path="/pasteit/:pastelink" element={<Pasteit/>}/>
         <Route path="*" element={<NotFound/>}/>
       </Routes>

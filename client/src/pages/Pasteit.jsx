@@ -9,6 +9,7 @@ import { faL, faLink } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import toast, { Toaster } from 'react-hot-toast';
 import axios from 'axios';
+import TokenAuth from '../utils/TokenAuth';
 
 // onclick = link generate, =>
 // check if link already generated : toast link already generated,
@@ -17,6 +18,7 @@ import axios from 'axios';
 
 
 function Pasteit() {
+  TokenAuth(); // refreahing token
   const monaco = useMonaco()
   const [deftmsg,setdeftmsg] = useState("Enter your code to be Saved through link")
   const [code,setcode] = useState("")
@@ -182,7 +184,7 @@ const handleTheme=(value,name)=>{
     <section>
     {isLoading ? (
     <Loader about={"Loading Pasteit...."}/>):(
-      <div className='bg-gray-900 bg-auto h-auto overflow-hidden'>
+      <div className='bg-gray-900 bg-auto min-h-screen overflow-hidden'>
         <Toaster/>
         <div className='flex flex-row justify-between items-center'>
         <input type="checkbox" onClick={handlebot} className="checkbox hidden" />
@@ -210,7 +212,7 @@ const handleTheme=(value,name)=>{
             </div>
         </div>
         <div className='flex-row mr-6 ml-6 mt-4'>
-            <div className='border p-1 border-cyan-400 w-full h-96 rounded-lg'>
+            <div className='border p-1 border-cyan-400 w-full h-screen rounded-lg'>
                 <Editor
                 // theme={theme || dracula}
                 language={language || 'python'}

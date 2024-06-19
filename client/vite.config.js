@@ -8,20 +8,26 @@ const env = loadEnv('development', process.cwd());
 export default defineConfig({
   plugins: [react()],
   server: {
-    // windows
     host: env.VITE_FRONTEND_URL,
-    // linux
-    // host: '192.168.1.1',
     port: env.VITE_FRONTEND_PORT,
-    // default
-    // host : '127.0.0.1',
-    // port : 8000
     proxy: {
-      '/api': {
+      "/api": {
         target: env.VITE_BACKEND_URL,
+        changeOrigin: true,
         secure: false,
+      },
+    },
+  },
+  build: {
+    proxy: {
+      "/api": {
+        target: env.VITE_BACKEND_URL, 
+        changeOrigin: true,
+        secure: false,
+       
       }
     }
   },
+  
   assetsInclude: ['**/*.PNG']
 })
