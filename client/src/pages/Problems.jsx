@@ -34,9 +34,10 @@ function Problems() {
 
   const fetchProblems = async () => {
     try {
-      const res = await axios.get("api/probleminimum");
+      // due to render issues i'm not using table data from db,
+      // const res = await axios.get("api/probleminimum");
       // console.log(res.data)
-      setIncommingProblemList(res.data);
+      setIncommingProblemList(ListProblemSamples);
     } catch (error) {
       toast.error(`Errr while fetching problems ${error}`);
     }

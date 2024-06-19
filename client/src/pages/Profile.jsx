@@ -36,13 +36,38 @@ function Profile() {
   const [formdata, setformdata] = useState({
     full_name: "",
     about: "",
-    picture: null,
+    picture_url: null,
   });
 
   // console.log(import.meta.env.VITE_FRONTEND_URL);
   // console.log(formdata);
   // console.log(username);
   // console.log(NewImage);
+
+  const uploadToCloudinary = async () => {
+    const cloudinarydata = new FormData();
+    cloudinarydata.append("file", NewImage);
+    cloudinarydata.append("upload_preset", import.meta.env.VITE_PRESET_NAME);
+    // cloudinarydata.append("api_key", import.meta.env.VITE_API_KEY);
+    cloudinarydata.append("folder", "OneCompiler");
+    // console.log(cloudinarydata);
+    if (NewImage) {
+      try {
+        const res = await axios.post(
+          `https://api.cloudinary.com/v1_1/${
+            import.meta.env.VITE_CLOUD_NAME
+          }/image/upload`,
+          cloudinarydata
+        );
+        console.log(res.data);
+        setNewImage(res.data.secure_url);
+        return res.data.secure_url
+      } catch (err) {
+        toast.error("Err while uploading to cloud");
+        // setImagePreview()
+      }
+    }
+  };
 
   const handlecopy = () => {
     // for share button
@@ -60,7 +85,7 @@ function Profile() {
   const fetchUserProfile = async () => {
     try {
       const res = await privateaxious.get("/api/profile/");
-      // console.log(res.data);
+      console.log(res.data);
       setincommingdata(res.data);
       setImagePreview(res.data.picture_url);
     } catch (error) {
@@ -89,10 +114,6 @@ function Profile() {
     if (event.target.files[0]) {
       const imageurl = URL.createObjectURL(event.target.files[0]);
       setImagePreview(imageurl);
-      setformdata({
-        ...formdata,
-        picture: NewImage,
-      });
       // HandleUpdateProfile();
     }
   };
@@ -110,7 +131,7 @@ function Profile() {
     }
     setTimeout(() => {
       setisLoading(false);
-    }, 1400);
+    }, 8400);
   }, []);
 
   const handleUpdateChange = (e) => {
@@ -123,19 +144,19 @@ function Profile() {
 
   const HandleUpdateProfile = async (e) => {
     e.preventDefault();
-    const data = new FormData();
-    data.append("full_name", formdata.full_name);
-    data.append("about", formdata.about);
-    if (formdata.picture) {
-      data.append("picture", formdata.picture);
-    }
     try {
-      const res = await privateaxious.put("/api/profile/update/", data, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      // console.log(res.data);
+      let picture_url = formdata.picture_url;
+      if (NewImage) {
+        picture_url = await uploadToCloudinary();
+      }
+
+      const data = {
+        full_name: formdata.full_name,
+        about: formdata.about,
+        picture_url: picture_url,
+      };
+      const res = await privateaxious.put("/api/profile/update/", data);
+      console.log(res.data);
       toast.success("Profile Updated Sucessfully");
       fetchUserProfile();
       setenableupdate(false);
@@ -259,7 +280,7 @@ function Profile() {
           <div className="flex mt-6">
             <div className="card ml-12 mr-12 md:ml-44 md:mr-44 w-full bg-slate-500 text-primary-content">
               <div className={`${enableupdate ? "hidden" : ""} card-body`}>
-                <div className="flex justify-center text-2xl font-bold gap-2">
+                <div className={`${incommingdata?.score===null?"hidden":"flex  justify-center text-2xl font-bold gap-2"}`}>
                   Total Score :{" "}
                   {incommingdata.score <= 50 ? (
                     <>

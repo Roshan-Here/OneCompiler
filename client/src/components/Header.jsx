@@ -16,7 +16,7 @@ function Header() {
     dispatch(SetTokenFailed());
     setTimeout(() => {
       navigate("/");
-    }, 1800);
+    }, 100);
   };
 
   const handleVault = () => {

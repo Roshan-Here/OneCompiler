@@ -116,7 +116,7 @@ function SingleChallenge() {
     fetchSingleProblem();
     setTimeout(() => {
       setisLoading(false);
-    }, 800);
+    }, 3800);
   }, []);
 
   const repetedusage = (value) => {
