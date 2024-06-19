@@ -28,9 +28,36 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY") 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
-ALLOWED_HOSTS = ["*"]
+# print(os.environ.get('IS_DEBUG'))
+CORS_URLS_REGEX = r"^/.*"
+
+CORS_ALLOWED_ORIGINS = []
+
+"""
+Activating Debug mode or Production mode.
+"""
+
+if os.environ.get('IS_DEBUG')==True:
+    print('Deployment Mode Activated')
+    DEBUG = True
+    ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    '111.222.333.444',
+    'mywebsite.example']
+    CORS_ALLOWED_ORIGINS += [
+    os.environ.get('BACKEND_URL'),
+    os.environ.get("CORS_ALLOWED_ORIGIN")
+]
+else:
+    print('Debug Mode Activated')
+    DEBUG = False
+    ALLOWED_HOSTS = ['*']
+    CORS_ALLOWED_ORIGINS += [
+    os.environ.get('BACKEND_URL'),
+    os.environ.get("CORS_ALLOWED_ORIGIN")
+]
 
 # Auth user model
 AUTH_USER_MODEL = "api.CustomUser"
@@ -97,20 +124,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
-CORS_URLS_REGEX = r"^/.*"
-
-CORS_ALLOWED_ORIGINS = []
-
-
-if DEBUG:
-    CORS_ALLOWED_ORIGINS += [
-    "http://192.168.1.4:8000",
-    "http://192.168.1.5:8111",
-    "http://127.0.0.1:8000",
-    "http://192.168.1.7:8000",
-    os.environ.get("CORS_ALLOWED_ORIGIN")
-] 
     
 
 ROOT_URLCONF = 'backend.urls'
@@ -137,12 +150,26 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
+if os.environ.get('DB_CONFIGURE'):
+    print("Using Custom Db")
+    DATABASES =         {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.environ.get('DB_NAME'),
+            'USER': os.environ.get('DB_USER'),
+            'PASSWORD': os.environ.get('DB_PASSWORD'),
+            'HOST': os.environ.get('DB_HOST'),
+            'PORT': os.environ.get('DB_PORT'),
+        }
+    }
+else:
+    print("Using Local Db")
+    DATABASES = {
+        'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
-}
 
 
 # Password validation
@@ -186,3 +213,9 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# run python manage.py collectstatic while deploying
+
+# oneliner to run all the process 
+# python .\manage.py makemigrations api && python .\manage.py migrate api && python .\manage.py makemigrations && python .\manage.py migrate && python .\manage.py runserver  
+# or 
+# python manage.py makemigrations api && python manage.py migrate api && python manage.py makemigrations && python manage.py migrate && python manage.py runserver
