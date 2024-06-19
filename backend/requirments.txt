@@ -15,6 +15,7 @@ djangorestframework==3.15.1
 djangorestframework-simplejwt==5.3.1
 docstring-parser==0.15
 frozenlist==1.4.1
+gunicorn==22.0.0
 idna==3.6
 leetscrape @ git+https://github.com/eugenebaraka/LeetScrape.git@a629c0a77e5088ae1b6d7d736eddee42a586e112
 markdownify==0.11.6
