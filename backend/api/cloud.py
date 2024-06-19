@@ -24,3 +24,14 @@ def Upload_to_Cloudinary(url):
     upload_item = f"settings.MEDIA_ROOT/{url}"
     print(upload_item) #dumb not working cloudinary python version.
     
+    
+"""
+Boolean Checker
+"""
+
+def str2bool(value: str, true_values: tuple[str, ...] = ("y", "yes", "t", "true", "on", "1"), 
+             false_values: tuple[str, ...] = ("n", "no", "f", "false", "off", "0"), 
+             lowercase=True, strip_whitespace=True):
+    value = value.strip() if strip_whitespace else value
+    value = value.lower() if lowercase else value
+    return value in true_values

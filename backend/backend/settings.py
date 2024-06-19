@@ -14,7 +14,7 @@ import os
 from dotenv import load_dotenv
 from pathlib import Path
 from datetime import timedelta
-
+from api.cloud import str2bool
 load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -39,23 +39,24 @@ CORS_ALLOWED_ORIGINS = []
 """
 Activating Debug mode or Production mode.
 """
+# print(str2bool(os.environ.get('IS_DEBUG'))) # fun to check whether its true of false
 
-if os.environ.get('IS_DEBUG')==True:
+if str2bool(os.environ.get('IS_DEBUG')):
     print('Deployment Mode Activated')
-    # DEBUG = True
-    ALLOWED_HOSTS = [
-    'localhost',
-    '127.0.0.1',
-    '111.222.333.444',
-    'mywebsite.example']
+    DEBUG = True
+    ALLOWED_HOSTS = ['*']
     CORS_ALLOWED_ORIGINS += [
     os.environ.get('BACKEND_URL'),
     os.environ.get("CORS_ALLOWED_ORIGIN")
 ]
 else:
-    print('Debug Mode Not Activated')
-    # DEBUG = False
-    ALLOWED_HOSTS = ['*']
+    print('Debug Mode Not Activated Develpment Mode')
+    DEBUG = False    
+    ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    '111.222.333.444',
+    'mywebsite.example']
     CORS_ALLOWED_ORIGINS += [
     os.environ.get('BACKEND_URL'),
     os.environ.get("CORS_ALLOWED_ORIGIN")
@@ -154,26 +155,26 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 # print(os.environ.get('DB_CONFIGURE'))
 
-# if os.environ.get('DB_CONFIGURE')==True:
-#     print("Using Custom Db")
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DB_NAME'),
-        'USER': os.environ.get('DB_USER'),
-        'PASSWORD': os.environ.get('DB_PASSWORD'),
-        'HOST': os.environ.get('DB_HOST'),
-        'PORT': os.environ.get('DB_PORT'),
+if str2bool(os.environ.get('DB_CONFIGURE')):
+    print("Using Custom Db")
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.environ.get('DB_NAME'),
+            'USER': os.environ.get('DB_USER'),
+            'PASSWORD': os.environ.get('DB_PASSWORD'),
+            'HOST': os.environ.get('DB_HOST'),
+            'PORT': os.environ.get('DB_PORT'),
+        }
     }
-}
-# else:
-#     print("Using Local Db")
-#     DATABASES = {
-#         'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#         }
-#     }
+else:
+    print("Using Local Db")
+    DATABASES = {
+        'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 
 # Password validation
