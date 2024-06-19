@@ -68,7 +68,7 @@ class UserProfile(models.Model):
     full_name = models.CharField(max_length=300,blank=True,null=True)
     about = models.TextField(null=True,blank=True)
     # picture = models.ImageField(upload_to='profile_pictures/', blank=True, null=True)
-    picture_url = models.URLField(max_length=500, blank=True, null=True)
+    picture_url = models.URLField(max_length=2000, blank=True, null=True)
     score = models.IntegerField(null=True,blank=True)
 
     def __str__(self):

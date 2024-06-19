@@ -150,27 +150,28 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
+# print(os.environ.get('DB_CONFIGURE'))
 
-if os.environ.get('DB_CONFIGURE')==True:
-    print("Using Custom Db")
-    DATABASES =         {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': os.environ.get('DB_NAME'),
-            'USER': os.environ.get('DB_USER'),
-            'PASSWORD': os.environ.get('DB_PASSWORD'),
-            'HOST': os.environ.get('DB_HOST'),
-            'PORT': os.environ.get('DB_PORT'),
-        }
+# if os.environ.get('DB_CONFIGURE')==True:
+#     print("Using Custom Db")
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('DB_NAME'),
+        'USER': os.environ.get('DB_USER'),
+        'PASSWORD': os.environ.get('DB_PASSWORD'),
+        'HOST': os.environ.get('DB_HOST'),
+        'PORT': os.environ.get('DB_PORT'),
     }
-else:
-    print("Using Local Db")
-    DATABASES = {
-        'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-        }
-    }
+}
+# else:
+#     print("Using Local Db")
+#     DATABASES = {
+#         'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#         }
+#     }
 
 
 # Password validation

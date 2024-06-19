@@ -36,7 +36,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(source='user.email', read_only=True)
     # picture = serializers.ImageField(required=False, allow_empty_file=True,allow_null=True,use_url=True)
     # picture_url = serializers.SerializerMethodField()
-    picture_url = serializers.URLField(max_length=2000, min_length=None, allow_blank=False)
+    picture_url = serializers.URLField(max_length=2000, allow_blank=True, allow_null=True)
 
     
     class Meta:
@@ -68,7 +68,7 @@ class UserDetailsUpdateSerializer(serializers.ModelSerializer):
     """
     Special Updater for UserSide Update, name, & about, score amd usersolvedquestionlist will be updated without user knowledge  
     """
-    picture_url = serializers.URLField(max_length=2000, min_length=None, allow_blank=False)
+    picture_url = serializers.URLField(max_length=2000, allow_blank=True, allow_null=True)
     
     class Meta:
         model = UserProfile
@@ -105,7 +105,7 @@ class SpecialDataUpdateSerializer(serializers.ModelSerializer):
     """
     Used to update score and usersolvedquestionlist
     """
-    usersolvedquestionlist = UserSolvedQuestionListSerializer(many=True, required=False)
+    usersolvedquestionlist = UserSolvedQuestionListSerializer(many=True, required=True)
     
     class Meta:
         model = UserProfile
@@ -142,7 +142,7 @@ class SpecialUserProfileSerializer(serializers.ModelSerializer):
     usersolvedquestionlist = UserSolvedQuestionListSerializer(many=True, read_only=True)
     username = serializers.CharField(source='user.username', read_only=True)
     # picture_url = serializers.SerializerMethodField()
-    picture_url = serializers.URLField(required=False, allow_blank=True, allow_null=True)
+    picture_url = serializers.URLField(max_length=2000, allow_blank=True, allow_null=True)
 
     class Meta:
         model = UserProfile
