@@ -63,7 +63,7 @@ function SingleChallenge() {
   }, [monaco]);
 
   const fetchSingleProblem = async () => {
-    const res = await privateaxious.get(`/api/problem/${Qslug}/`);
+    const res = await privateaxious.get(`${import.meta.env.VITE_BACKEND_URL}/api/problem/${Qslug}/`);
     console.log(res.data);
     setproblemdata(res.data);
     handleSetScore()
@@ -86,7 +86,7 @@ function SingleChallenge() {
         ],
       };
       const res = await privateaxious.put(
-        "/api/profile/score/update",
+        `${import.meta.env.VITE_BACKEND_URL}/api/profile/score/update`,
         formdata
       );
       console.log(res);
@@ -150,7 +150,7 @@ function SingleChallenge() {
       };
       try {
         setoutputLoading(true);
-        const res = await axios.post(`/api/run/`, submitdata);
+        const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/run/`, submitdata);
         repetedusage(res);
         toast.success("Compiled Sucessfully");
         setoutputLoading(false);

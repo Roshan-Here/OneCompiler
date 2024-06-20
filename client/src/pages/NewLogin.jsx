@@ -54,7 +54,7 @@ function NewLogin() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("/api/login/", formdata, {
+      const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/login/`, formdata, {
         headers: {
           "Content-Type": "application/json",
         },
