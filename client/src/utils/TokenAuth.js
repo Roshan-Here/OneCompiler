@@ -9,7 +9,6 @@ import {
 } from "../redux/User/userSlice";
 import axios from "axios";
 import { useEffect } from "react";
-import privateaxious from "./api";
 
 function TokenAuth() {
   const dispatch = useDispatch();
@@ -33,7 +32,7 @@ function TokenAuth() {
   const ReToken = async () => {
     // Refreshing the token
     try {
-      const res = await axios.post("/api/token/refresh/", {
+      const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/token/refresh/`, {
         refresh: refreshToken,
       });
       if (res.status === 200) {
