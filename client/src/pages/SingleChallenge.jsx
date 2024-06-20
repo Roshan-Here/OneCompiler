@@ -42,7 +42,7 @@ function SingleChallenge() {
   const [solexpand, setsolexpand] = useState(false);
   const [problemdata, setproblemdata] = useState([]);
   const currentexample = problemdata ? problemdata.examples : "";
-  const currenttags = problemdata.Tags ? problemdata.Tags : "";
+  const currenttags = problemdata?.Tags ? problemdata?.Tags : "";
   const { Qslug } = useParams();
   console.log(Qslug);
   const handlelanguage = (value) => {
