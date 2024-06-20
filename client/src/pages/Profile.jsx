@@ -181,7 +181,7 @@ function Profile() {
 
   const LoadingText =
     username === undefined && authenticated
-      ? `Welcome ${incommingdata?.username===undefined?"":incommingdata?.username}`
+      ? `Welcome ${incommingdata?.username===undefined?"...":incommingdata?.username}`
       : "Profile Loading ...";
 
   const Indexoflastpage = currentpage * postperpage;
