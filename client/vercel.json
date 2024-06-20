@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "https://onecompiler.onrender.com/api/$1" },
+    { "source": "/(.*)", "destination": "/" }
+  ]
+}
