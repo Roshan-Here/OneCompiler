@@ -130,7 +130,7 @@ function NewLogin() {
                 </h1>
               </div>
             </div>
-            <div className="flex justify-center md:mt-20 card min-w-max md:w-96 shadow-2xl md:mr-24 md:ml-6 ml-20 mr-20 bg-base-100">
+            <div className="flex justify-center md:mt-20 card min-w-max md:w-96 shadow-2xl md:mr-20 md:ml-10 ml-8 mr-8 bg-base-100">
               <form onSubmit={handleSubmit} method="post" className="card-body">
                 <div className="form-control">
                   <label className="label">
@@ -159,10 +159,10 @@ function NewLogin() {
                     value={eyeopen ? formdata?.password : formdata?.password}
                     required
                   />
-                  <label className="label">
+                  <label className="mt-4 label">
                     <a
                       onClick={() => navigate("/register")}
-                      className="label-text-alt link link-hover"
+                      className="label-text-alt link link-hover text-lg"
                     >
                       No account? Crete new
                     </a>

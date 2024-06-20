@@ -35,7 +35,7 @@ function Header() {
           </div>
         </Link>
         <div>
-          <ul className="flex items-center gap-4 text-base text-slate-300">
+          <ul className="flex items-center gap-2 md:gap-4 text-base text-slate-300">
             <Link to="/compiler">
               <li className="md:inline hover:opacity-75">Compiler</li>
             </Link>
@@ -43,7 +43,7 @@ function Header() {
               <li className="hidden md:inline hover:opacity-75">Problems</li>
             </Link>
             <Link to="/pasteit">
-              <li className="md:inline hover:opacity-75">Pasteit</li>
+              <li className="hidden md:inline hover:opacity-75">Pasteit</li>
             </Link>
             {authenticated ? (
               <>

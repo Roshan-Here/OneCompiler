@@ -27,7 +27,6 @@ function Register() {
     },
   });
 
-
   const handleChange = (e) => {
     const { id, value } = e.target;
     if (id in formData) {
@@ -39,7 +38,7 @@ function Register() {
       });
     }
   };
-//   console.log(formData);
+  //   console.log(formData);
 
   useEffect(() => {
     if (authenticated) {
@@ -56,11 +55,15 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/register/`, formData, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const res = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/api/register/`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
       const data = res.data;
       // console.log(data)
       toast.success("User Registed Sucessfully");
@@ -140,6 +143,14 @@ function Register() {
                     className="input input-bordered"
                     required
                   ></textarea>
+                  <label className="mt-4 label">
+                    <a
+                      onClick={() => navigate("/login")}
+                      className="label-text-alt link link-hover text-lg"
+                    >
+                      Have an account? Login!
+                    </a>
+                  </label>
                   <div className="form-control mt-6">
                     <button className="btn btn-primary">Register</button>
                   </div>
