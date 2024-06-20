@@ -55,7 +55,9 @@ function Pasteit() {
               setdeftmsg(code)
               toast.success("Url grabbed")
               setlinkGenerated(true)
-              console.log(newlink)
+              const value = `${import.meta.env.VITE_FRONTEND_URL}/${newlink}`
+              navigator.clipboard.write(value)
+              // console.log(newlink)
             }
             catch(error){
               toast.error(error)
