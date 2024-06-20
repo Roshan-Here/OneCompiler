@@ -23,7 +23,6 @@ function NewLogin() {
     setformdata({ ...formdata, [e.target.id]: e.target.value });
   };
   console.log(formdata);
-  console.log(import.meta.env.VITE_BACKEND_URL);
 
   useEffect(() => {
     if (authenticated) {
@@ -55,7 +54,7 @@ function NewLogin() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/login/`, formdata, {
+      const res = await axios.post("/api/login/", formdata, {
         headers: {
           "Content-Type": "application/json",
         },

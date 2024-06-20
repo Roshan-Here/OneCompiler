@@ -63,7 +63,7 @@ function Compile() {
             }
             try {
                 setoutputLoading(true)
-                const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/run/`, submitdata);
+                const res = await axios.post(`/api/run/`, submitdata);
                 repetedusage(res)
                 toast.success("Compiled Sucessfully")
                 setoutputLoading(false)

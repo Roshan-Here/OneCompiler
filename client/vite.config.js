@@ -6,16 +6,15 @@ export default ({ mode }) => {
 
   return defineConfig({
     plugins: [react()],
+    server: {
+      proxy: {
+        '/api': {
+          target: env.VITE_BACKEND_URL,
+          changeOrigin: true,
+          secure: false,
+        },
+      },
+    },
     assetsInclude: ['**/*.PNG'],
   });
 };
-
-// server: {
-//   proxy: {
-//     '/api': {
-//       target: env.VITE_BACKEND_URL,
-//       changeOrigin: true,
-//       secure: false,
-//     },
-//   },
-// },

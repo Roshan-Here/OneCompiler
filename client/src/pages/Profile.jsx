@@ -84,7 +84,7 @@ function Profile() {
 
   const fetchUserProfile = async () => {
     try {
-      const res = await privateaxious.get(`${import.meta.env.VITE_BACKEND_URL}/api/profile/`);
+      const res = await privateaxious.get("/api/profile/");
       console.log(res.data);
       setincommingdata(res.data);
       setImagePreview(res.data.picture_url);
@@ -96,7 +96,7 @@ function Profile() {
   const fetchUserProfileWithoutJWT = async () => {
     try {
       setisLoading(true);
-      const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/user/${username}`);
+      const res = await axios.get(`/api/user/${username}`);
       // console.log(res.data);
       setincommingdata(res.data);
       setImagePreview(res.data.picture_url);
@@ -155,7 +155,7 @@ function Profile() {
         about: formdata.about,
         picture_url: picture_url,
       };
-      const res = await privateaxious.put(`${import.meta.env.VITE_BACKEND_URL}/api/profile/update/`, data);
+      const res = await privateaxious.put("/api/profile/update/", data);
       console.log(res.data);
       toast.success("Profile Updated Sucessfully");
       fetchUserProfile();
@@ -168,7 +168,7 @@ function Profile() {
 
   const HandleDeleteProfile = async () => {
     try {
-      const res = await privateaxious.delete(`${import.meta.env.VITE_BACKEND_URL}/api/profile/delete/`);
+      const res = await privateaxious.delete("/api/profile/delete/");
       // console.log(res);
       toast.success("Account Deleted Sucessfully!");
       dispatch(SetTokenFailed());

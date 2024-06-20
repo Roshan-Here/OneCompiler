@@ -49,7 +49,7 @@ function Pasteit() {
         }
         else{
             try{
-              const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/savecode/`,submitdata)
+              const res = await axios.post('/api/savecode/',submitdata)
               setnewlink(res.data['unique_link'])
               // console.log(res.data['unique_link'])
               setdeftmsg(code)
@@ -68,7 +68,7 @@ function Pasteit() {
     try{
       setisLoading(true)
       console.log(pastelink)
-      const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/savecode/${pastelink}`)
+      const res = await axios.get(`/api/savecode/${pastelink}`)
       // const res = await axios.get(`/api/viewsavedcode/`)
       console.log(res.data)
       setdeftmsg(res.data['code'])
