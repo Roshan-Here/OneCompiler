@@ -23,6 +23,7 @@ function NewLogin() {
     setformdata({ ...formdata, [e.target.id]: e.target.value });
   };
   console.log(formdata);
+  console.log(import.meta.env.VITE_BACKEND_URL);
 
   useEffect(() => {
     if (authenticated) {
