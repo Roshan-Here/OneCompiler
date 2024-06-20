@@ -54,7 +54,7 @@ function Header() {
                   className={`${
                     !openvault
                       ? "hidden"
-                      : "absolute ml-24 mt-32 w-36 rounded-md bg-slate-600 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                      : "absolute ml-3 md:ml-28 mt-32 w-36 rounded-md bg-slate-600 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
                   }`}
                 >
                   <ul className="py-1">
