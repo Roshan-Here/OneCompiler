@@ -17,7 +17,7 @@ function Testing() {
 
   return (
     <main>
-      <div className="bg-gray-900 h-full overflow-auto">
+      <div className="bg-gray-900 min-h-screen overflow-auto">
         <Drawer OpenDrawer={handleDrawerOpen} IsOpen={draweropen} />
         <div className="flex md:justify-center p-5">
           <div className="text-5xl md:text-7xl text-slate-200 font-extrabold">
