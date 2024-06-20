@@ -64,7 +64,7 @@ function SingleChallenge() {
 
   const fetchSingleProblem = async () => {
     const res = await privateaxious.get(`${import.meta.env.VITE_BACKEND_URL}/api/problem/${Qslug}/`);
-    console.log(res.data);
+    // console.log(res.data);
     setproblemdata(res.data);
     handleSetScore()
   };

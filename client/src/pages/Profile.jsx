@@ -72,9 +72,7 @@ function Profile() {
   const handlecopy = () => {
     // for share button
     try {
-      let value = `https://${import.meta.env.VITE_FRONTEND_URL}/profile/${
-        incommingdata.username
-      }`;
+      const value = `https://${import.meta.env.VITE_FRONTEND_URL}/profile/${incommingdata.username}`;
       navigator.clipboard.write(value);
       toast.success("Link added to clipboard");
     } catch (error) {
@@ -131,7 +129,7 @@ function Profile() {
     }
     setTimeout(() => {
       setisLoading(false);
-    }, 8400);
+    }, 4000);
   }, []);
 
   const handleUpdateChange = (e) => {
