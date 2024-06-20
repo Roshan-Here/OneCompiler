@@ -13,13 +13,15 @@ import ProblemTable from "./../components/ProblemTable";
 import ProblemFilterList from "./../components/ProblemFilterList";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
-import Loader from './../components/Loader';
+import Loader from "./../components/Loader";
 import TokenAuth from "../utils/TokenAuth";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 function Problems() {
   TokenAuth(); // refreahing token
-  const navigate = useNavigate()
+  const authenticated = useSelector((state) => state.user.authenticated);
+  const navigate = useNavigate();
   const [IncommingProblemList, setIncommingProblemList] = useState([]);
   const difficultyList = ["Easy", "Medium", "Hard"];
   const [difficulty, setdifficulty] = useState("");
@@ -76,7 +78,7 @@ function Problems() {
       item.Title.toLowerCase().includes(searchproblem.toLowerCase().trim());
     const tagsMatch =
       filtereditems?.length === 0 ||
-      item.Tags.some((tag) => filtereditems?.includes(tag));
+      item.tags.some((tag) => filtereditems?.includes(tag));
 
     return difficultyMatch && (searchProblemMatches || searchQid) && tagsMatch;
   });
@@ -120,17 +122,19 @@ function Problems() {
 
   const handeRandomProblem = () => {
     // console.log(currentproblems.length);
-    const currentPageQids = currentproblems.map((item) => item.id);
-    let randomNum = Math.floor(Math.random() * currentproblems.length);
-    // console.log(randomNum);
-    // console.log(currentPageQids[randomNum]);
-    let val = currentPageQids[randomNum]
-    // console.log(currentproblems.find((y)=>val==y.id).slug);
-    const randomquestion =  currentproblems.find((y)=>val==y.id).slug
-    toast.success(
-      `Randomly selcted Question No : ${val}`
-    );
-    navigate(`/problem/${randomquestion}`)
+    if (authenticated) {
+      const currentPageQids = currentproblems.map((item) => item.id);
+      let randomNum = Math.floor(Math.random() * currentproblems.length);
+      // console.log(randomNum);
+      // console.log(currentPageQids[randomNum]);
+      let val = currentPageQids[randomNum];
+      // console.log(currentproblems.find((y)=>val==y.id).slug);
+      const randomquestion = currentproblems.find((y) => val == y.id).slug;
+      toast.success(`Randomly selcted Question No : ${val}`);
+      navigate(`/problem/${randomquestion}`);
+    } else {
+      toast.error("Please Login First");
+    }
   };
 
   return (
@@ -148,7 +152,7 @@ function Problems() {
             <div className="hidden md:flex p-3 text-xl font-medium">
               SortBy:
             </div>
-            <div className="dropdown dropdown-hover relative">
+            <div className="dropdown  relative">
               {/* Difficulty button */}
               <div
                 tabIndex={0}
