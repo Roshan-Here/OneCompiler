@@ -73,7 +73,7 @@ function Profile() {
     // for share button
     try {
       const value = `https://${import.meta.env.VITE_FRONTEND_URL}/profile/${incommingdata.username}`;
-      navigator.clipboard.write(value);
+      navigator.clipboard.writeText(value);
       toast.success("Link added to clipboard");
     } catch (error) {
       toast.error("Unable to copy to clipboard");
