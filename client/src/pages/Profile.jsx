@@ -274,7 +274,7 @@ function Profile() {
                   <button
                     className={`${authenticated ? "" : "hidden"}:
                     ${
-                      (incommingdata?.username === "roshan" && authenticated) ? "btn-disabled" : ""
+                      (incommingdata?.username === "roshan" && authenticated) ? "btn-disabled" : "hidden"
                     }
                     :"btn btn-sm  btn-error"
                     `}
