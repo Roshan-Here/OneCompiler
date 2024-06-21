@@ -14,6 +14,7 @@ function Register() {
   const navigate = useNavigate();
   const authenticated = useSelector((state) => state.user.authenticated);
   const [isLoading, setisLoading] = useState(false);
+  const [registerloading, setregisterloading] = useState(false)
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -54,6 +55,7 @@ function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setregisterloading(true)
     try {
       const res = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/api/register/`,
@@ -66,11 +68,13 @@ function Register() {
       );
       const data = res.data;
       // console.log(data)
+      setregisterloading(false)
       toast.success("User Registed Sucessfully");
       setTimeout(() => {
         navigate("/login");
       }, 1000);
     } catch (error) {
+      setregisterloading(false)
       toast.error(`Err: ${error}`);
     }
   };
@@ -152,7 +156,9 @@ function Register() {
                     </a>
                   </label>
                   <div className="form-control mt-6">
-                    <button className="btn btn-primary">Register</button>
+                    <button className="btn btn-primary">
+                    <span className={`${registerloading?"animate-spin":"hidden"} loading loading-spinner text-success`}></span>
+                      Register</button>
                   </div>
                 </div>
               </form>

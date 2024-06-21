@@ -61,7 +61,7 @@ function Profile() {
         );
         console.log(res.data);
         setNewImage(res.data.secure_url);
-        return res.data.secure_url
+        return res.data.secure_url;
       } catch (err) {
         toast.error("Err while uploading to cloud");
         // setImagePreview()
@@ -72,7 +72,9 @@ function Profile() {
   const handlecopy = () => {
     // for share button
     try {
-      const value = `https://${import.meta.env.VITE_FRONTEND_URL}/profile/${incommingdata.username}`;
+      const value = `https://${import.meta.env.VITE_FRONTEND_URL}/profile/${
+        incommingdata.username
+      }`;
       navigator.clipboard.writeText(value);
       toast.success("Link added to clipboard");
     } catch (error) {
@@ -82,7 +84,9 @@ function Profile() {
 
   const fetchUserProfile = async () => {
     try {
-      const res = await privateaxious.get(`${import.meta.env.VITE_BACKEND_URL}/api/profile/`);
+      const res = await privateaxious.get(
+        `${import.meta.env.VITE_BACKEND_URL}/api/profile/`
+      );
       console.log(res.data);
       setincommingdata(res.data);
       setImagePreview(res.data.picture_url);
@@ -94,7 +98,9 @@ function Profile() {
   const fetchUserProfileWithoutJWT = async () => {
     try {
       setisLoading(true);
-      const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/user/${username}`);
+      const res = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/api/user/${username}`
+      );
       // console.log(res.data);
       setincommingdata(res.data);
       setImagePreview(res.data.picture_url);
@@ -153,7 +159,10 @@ function Profile() {
         about: formdata.about,
         picture_url: picture_url,
       };
-      const res = await privateaxious.put(`${import.meta.env.VITE_BACKEND_URL}/api/profile/update/`, data);
+      const res = await privateaxious.put(
+        `${import.meta.env.VITE_BACKEND_URL}/api/profile/update/`,
+        data
+      );
       console.log(res.data);
       toast.success("Profile Updated Sucessfully");
       fetchUserProfile();
@@ -166,7 +175,9 @@ function Profile() {
 
   const HandleDeleteProfile = async () => {
     try {
-      const res = await privateaxious.delete(`${import.meta.env.VITE_BACKEND_URL}/api/profile/delete/`);
+      const res = await privateaxious.delete(
+        `${import.meta.env.VITE_BACKEND_URL}/api/profile/delete/`
+      );
       // console.log(res);
       toast.success("Account Deleted Sucessfully!");
       dispatch(SetTokenFailed());
@@ -181,7 +192,11 @@ function Profile() {
 
   const LoadingText =
     username === undefined && authenticated
-      ? `Welcome ${incommingdata?.username===undefined?"...":incommingdata?.username}`
+      ? `Welcome ${
+          incommingdata?.username === undefined
+            ? "..."
+            : incommingdata?.username
+        }`
       : "Profile Loading ...";
 
   const Indexoflastpage = currentpage * postperpage;
@@ -255,14 +270,19 @@ function Profile() {
                 >
                   Update
                 </button>
-                <button
-                  className={`${
-                    authenticated ? "" : "hidden"
-                  } btn btn-sm  btn-error`}
-                  onClick={HandleDeleteProfile}
-                >
-                  Delete
-                </button>
+                <div className={`${incommingdata?.username==='roshan'?"":'tooltip'}`} data-tip="hello">
+                  <button
+                    className={`${authenticated ? "" : "hidden"}:
+                    ${
+                      incommingdata?.username === "roshan" ? "btn-disabled" : ""
+                    }
+                    :"btn btn-sm  btn-error"
+                    `}
+                    onClick={HandleDeleteProfile}
+                  >
+                    Delete
+                  </button>
+                </div>
               </div>
               <div className="mt-2 flex justify-center">
                 <button
@@ -278,7 +298,13 @@ function Profile() {
           <div className="flex mt-6">
             <div className="card ml-12 mr-12 md:ml-44 md:mr-44 w-full bg-slate-500 text-primary-content">
               <div className={`${enableupdate ? "hidden" : ""} card-body`}>
-                <div className={`${incommingdata?.score===null?"hidden":"flex  justify-center text-2xl font-bold gap-2"}`}>
+                <div
+                  className={`${
+                    incommingdata?.score === null
+                      ? "hidden"
+                      : "flex  justify-center text-2xl font-bold gap-2"
+                  }`}
+                >
                   Total Score :{" "}
                   {incommingdata.score <= 50 ? (
                     <>

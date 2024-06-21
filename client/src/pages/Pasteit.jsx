@@ -53,11 +53,11 @@ function Pasteit() {
               setnewlink(res.data['unique_link'])
               // console.log(res.data['unique_link'])
               setdeftmsg(code)
-              toast.success("Url grabbed")
               setlinkGenerated(true)
               const value = `${import.meta.env.VITE_FRONTEND_URL}/${newlink}`
               navigator.clipboard.write(value)
               // console.log(newlink)
+              toast.success("Url grabbed")
             }
             catch(error){
               toast.error(error)
@@ -199,11 +199,11 @@ const handleTheme=(value,name)=>{
             />
             {/* link will be hidden only active when getLink fetch saved -result */}
             <div className={`flex mt-3 ${linkclicked? 'hidden':''}`}>
-              <Link to={`/pasteit/${newlink}`}>
+              {/* <Link to={`/pasteit/${newlink}`}> */}
                 <div onClick={handlecopy} className='hidden md:btn btn-link hover:btn-accent border border-gray-300 hover:border-violet-500 overflow-hidden hover:cursor-text'>
                   <p className='p-4 text-md font-sans text-cyan-500 hover:text-black'>https://oneCompiler/{newlink}</p>
                 </div>
-              </Link>
+              {/* </Link> */}
             </div>
 
             <div className='px-0.5 md:px-6 mt-3 overflow-hidden'>

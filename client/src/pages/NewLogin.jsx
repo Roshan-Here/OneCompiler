@@ -14,6 +14,7 @@ function NewLogin() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [eyeopen, seteyeopen] = useState(false);
+  const [loginloading, setloginloading] = useState(false)
   const sampleusername = "roshan";
   const samplepass = "roshanhere";
   const authenticated = useSelector((state) => state.user.authenticated);
@@ -54,6 +55,7 @@ function NewLogin() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setloginloading(true)
     try {
       const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/login/`, formdata, {
         headers: {
@@ -65,12 +67,14 @@ function NewLogin() {
       dispatch(SetTokenSucess(data.access));
       dispatch(SetRefreshToken(data.refresh));
       toast.success("User Signin Sucessfully");
+      setloginloading(false)
       setTimeout(() => {
         navigate("/");
       }, 1000);
     } catch (error) {
       dispatch(SetTokenFailed());
       toast.error(`Err: ${error}`);
+      setloginloading(false)
     }
   };
 
@@ -169,7 +173,9 @@ function NewLogin() {
                   </label>
                 </div>
                 <div className="form-control mt-6">
-                  <button className="btn btn-primary">Login</button>
+                  <button className={`btn btn-primary`}>
+                  <span className={`${loginloading?"animate-spin":"hidden"} loading loading-spinner text-success`}></span>
+                    Login</button>
                 </div>
               </form>
             </div>
