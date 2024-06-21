@@ -82,7 +82,7 @@ function Drawer({ OpenDrawer, IsOpen }) {
                   </div>
                   <div className="flex flex-col ml-5 mt-3">
                     <p>
-                    While searching for a job, it became necessary to learn and crash DSA during interview rounds.
+                    While searching for a job, it became necessary to learn and crack DSA during interview rounds.
                     </p>
                     <p>
                     And the problem area in OneCompiler is similar to Leetcode, likely scrapping all the non-premium problems.{" "}
