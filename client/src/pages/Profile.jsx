@@ -72,7 +72,7 @@ function Profile() {
   const handlecopy = () => {
     // for share button
     try {
-      const value = `https://${import.meta.env.VITE_FRONTEND_URL}/profile/${
+      const value = `${import.meta.env.VITE_FRONTEND_URL}/profile/${
         incommingdata.username
       }`;
       navigator.clipboard.writeText(value);

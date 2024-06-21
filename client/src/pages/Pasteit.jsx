@@ -88,8 +88,9 @@ function Pasteit() {
     }
   }
 
-  const handlecopy = (value) =>{
+  const handlecopy = () =>{
     try{
+      const value = `${import.meta.env.VITE_FRONTEND_URL}/${newlink}`
       navigator.clipboard.write(value)
       toast.success("Link added to clipboard")
     }
