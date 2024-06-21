@@ -13,31 +13,35 @@
 - JWT Authentication
 - Many more... expolre it.
 
-
 ### Usage :
+
 - (To Run Locally) Need 2 Terminal
 
-       Terminal 1 (Frontend)
+- - ### Terminal 1 (Frontend)
+
 ```bash
 git clone https://github.com/Roshan-Here/OneCompiler.git
 cd OneCompiler/client/
 npm install
 npm run dev
-python manage.py runserver 
+python manage.py runserver
 ```
--       Terminal 2 (Backend)
+
+- - ### Terminal 2 (Backend)
+
 ```bash
-git clone https://github.com/Roshan-Here/Django-React-NotesApp.git
+git clone https://github.com/Roshan-Here/OneCompiler.git
 cd OneCompiler/backend/
 pip install -r requirments.txt
 python manage.py makemigrations api
 python manage.py migrate api
 python manage.py makemigrations
 python manage.py migrate
-python mange.py runserver 
+python mange.py runserver
 ```
 
-### Results 
+### Results
+
 <img src="SampleWorking/Sample_one.png" alt="" srcset="">
 <img src="SampleWorking/Sample_two.png" alt="" srcset="">
 <img src="SampleWorking/Sample_three.png" alt="" srcset="">
@@ -53,4 +57,3 @@ python mange.py runserver
 </p>
 
 <h3 style="margin-top:4%"><a href="https://github.com/Roshan-Here/OneCompiler/blob/development/LICENSE">GNU General Public License v3.0</a></h3>
-
