@@ -270,7 +270,7 @@ function Profile() {
                 >
                   Update
                 </button>
-                <div className={`${incommingdata?.username==='roshan'?"":'tooltip'}`} data-tip="hello">
+                <div className={`${incommingdata?.username==='roshan'?"tooltip tooltip-bottom":''}`} data-tip="Demo Account Can't delete">
                   <button
                     className={`${authenticated ? "" : "hidden"}:
                     ${

@@ -174,7 +174,7 @@ function NewLogin() {
                 </div>
                 <div className="form-control mt-6">
                   <button className={`btn btn-primary`}>
-                  <span className={`${loginloading?"animate-spin":"hidden"} loading loading-spinner text-success`}></span>
+                  <span className={`${loginloading?"animate-spin":"hidden"} loading loading-spinner text-warning`}></span>
                     Login</button>
                 </div>
               </form>
