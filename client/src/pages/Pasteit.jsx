@@ -51,10 +51,13 @@ function Pasteit() {
             try{
               const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/savecode/`,submitdata)
               setnewlink(res.data['unique_link'])
-              // console.log(res.data['unique_link'])
+              console.log(res.data['unique_link'])
+              const linkkk = res.data['unique_link']
               setdeftmsg(code)
+              console.log(linkkk);
               setlinkGenerated(true)
-              const value = `${import.meta.env.VITE_FRONTEND_URL}/${res.data['unique_link']}`
+              const value = `${import.meta.env.VITE_FRONTEND_URL}/${linkkk}`
+              console.log(value);
               navigator.clipboard.write(value)
               // console.log(newlink)
               toast.success("Url grabbed")
