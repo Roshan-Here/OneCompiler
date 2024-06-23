@@ -51,7 +51,7 @@ function Pasteit() {
             try{
               const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/savecode/`,submitdata)
               setnewlink(res.data['unique_link'])
-              console.log(res.data['unique_link'])
+              // console.log(res.data['unique_link'])
               const linkkk = res.data['unique_link']
               setdeftmsg(code)
               // console.log(linkkk);
@@ -94,7 +94,7 @@ function Pasteit() {
   const handlecopy = () =>{
     try{
       const value = `${import.meta.env.VITE_FRONTEND_URL}/pasteit/${newlink}`;
-      navigator.clipboard.write(value)
+      navigator.clipboard.writeText(value)
       toast.success("Link added to clipboard")
     }
     catch(error){
@@ -102,7 +102,7 @@ function Pasteit() {
     }
   }
 
-  console.log(code)
+  // console.log(code)
 
   //calls the function whenever the pastlink changes 
   useEffect(()=>{
