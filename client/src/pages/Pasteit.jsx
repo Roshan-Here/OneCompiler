@@ -54,11 +54,11 @@ function Pasteit() {
               console.log(res.data['unique_link'])
               const linkkk = res.data['unique_link']
               setdeftmsg(code)
-              console.log(linkkk);
+              // console.log(linkkk);
               setlinkGenerated(true)
-              const value = `${import.meta.env.VITE_FRONTEND_URL}/${linkkk}`
-              console.log(value);
-              navigator.clipboard.write(value)
+              const value = `${import.meta.env.VITE_FRONTEND_URL}/pasteit/${linkkk}`
+              // console.log(value);
+              navigator.clipboard.writeText(value)
               // console.log(newlink)
               toast.success("Url grabbed")
             }
@@ -93,7 +93,7 @@ function Pasteit() {
 
   const handlecopy = () =>{
     try{
-      const value = `${import.meta.env.VITE_FRONTEND_URL}/${newlink}`
+      const value = `${import.meta.env.VITE_FRONTEND_URL}/pasteit/${newlink}`;
       navigator.clipboard.write(value)
       toast.success("Link added to clipboard")
     }
