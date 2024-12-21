@@ -42,15 +42,15 @@ python mange.py runserver
 
 ### Results
 
-<img src="SampleWorking/Sample_one.png" alt="" srcset="">
-<img src="SampleWorking/Sample_two.png" alt="" srcset="">
-<img src="SampleWorking/Sample_three.png" alt="" srcset="">
-<img src="SampleWorking/Sample_about.png" alt="" srcset="">
-<img src="SampleWorking/Sample_four.png" alt="" srcset="">
-<img src="SampleWorking/Sample_five.png" alt="" srcset="">
-<img src="SampleWorking/Sample_six.png" alt="" srcset="">
-<img src="SampleWorking/Sample_seven.png" alt="" srcset="">
-<img src="SampleWorking/Sample_eight.png" alt="" srcset="">
+<img src="https://raw.githubusercontent.com/Roshan-Here/OneCompiler/development/SampleWorking/Sample_about.png" alt="" srcset="">
+<img src="https://raw.githubusercontent.com/Roshan-Here/OneCompiler/development/SampleWorking/Sample_two.png" alt="" srcset="">
+<img src="https://raw.githubusercontent.com/Roshan-Here/OneCompiler/development/SampleWorking/Sample_three.png" alt="" srcset="">
+<img src="https://raw.githubusercontent.com/Roshan-Here/OneCompiler/development/SampleWorking/Sample_about.png" alt="" srcset="">
+<img src="https://raw.githubusercontent.com/Roshan-Here/OneCompiler/development/SampleWorking/Sample_four.png" alt="" srcset="">
+<img src="https://raw.githubusercontent.com/Roshan-Here/OneCompiler/development/SampleWorking/Sample_five.png" alt="" srcset="">
+<img src="https://raw.githubusercontent.com/Roshan-Here/OneCompiler/development/SampleWorking/Sample_six.png" alt="" srcset="">
+<img src="https://raw.githubusercontent.com/Roshan-Here/OneCompiler/development/SampleWorking/Sample_seven.png" alt="" srcset="">
+<img src="https://raw.githubusercontent.com/Roshan-Here/OneCompiler/development/SampleWorking/Sample_eight.png" alt="" srcset="">
 
 <p style='font-size: 20px'> 
 <a href='https://one-compiler.vercel.app/'> And much more, explore </a>
