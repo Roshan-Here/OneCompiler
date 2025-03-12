@@ -23,7 +23,7 @@ function Register() {
       full_name: "",
       about: "",
       score: null,
-      picture: null,
+      picture_url: null,
       usersolvedquestionlist: [],
     },
   });

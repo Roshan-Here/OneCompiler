@@ -24,7 +24,6 @@ git clone https://github.com/Roshan-Here/OneCompiler.git
 cd OneCompiler/client/
 npm install
 npm run dev
-python manage.py runserver
 ```
 
 - - ### Terminal 2 (Backend)
@@ -37,6 +36,9 @@ python manage.py makemigrations api
 python manage.py migrate api
 python manage.py makemigrations
 python manage.py migrate
+# to load questions to Db
+python manage.py load_problems api\json\required_format.json
+# takes 20 minitues
 python mange.py runserver
 ```
 
