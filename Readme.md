@@ -58,4 +58,9 @@ python mange.py runserver
 <a href='https://one-compiler.vercel.app/'> And much more, explore </a>
 </p>
 
+### 📖 Full Project Details
+For complete information including project architecture, cloning instructions, database structure, and much more, visit:
+- 👉 <a href="https://deepwiki.com/Roshan-Here/OneCompiler" target="_blank">OneCompiler on DeepWiki</a>
+
+
 <h3 style="margin-top:4%"><a href="https://github.com/Roshan-Here/OneCompiler/blob/development/LICENSE">GNU General Public License v3.0</a></h3>
