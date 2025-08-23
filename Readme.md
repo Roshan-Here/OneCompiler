@@ -64,3 +64,5 @@ For complete information including project architecture, cloning instructions, d
 
 
 <h3 style="margin-top:4%"><a href="https://github.com/Roshan-Here/OneCompiler/blob/development/LICENSE">GNU General Public License v3.0</a></h3>
+
+[![](https://xstats.xoid.me/stats/roshan-here/onecompiler)](https://stats.xoid.me/stats/roshan-here/onecompiler)
